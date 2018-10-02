@@ -1,4 +1,4 @@
-# AIAD
+# AIAD - "Ai ai bebé"
 
 O cenário escolhido para este projeto foi o de combate aos fogos com recurso a aviões. 
 
