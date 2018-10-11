@@ -1,5 +1,4 @@
-# AIAD - "Agentes Inteligentes a Combate a Incêndios Florestais"
-## AIAD Bebé
+# AIAD - "Agentes Inteligentes no Combate a Incêndios Florestais"
 
 O cenário escolhido para este projeto foi o de combate aos fogos com recurso a aviões.
 
