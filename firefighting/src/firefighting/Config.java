@@ -16,10 +16,10 @@ public abstract class Config {
 	/**
 	 * Defines the grid width
 	 */
-	final static int GRID_WIDTH = 9;
+	final static int GRID_WIDTH = 7;
 
 	/**
 	 * Defines the grid height
 	 */
-	final static int GRID_HEIGHT = 9;
+	final static int GRID_HEIGHT = 8;
 }
