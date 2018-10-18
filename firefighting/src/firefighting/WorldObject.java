@@ -1,14 +1,16 @@
 package firefighting;
 
-public class WorldObject {
+import java.awt.Point;
+
+public abstract class WorldObject {
 	
 	// Global Instances/Variables
 	private WorldObjectType objectType;
-	private int[] matrixPosition;
+	private Point worldPosition;
 	
-	public WorldObject(WorldObjectType worldObjectType, int posX, int posY) {
+	public WorldObject(WorldObjectType worldObjectType, Point position) {
 		
-		this.matrixPosition = new int[2];
+		this.worldPosition = position;
 		
 		switch(worldObjectType) {
 			case AIRCRAFT:
@@ -22,6 +24,11 @@ public class WorldObject {
 		}
 	}
 	
+	public int getPosX() {
+		return this.worldPosition.x;
+	}
 	
-	
+	public int getPosY() {
+		return this.worldPosition.y;
+	}
 }

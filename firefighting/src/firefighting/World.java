@@ -1,7 +1,10 @@
 package firefighting;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import java.awt.Point;
 import jade.core.Agent;
 
 /**
@@ -10,14 +13,11 @@ import jade.core.Agent;
 @SuppressWarnings("serial")
 public class World extends Agent implements Runnable {
 
-	private worldObject[][] worldMatrix;
+	private Map<Point, WorldObject> worldMap;
 	
 	public void createWorld() {
-		this.worldMatrix = new worldObject[Config.GRID_WIDTH][Config.GRID_HEIGHT];
-		
-		for(int x=0; x<Config.GRID_WIDTH ; x++)
-			for(int y=0; x<Config.GRID_WIDTH ; y++)
-				System.out.println(this.worldMatrix==null);
+		int maxWorldGridSize = Config.GRID_WIDTH * Config.GRID_HEIGHT;
+		this.worldMap = new HashMap<Point, WorldObject>(maxWorldGridSize);
 	}
 	
 	
@@ -43,19 +43,31 @@ public class World extends Agent implements Runnable {
 	
 	
 	Thread generateFires = new Thread(() -> {
-	    Random randomObject;
+	    Random randomObject = new Random();
 
 	    for(;;) {
-	    	Thread.sleep(2000);
-	    	int random = randomObject.nextInt((max - min) + 1) + min;
+	    	// Time to wait until generate the next fire
+	    	try {
+				Thread.sleep(6000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    	int posX = randomObject.nextInt((Config.GRID_WIDTH - 1) + 1) + 1;
+	    	int posY = randomObject.nextInt((Config.GRID_HEIGHT - 1) + 1) + 1;
+	    	
+	    	Point firePos = new Point(posX, posY);
+	    	
+	    	while(worldMap.containsKey(firePos)) {
+	    		posX = randomObject.nextInt((Config.GRID_WIDTH - 1) + 1) + 1;
+		    	posY = randomObject.nextInt((Config.GRID_HEIGHT - 1) + 1) + 1;
+		    	
+		    	firePos = new Point(posX, posY);
+	    	}
+	    	
+	    	worldMap.put(firePos, new WorldObject(WorldObjectType.FIRE, int posX, int posY))
 	    }
-	    	
-	    	
-	    	
-	    	
-	    // nextInt is normally exclusive of the top value,
-	    // so add 1 to make it inclusive
-	    int randomNum = randomObject.nextInt((max - min) + 1) + min;
 	});
 	
 	
