@@ -6,6 +6,7 @@ public abstract class WorldObject {
 	
 	// Global Instances/Variables
 	private WorldObjectType objectType;
+	private WorldAgent worldAgent;
 	private Point worldPosition;
 	
 	public WorldObject(WorldObjectType worldObjectType, Point position) {
@@ -13,6 +14,12 @@ public abstract class WorldObject {
 		this.worldPosition = position;
 		
 		switch(worldObjectType) {
+			case FIRE_STATION: 
+				// Create FIRE_STATION code
+				break;
+			case FILLING_STATION: 
+				// Create FILLING_STATION code
+				break;
 			case AIRCRAFT:
 				// Create AIRCRAFT code
 				break;
