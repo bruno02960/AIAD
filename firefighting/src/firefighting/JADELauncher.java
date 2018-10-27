@@ -12,7 +12,8 @@ public class JADELauncher {
 	static World world = new World();
 	
 	public static void main(String[] args) {
-		world.print();
+		world.startWorld();
+		world.printCurrentStatus();
 		
 		/**Runtime rt = Runtime.instance();
 
