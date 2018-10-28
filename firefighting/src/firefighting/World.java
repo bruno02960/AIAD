@@ -78,7 +78,7 @@ public class World extends Agent implements Runnable {
 	private int generateRandomXOrY(int axisLimit) {
 		Random randomObject = new Random();
 		
-		return randomObject.nextInt((axisLimit - 1) + 1) + 1;
+		return randomObject.nextInt(axisLimit) + 1;
 	}
 	
 	/**
@@ -88,12 +88,12 @@ public class World extends Agent implements Runnable {
 	 */
 	private int[] generateRandomPos() {
 				
-		int posX = this.generateRandomXOrY(Config.GRID_WIDTH);
-		int posY = this.generateRandomXOrY(Config.GRID_HEIGHT);
+		int posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
+		int posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
 		
     	while(worldMap[posX][posY] != null) {
-    		posX = this.generateRandomXOrY(Config.GRID_WIDTH);
-    		posY = this.generateRandomXOrY(Config.GRID_HEIGHT);
+    		posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
+    		posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
     	}
     	
     	int[] pos = {posX, posY};
@@ -157,7 +157,7 @@ public class World extends Agent implements Runnable {
 	 * Generates all the Fires in the world, when is possible.
 	 */
 	Thread generateFires = new Thread(() -> {
-		this.fires = new Fire[Config.NUM_MAX_FIRES];
+		this.fires = new Fire[Config.NUM_MAX_FIRES + 1];
 		
 		this.currentNumFires = 0;
 		
@@ -178,7 +178,7 @@ public class World extends Agent implements Runnable {
 		    	
 		    	Fire fire = new Fire((byte) this.currentNumFires, fireWorldObject);
 		    	
-	    		this.worldMap[firePos[0]][firePos[1]] = fireWorldObject;
+	    		this.worldMap[firePos[0]][firePos[1]] = fire;
 	    		
 	    		
 	    		int fireToCreatePosInArray;
@@ -187,9 +187,11 @@ public class World extends Agent implements Runnable {
 	    			if(this.fires[fireToCreatePosInArray] != null)
 	    				break;
 	    		
-	    		this.fires[fireToCreatePosInArray] = fire;
-	    		
-	    		this.currentNumFires++;
+	    		if(fireToCreatePosInArray <= Config.NUM_MAX_FIRES) {
+		    		this.fires[fireToCreatePosInArray] = fire;
+		    		
+		    		this.currentNumFires++;
+	    		}
 	    	}
 	    }
 	});
@@ -204,7 +206,13 @@ public class World extends Agent implements Runnable {
 		System.out.println("");
 		for(int j = 0; j < Config.GRID_HEIGHT; j++) {
 			for(int i = 0; i < Config.GRID_WIDTH; i++) {
-				System.out.print("|  ");
+				System.out.print("|");
+				if (this.worldMap[i][j] != null) {
+					System.out.print(this.worldMap[i][j]);
+				}
+				else {
+					System.out.print("  ");
+				}
 			}
 			System.out.println('|');
 			for(int i = 0; i < Config.GRID_WIDTH * 3 + 1; i++) {

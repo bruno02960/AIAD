@@ -25,6 +25,11 @@ public class AircraftAgent extends Agent {
 	 */
 	private int tankCapacity;
 	
+	/**
+	 * Status of the Aircraft Agent's tank.
+	 */
+	private int tankStatus;
+	
 	
 	// Constructors:
 	/**
@@ -41,6 +46,12 @@ public class AircraftAgent extends Agent {
 		this.id = id;
 		this.worldObject = worldObject;
 		this.tankCapacity = random.nextInt(Config.AIRCRAFT_MAX_TANK_CAPACITY) + 1;
+		this.tankStatus = 0;
+	}
+	
+	//TODO: Remove
+	public AircraftAgent() {
+		
 	}
 	
 	
@@ -70,5 +81,10 @@ public class AircraftAgent extends Agent {
 	 */
 	private int getTankCapacity() {
 		return this.tankCapacity;
+	}
+
+	@Override
+	public String toString() {
+		return "A" + tankStatus;
 	}
 }

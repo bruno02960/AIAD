@@ -36,6 +36,11 @@ public abstract class Config {
 	final static int AIRCRAFT_MAX_TANK_CAPACITY = 4;
 	
 	/**
+	 * Defines the maximum capacity of a filling station.
+	 */
+	final static int FILLINGSTATION_MAX_CAPACITY = 4;
+	
+	/**
 	 * Defines the maximum intensity of a fire.
 	 */
 	final static int FIRE_MAX_INTENSITY = 9;

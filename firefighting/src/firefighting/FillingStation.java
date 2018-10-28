@@ -1,5 +1,7 @@
 package firefighting;
 
+import java.util.Random;
+
 /**
  * Class responsible for a Filling Station.
  */
@@ -16,6 +18,11 @@ public class FillingStation {
 	 */
 	private WorldObject worldObject;
 	
+	/**
+	 * Filling Station current status
+	 */
+	private int currentStatus;
+	
 	// Constructors:
 	/**
 	 * Constructor #1 of the Filling Station.
@@ -26,8 +33,11 @@ public class FillingStation {
 	 * @param the Filling Station's World Object
 	 */
 	public FillingStation(byte id, WorldObject worldObject) {
+		Random random = new Random();
+		
 		this.id = id;
 		this.worldObject = worldObject;
+		this.currentStatus = random.nextInt(Config.FILLINGSTATION_MAX_CAPACITY) + 1;
 	}
 
 	// Methods:
@@ -47,5 +57,10 @@ public class FillingStation {
 	 */
 	private WorldObject getWorldObject() {
 		return this.worldObject;
+	}
+
+	@Override
+	public String toString() {
+		return "F" + this.currentStatus;
 	}
 }

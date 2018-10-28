@@ -100,4 +100,9 @@ public class Fire {
 	private float getSpreadProbability() {
 		return this.spreadProbability;
 	}
+
+	@Override
+	public String toString() {
+		return "f" + this.currentIntensity;
+	}
 }

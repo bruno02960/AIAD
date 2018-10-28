@@ -36,4 +36,9 @@ public class FireStationAgent extends Agent {
 	private WorldObject getWorldObject() {
 		return this.worldObject;
 	}
+
+	@Override
+	public String toString() {
+		return "FS";
+	}
 }
