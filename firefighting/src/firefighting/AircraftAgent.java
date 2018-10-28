@@ -49,6 +49,11 @@ public class AircraftAgent extends Agent {
 		this.tankStatus = 0;
 	}
 	
+	//TODO: Remove
+	public AircraftAgent() {
+		
+	}
+	
 	
 	// Methods:
 	/**
