@@ -8,6 +8,10 @@ import jade.core.Agent;
 @SuppressWarnings("serial")
 public class FireStationAgent extends Agent {
 	
+	public FireStationAgent() {
+		
+	}
+	
 	// Global Instance Variables:
 	/**
 	 * World's object of the Fire Station Agent.
@@ -40,5 +44,14 @@ public class FireStationAgent extends Agent {
 	@Override
 	public String toString() {
 		return "FS";
+	}
+
+	protected void setup() {
+		System.out.println("Im in! My identifier is "+getAID().getName());
+		addBehaviour(new ReceiveMessages());
+	}
+	
+	protected void takeDown() {
+		System.out.println("Agent"+getAID().getName()+"terminating.");
 	}
 }

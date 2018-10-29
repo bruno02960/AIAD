@@ -1,7 +1,11 @@
 package firefighting;
 
 import java.util.Random;
+
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
 
 /**
  * Class responsible for an Aircraft Agent and its behaviour.
@@ -87,4 +91,16 @@ public class AircraftAgent extends Agent {
 	public String toString() {
 		return "A" + tankStatus;
 	}
+	
+	protected void setup() {
+		System.out.println("Hello! My name is "+getAID().getName());
+		addBehaviour(new SendMessages());
+		
+		
+	}
+	
+	protected void takeDown() {
+		System.out.println("Agent"+getAID().getName()+"terminating.");
+	}
+	
 }

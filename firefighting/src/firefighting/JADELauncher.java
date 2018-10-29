@@ -24,8 +24,10 @@ public class JADELauncher {
 		
 	
 		try {
-			AgentController testagent = mainContainer.createNewAgent("name2", "firefighting.AircraftAgent" , null);
-			testagent.start();
+			AgentController aircraftAgent = mainContainer.createNewAgent("AirCraftAgent", "firefighting.AircraftAgent" , null);
+			AgentController firestationAgent = mainContainer.createNewAgent("FireStationAgent", "firefighting.FireStationAgent" , null);
+			aircraftAgent.start();
+			firestationAgent.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
