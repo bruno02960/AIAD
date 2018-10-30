@@ -225,7 +225,7 @@ public class World extends Agent implements Runnable {
 	/**
 	 * Starts the world and all its components.
 	 */
-	public void startWorld() {
+	public void World() {
 		this.createWorld();
 		this.createFireStationAgent();
 		this.generateFillingStations();
