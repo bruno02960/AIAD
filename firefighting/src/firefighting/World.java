@@ -9,63 +9,63 @@ import jade.core.Agent;
  * Class responsible for managing, updating and printing the world status.
  */
 @SuppressWarnings("serial")
-public class World extends Agent implements Runnable {
+public final class World extends Agent implements Runnable {
 	
 	// Global Instance Variables:
 	/**
 	 * The matrix/grid that represents all the positions of the world.
 	 */
-	private Object[][] worldMap;
-	
+	private static Object[][] worldMap;
+
 	// Fixed agents (without movement)
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private FireStationAgent fireStationAgent;
+	private static FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Filling Stations in the world.
 	 */
-	private FillingStation[] fillingStations;
+	private static FillingStation[] fillingStations;
 	
 	// Mobile agents (with movement)
 	/**
 	 * The Aircraft Agents in the world.
 	 */
-	private AircraftAgent[] aircraftAgents;
+	private static AircraftAgent[] aircraftAgents;
 	
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
 	 */
-	private Fire[] fires;
+	private static Fire[] fires;
 	
 	/*
 	 * The current number of filling stations in the world.
 	 */
-	private int currentNumFillingStations;
+	private static int currentNumFillingStations;
 	
 	/*
 	 * The current number of aircrafts in the world.
 	 */
-	private int currentNumAircrafts;
+	private static int currentNumAircrafts;
 	
 	/*
 	 * The current number of fires in the world.
 	 */
-	private int currentNumFires;
+	private static int currentNumFires;
 	
 	
 	// Methods:
 	/**
 	 * Creates the matrix/grid that represents all the positions of the world.
 	 */
-	public void createWorld() {
-		this.worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+	public static void createWorld() {
+		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 		
-		this.currentNumFillingStations = 0;
-		this.currentNumAircrafts = 0;
-		this.currentNumFires = 0;
+		currentNumFillingStations = 0;
+		currentNumAircrafts = 0;
+		currentNumFires = 0;
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class World extends Agent implements Runnable {
 	 * 
 	 * @return a random coordinate X or Y
 	 */
-	private int generateRandomXOrY(int axisLimit) {
+	private static int generateRandomXOrY(int axisLimit) {
 		Random randomObject = new Random();
 		
 		return randomObject.nextInt(axisLimit) + 1;
@@ -86,14 +86,14 @@ public class World extends Agent implements Runnable {
 	 * 
 	 * @return a random position in the matrix/grid that represents all the positions of the world
 	 */
-	private int[] generateRandomPos() {
+	private static int[] generateRandomPos() {
 				
-		int posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
-		int posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
+		int posX = generateRandomXOrY(Config.GRID_WIDTH) - 1;
+		int posY = generateRandomXOrY(Config.GRID_HEIGHT) - 1;
 		
     	while(worldMap[posX][posY] != null) {
-    		posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
-    		posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
+    		posX = generateRandomXOrY(Config.GRID_WIDTH) - 1;
+    		posY = generateRandomXOrY(Config.GRID_HEIGHT) - 1;
     	}
     	
     	int[] pos = {posX, posY};
@@ -235,5 +235,14 @@ public class World extends Agent implements Runnable {
 	
 		// TODO - Uncomment to print the status of the world
 		//this.printWorldStatus();
+	}
+	
+
+	/**
+	 * Returns the current world map
+	 * @return current world map
+	 */
+	static Object[][] getWorldMap() {
+		return worldMap;
 	}
 }
