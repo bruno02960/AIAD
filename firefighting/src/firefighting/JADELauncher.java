@@ -22,11 +22,15 @@ public class JADELauncher {
 		profile.setParameter(Profile.GUI, "true");
 		ContainerController mainContainer = rt.createMainContainer(profile);
 		
+		//acceptNewAgent(java.lang.String nickname, Agent anAgent)
+		
 	
 		try {
 			AgentController aircraftAgent = mainContainer.createNewAgent("AirCraftAgent", "firefighting.AircraftAgent" , null);
+			AgentController aircraftAgent2 = mainContainer.createNewAgent("AirCraftAgent2", "firefighting.AircraftAgent" , null);
 			AgentController firestationAgent = mainContainer.createNewAgent("FireStationAgent", "firefighting.FireStationAgent" , null);
 			aircraftAgent.start();
+			aircraftAgent2.start();
 			firestationAgent.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block

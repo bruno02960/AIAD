@@ -56,6 +56,30 @@ public class World extends Agent implements Runnable {
 	private int currentNumFires;
 	
 	
+	public int getNumFillingStations() {
+		return currentNumFillingStations;
+	}
+	
+	public int getNumAircrafts() {
+		return currentNumAircrafts;
+	}
+	
+	public int getNumFires() {
+		return currentNumFires;
+	}
+	
+	public FireStationAgent getFireStationAgent() {
+		return fireStationAgent;
+	}
+	
+	public FillingStation[] getFillingStations() {
+		return fillingStations;
+	}
+	
+	public AircraftAgent[] getAircraftAgents() {
+		return aircraftAgents;
+	}
+	
 	// Methods:
 	/**
 	 * Creates the matrix/grid that represents all the positions of the world.

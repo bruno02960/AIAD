@@ -64,9 +64,10 @@ public class FireStationAgent extends Agent {
 	    Object[] args = getArguments();
 	 
 	    String a = "AircraftAgent";
-	    Object b = a;
+	    String b = "AircraftAgent2";
+
 	    
-	    args = new Object[] {a};
+	    args = new Object[] {a,b};
 	    
 	    System.out.println(args);
 	    
@@ -108,7 +109,7 @@ public class FireStationAgent extends Agent {
 	            nResponders--;
 	          }
 	          
-	       /*  
+	       
 	          protected void handleAllResponses(Vector responses, Vector acceptances) {
 	            if (responses.size() < nResponders) {
 	              // Some responder didn't reply within the specified timeout
@@ -138,7 +139,7 @@ public class FireStationAgent extends Agent {
 	              System.out.println("Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
 	              accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 	            }           
-	          }*/
+	          }
 	          
 	          protected void handleInform(ACLMessage inform) {
 	            System.out.println("Agent "+inform.getSender().getName()+" successfully performed the requested action");
