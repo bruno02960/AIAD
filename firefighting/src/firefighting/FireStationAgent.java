@@ -63,11 +63,11 @@ public class FireStationAgent extends Agent {
 	    // Read names of responders as arguments
 	    Object[] args = getArguments();
 	 
-	    String a = "AircraftAgent";
-	    String b = "AircraftAgent2";
-
+	    String a = "aircraftAgent0";
+	    String b = "aircraftAgent1";
+	    String c = "aircraftAgent2";
 	    
-	    args = new Object[] {a,b};
+	    args = new Object[] {a,b,c};
 	    
 	    System.out.println(args);
 	    

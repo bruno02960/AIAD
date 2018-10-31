@@ -170,6 +170,7 @@ public class World extends Agent implements Runnable {
 			
 			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject);
 			
+			
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;
 			this.aircraftAgents[i] = aircraftAgent;
 			
@@ -249,7 +250,7 @@ public class World extends Agent implements Runnable {
 	/**
 	 * Starts the world and all its components.
 	 */
-	public void World() {
+	public World() {
 		this.createWorld();
 		this.createFireStationAgent();
 		this.generateFillingStations();

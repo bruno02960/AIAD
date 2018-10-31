@@ -1,11 +1,13 @@
 package firefighting;
 
 import jade.Boot;
+import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
+import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import firefighting.AircraftAgent;
 
@@ -15,23 +17,22 @@ import firefighting.AircraftAgent;
 public class JADELauncher {
     static World world = new World();
 	
-	public static void main(String[] args) {		
+	public static void main(String[] args) throws ControllerException {		
 		Runtime rt = Runtime.instance();
 		
 		Profile profile = new ProfileImpl();
 		profile.setParameter(Profile.GUI, "true");
 		ContainerController mainContainer = rt.createMainContainer(profile);
 		
-		//acceptNewAgent(java.lang.String nickname, Agent anAgent)
-		
-	
 		try {
-			AgentController aircraftAgent = mainContainer.createNewAgent("AirCraftAgent", "firefighting.AircraftAgent" , null);
-			AgentController aircraftAgent2 = mainContainer.createNewAgent("AirCraftAgent2", "firefighting.AircraftAgent" , null);
-			AgentController firestationAgent = mainContainer.createNewAgent("FireStationAgent", "firefighting.FireStationAgent" , null);
-			aircraftAgent.start();
-			aircraftAgent2.start();
-			firestationAgent.start();
+			
+			mainContainer.acceptNewAgent("FireStation", world.getFireStationAgent());
+			mainContainer.getAgent("FireStation").start();
+			for(int i = 0; i < world.getNumAircrafts(); i++) {
+				mainContainer.acceptNewAgent("aircraftAgent"+i, world.getAircraftAgents()[i]);
+				mainContainer.getAgent(world.getAircraftAgents()[i].getLocalName()).start();
+			}
+
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
