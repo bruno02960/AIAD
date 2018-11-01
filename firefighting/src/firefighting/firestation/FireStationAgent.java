@@ -1,4 +1,4 @@
-package firefighting;
+package firefighting.firestation;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -6,9 +6,11 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
+
+import firefighting.world.*;
+
 import java.util.Enumeration;
 
 /**
@@ -63,10 +65,11 @@ public class FireStationAgent extends Agent {
 	    // Read names of responders as arguments
 	    Object[] args = getArguments();
 	 
-	    String a = "AircraftAgent";
-	    Object b = a;
+	    String a = "aircraftAgent0";
+	    String b = "aircraftAgent1";
+	    String c = "aircraftAgent2";
 	    
-	    args = new Object[] {a};
+	    args = new Object[] {a,b,c};
 	    
 	    System.out.println(args);
 	    
@@ -108,7 +111,7 @@ public class FireStationAgent extends Agent {
 	            nResponders--;
 	          }
 	          
-	       /*  
+	       
 	          protected void handleAllResponses(Vector responses, Vector acceptances) {
 	            if (responses.size() < nResponders) {
 	              // Some responder didn't reply within the specified timeout
@@ -138,7 +141,7 @@ public class FireStationAgent extends Agent {
 	              System.out.println("Accepting proposal "+bestProposal+" from responder "+bestProposer.getName());
 	              accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 	            }           
-	          }*/
+	          }
 	          
 	          protected void handleInform(ACLMessage inform) {
 	            System.out.println("Agent "+inform.getSender().getName()+" successfully performed the requested action");
@@ -156,5 +159,10 @@ public class FireStationAgent extends Agent {
 		
 	protected void takeDown() {
 		System.out.println("Agent"+getAID().getName()+"terminating.");
+	}
+
+	public ContractNetInitiator createContractNetInitiator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

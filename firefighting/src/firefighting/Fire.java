@@ -2,6 +2,9 @@ package firefighting;
 
 import java.util.Random;
 
+import firefighting.utils.Config;
+import firefighting.world.*;
+
 /**
  * Class responsible for a Fire.
  */
@@ -33,6 +36,10 @@ public class Fire {
 	 */
 	private float spreadProbability;
 	
+	private boolean active;
+	
+	private boolean attended;
+	
 	
 	// Constructors:
 	/**
@@ -53,6 +60,9 @@ public class Fire {
 		this.originalIntensity = currentIntensity;
 		
 		this.spreadProbability = random.nextFloat();
+		
+		this.active = true;
+		this.attended = false;
 	}
 	
 	// Methods:
@@ -101,6 +111,16 @@ public class Fire {
 		return this.spreadProbability;
 	}
 
+
+	public boolean isActive() {
+		return this.active;
+	}
+	
+
+	public boolean isAttended() {
+		return this.attended;
+	}
+	
 	@Override
 	public String toString() {
 		return "f" + this.currentIntensity;

@@ -1,4 +1,6 @@
-package firefighting;
+package firefighting.world;
+
+import firefighting.world.utils.*;
 
 import java.awt.Point;
 
@@ -67,7 +69,7 @@ public class WorldObject {
 	 * 
 	 * @return the coordinates of the position of the world's object
 	 */
-	Point getPos() {
+	public Point getPos() {
 		return this.worldPosition;
 	}
 }

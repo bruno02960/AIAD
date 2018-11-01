@@ -1,6 +1,15 @@
-package firefighting;
+package firefighting.world;
 
 import java.util.Random;
+
+import firefighting.AircraftAgent;
+import firefighting.FillingStation;
+import firefighting.Fire;
+import firefighting.firestation.FireStationAgent;
+import firefighting.utils.Config;
+import firefighting.world.behaviours.GenerateFiresBehaviour;
+import firefighting.world.behaviours.PrintStatusBehaviour;
+import firefighting.world.utils.WorldObjectType;
 
 import java.awt.Point;
 import jade.core.Agent;
@@ -9,59 +18,151 @@ import jade.core.Agent;
  * Class responsible for managing, updating and printing the world status.
  */
 @SuppressWarnings("serial")
-public final class World extends Agent implements Runnable {
-	
+public class WorldAgent extends Agent {	
 	// Global Instance Variables:
 	/**
 	 * The matrix/grid that represents all the positions of the world.
 	 */
-	private static Object[][] worldMap;
+	private  Object[][] worldMap;
 
 	// Fixed agents (without movement)
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private static FireStationAgent fireStationAgent;
+	private  FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Filling Stations in the world.
 	 */
-	private static FillingStation[] fillingStations;
+	private  FillingStation[] fillingStations;
 	
 	// Mobile agents (with movement)
 	/**
 	 * The Aircraft Agents in the world.
 	 */
-	private static AircraftAgent[] aircraftAgents;
+	private  AircraftAgent[] aircraftAgents;
 	
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
 	 */
-	private static Fire[] fires;
+	private  Fire[] fires;
 	
 	/*
 	 * The current number of filling stations in the world.
 	 */
-	private static int currentNumFillingStations;
+	private  int currentNumFillingStations;
 	
 	/*
 	 * The current number of aircrafts in the world.
 	 */
-	private static int currentNumAircrafts;
+	private  int currentNumAircrafts;
 	
 	/*
 	 * The current number of fires in the world.
 	 */
-	private static int currentNumFires;
+	private  int currentNumFires;
+	
+	
+	//Constructors:
+	/**
+	 * 
+	 */
+	public WorldAgent() {
+		this.createWorld();
+		this.createFireStationAgent();
+		this.generateFillingStations();
+		this.generateAicraftAgents();
+	}
+	
+	
+	// Methods:
+	/**
+	 * Returns the number of filling stations in the world.
+	 * 
+	 * @return the number of filling stations in the world
+	 */
+	public int getNumFillingStations() {
+		return this.currentNumFillingStations;
+	}
+	
+	/**
+	 * Returns the number of aircrafts the world.
+	 * 
+	 * @return the number of aircrafts the world.
+	 */
+	public int getNumAircraftsAgents() {
+		return this.currentNumAircrafts;
+	}
+	
+	/**
+	 * Returns the current number of fires in the world.
+	 * 
+	 * @return the current number of fires in the world
+	 */
+	public int getCurrentNumFires() {
+		return this.currentNumFires;
+	}
+	
+	/**
+	 * Increases the current number of fires in the world.
+	 */
+	public void incCurrentNumFires() {
+		this.currentNumFires++;
+	}
+	
+	/**
+	 * Decreases the current number of fires in the world.
+	 */
+	public void decCurrentNumFires() {
+		this.currentNumFires--;
+	}
+	
+	/**
+	 * Returns the fire station agent in the world.
+	 * 
+	 * @return the fire station agent in the world
+	 */
+	public FireStationAgent getFireStationAgent() {
+		return this.fireStationAgent;
+	}
+	
+	/**
+	 * Returns all the filling stations in the world.
+	 * 
+	 * @return all the filling stations in the world
+	 */
+	public FillingStation[] getFillingStations() {
+		return this.fillingStations;
+	}
+	
+	/**
+	 * Returns all the aircraft agents in the world.
+	 * 
+	 * @return all the aircraft agents in the world
+	 */
+	public AircraftAgent[] getAircraftAgents() {
+		return this.aircraftAgents;
+	}
+	
+	/**
+	 * Returns all the current fires in the world.
+	 * 
+	 * @return all the current fires in the world
+	 */
+	public Fire[] getCurrentFires() {
+		return this.fires;
+	}
 	
 	
 	// Methods:
 	/**
 	 * Creates the matrix/grid that represents all the positions of the world.
 	 */
-	public static void createWorld() {
+	public  void createWorld() {
 		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+
+		fires = new Fire[Config.NUM_MAX_FIRES + 1];
 		
 		currentNumFillingStations = 0;
 		currentNumAircrafts = 0;
@@ -75,7 +176,7 @@ public final class World extends Agent implements Runnable {
 	 * 
 	 * @return a random coordinate X or Y
 	 */
-	private static int generateRandomXOrY(int axisLimit) {
+	private  int generateRandomXOrY(int axisLimit) {
 		Random randomObject = new Random();
 		
 		return randomObject.nextInt(axisLimit) + 1;
@@ -86,7 +187,7 @@ public final class World extends Agent implements Runnable {
 	 * 
 	 * @return a random position in the matrix/grid that represents all the positions of the world
 	 */
-	private static int[] generateRandomPos() {
+	public  int[] generateRandomPos() {
 				
 		int posX = generateRandomXOrY(Config.GRID_WIDTH) - 1;
 		int posY = generateRandomXOrY(Config.GRID_HEIGHT) - 1;
@@ -144,7 +245,8 @@ public final class World extends Agent implements Runnable {
 			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
-			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject);
+			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject, this);
+			
 			
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;
 			this.aircraftAgents[i] = aircraftAgent;
@@ -154,87 +256,22 @@ public final class World extends Agent implements Runnable {
 	}
 	
 	/**
-	 * Generates all the Fires in the world, when is possible.
+	 * Adds a fire to some available position in the world, if it's possible.
+	 * 
+	 * @param firePosX coordinate X of the world's map/grid
+	 * @param firePosY coordinate Y of the world's map/grid
+	 * @param fire the fire object to add
 	 */
-	Thread generateFires = new Thread(() -> {
-		this.fires = new Fire[Config.NUM_MAX_FIRES + 1];
-		
-		this.currentNumFires = 0;
-		
-	    for(;;) {
-	    	// Time to wait until generate the next fire (6 seconds per fire)
-	    	try {
-				Thread.sleep(6000);
-			}
-	    	catch (InterruptedException e) {
-				// Trace the InterruptedException e
-				e.printStackTrace();
-			}
-	    		    	
-	    	if(this.currentNumFires < Config.NUM_MAX_FIRES) {
-		    	int[] firePos = this.generateRandomPos();
-		    	
-		    	WorldObject fireWorldObject = new WorldObject(WorldObjectType.FIRE, new Point(firePos[0], firePos[1]));
-		    	
-		    	Fire fire = new Fire((byte) this.currentNumFires, fireWorldObject);
-		    	
-	    		this.worldMap[firePos[0]][firePos[1]] = fire;
-	    		
-	    		
-	    		int fireToCreatePosInArray;
-
-	    		for(fireToCreatePosInArray = 0; fireToCreatePosInArray < Config.NUM_MAX_FIRES; fireToCreatePosInArray++)
-	    			if(this.fires[fireToCreatePosInArray] != null)
-	    				break;
-	    		
-	    		if(fireToCreatePosInArray <= Config.NUM_MAX_FIRES) {
-		    		this.fires[fireToCreatePosInArray] = fire;
-		    		
-		    		this.currentNumFires++;
-	    		}
-	    	}
-	    }
-	});
-	
-	/**
-	 * Prints the current status of the world.
-	 */
-	public void printCurrentStatus() {
-		for(int i = 0; i < Config.GRID_WIDTH * 3 + 1; i++) {
-			System.out.print('-');
-		}
-		System.out.println("");
-		for(int j = 0; j < Config.GRID_HEIGHT; j++) {
-			for(int i = 0; i < Config.GRID_WIDTH; i++) {
-				System.out.print("|");
-				if (this.worldMap[i][j] != null) {
-					System.out.print(this.worldMap[i][j]);
-				}
-				else {
-					System.out.print("  ");
-				}
-			}
-			System.out.println('|');
-			for(int i = 0; i < Config.GRID_WIDTH * 3 + 1; i++) {
-				System.out.print('-');
-			}
-			System.out.println("");
-		}
+	public void addFire(int firePosX, int firePosY, Fire fire) {
+		this.worldMap[firePosX][firePosY] = fire;
 	}
 	
 	/**
-	 * Starts the world and all its components.
+	 * Generates all the Fires in the world, when is possible.
 	 */
-	public void startWorld() {
-		this.createWorld();
-		this.createFireStationAgent();
-		this.generateFillingStations();
-		this.generateAicraftAgents();
-		
-		this.generateFires.start();
-	
-		// TODO - Uncomment to print the status of the world
-		//this.printWorldStatus();
+	public void setup() {
+		addBehaviour(new GenerateFiresBehaviour(this, 6000));
+		addBehaviour(new PrintStatusBehaviour(this, 500));
 	}
 	
 
@@ -242,7 +279,7 @@ public final class World extends Agent implements Runnable {
 	 * Returns the current world map
 	 * @return current world map
 	 */
-	static Object[][] getWorldMap() {
+	public  Object[][] getWorldMap() {
 		return worldMap;
 	}
 }

@@ -17,7 +17,8 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
-
+import firefighting.utils.Config;
+import firefighting.world.*;
 
 /**
  * Class responsible for an Aircraft Agent and its behaviour.
@@ -46,6 +47,11 @@ public class AircraftAgent extends Agent {
 	 */
 	private int tankStatus;
 
+	/**
+	 * World agent
+	 */
+	private WorldAgent worldAgent;
+
 
 	// Constructors:
 	/**
@@ -56,11 +62,12 @@ public class AircraftAgent extends Agent {
 	 * @param id the Aircraft Agent's ID
 	 * @param worldObject the Aircraft's World Object
 	 */
-	AircraftAgent(byte id, WorldObject worldObject) {
+	public AircraftAgent(byte id, WorldObject worldObject, WorldAgent worldAgent) {
 		Random random = new Random();
 
 		this.id = id;
 		this.worldObject = worldObject;
+		this.worldAgent = worldAgent;
 		this.tankCapacity = random.nextInt(Config.AIRCRAFT_MAX_TANK_CAPACITY) + 1;
 		this.tankStatus = 0;
 	}
@@ -172,7 +179,7 @@ public class AircraftAgent extends Agent {
 		boolean[][] visited = new boolean[Config.GRID_HEIGHT][Config.GRID_WIDTH];
 		for (int i = 0; i < Config.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Config.GRID_WIDTH; j++) {
-				if(World.getWorldMap()[i][j] == null)
+				if(worldAgent.getWorldMap()[i][j] == null)
 					visited[i][j] = false;
 				else
 					visited[i][j] = true;
