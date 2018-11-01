@@ -233,6 +233,20 @@ public class AircraftAgent extends Agent {
 		return new ArrayList<Point>();
 	}
 
+
+	private void moveThroughPath(ArrayList<Point> path) throws InterruptedException {
+		Point prev = (Point) this.worldObject.getPos().clone();
+		
+		while(!path.isEmpty()) {
+			worldAgent.getWorldMap()[(int) prev.getX()][(int) prev.getY()] = null;
+			Point next = path.remove(0);
+			worldAgent.getWorldMap()[(int) next.getX()][(int) next.getY()] = this;
+			prev = (Point) next.clone();
+			
+			Thread.sleep(Config.MS_BETWEEN_AIRCRAFT_MOVES);
+		}
+	}
+	
 	protected void takeDown() {
 		System.out.println("Agent"+getAID().getName()+"terminating.");
 	}
