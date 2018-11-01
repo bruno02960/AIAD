@@ -63,4 +63,13 @@ public class WorldObject {
 	private int getPosY() {
 		return this.worldPosition.y;
 	}
+
+	/**
+	 * Returns the coordinates of the position of the world's object.
+	 * 
+	 * @return the coordinates of the position of the world's object
+	 */
+	public Point getPos() {
+		return this.worldPosition;
+	}
 }

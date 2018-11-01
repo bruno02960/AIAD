@@ -18,51 +18,50 @@ import jade.core.Agent;
  * Class responsible for managing, updating and printing the world status.
  */
 @SuppressWarnings("serial")
-public class WorldAgent extends Agent {
-	
+public class WorldAgent extends Agent {	
 	// Global Instance Variables:
 	/**
 	 * The matrix/grid that represents all the positions of the world.
 	 */
-	private Object[][] worldMap;
-	
+	private  Object[][] worldMap;
+
 	// Fixed agents (without movement)
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private FireStationAgent fireStationAgent;
+	private  FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Filling Stations in the world.
 	 */
-	private FillingStation[] fillingStations;
+	private  FillingStation[] fillingStations;
 	
 	// Mobile agents (with movement)
 	/**
 	 * The Aircraft Agents in the world.
 	 */
-	private AircraftAgent[] aircraftAgents;
+	private  AircraftAgent[] aircraftAgents;
 	
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
 	 */
-	private Fire[] fires;
+	private  Fire[] fires;
 	
 	/*
 	 * The current number of filling stations in the world.
 	 */
-	private int currentNumFillingStations;
+	private  int currentNumFillingStations;
 	
 	/*
 	 * The current number of aircrafts in the world.
 	 */
-	private int currentNumAircraftsAgents;
+	private  int currentNumAircrafts;
 	
 	/*
 	 * The current number of fires in the world.
 	 */
-	private int currentNumFires;
+	private  int currentNumFires;
 	
 	
 	//Constructors:
@@ -93,7 +92,7 @@ public class WorldAgent extends Agent {
 	 * @return the number of aircrafts the world.
 	 */
 	public int getNumAircraftsAgents() {
-		return this.currentNumAircraftsAgents;
+		return this.currentNumAircrafts;
 	}
 	
 	/**
@@ -117,15 +116,6 @@ public class WorldAgent extends Agent {
 	 */
 	public void decCurrentNumFires() {
 		this.currentNumFires--;
-	}
-	
-	/**
-	 * Returns the current world's map/grid.
-	 * 
-	 * @return the current world's map/grid
-	 */
-	public Object[][] getWorldMap() {
-		return this.worldMap;
 	}
 	
 	/**
@@ -169,14 +159,14 @@ public class WorldAgent extends Agent {
 	/**
 	 * Creates the matrix/grid that represents all the positions of the world.
 	 */
-	public void createWorld() {
-		this.worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+	public  void createWorld() {
+		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 
-		this.fires = new Fire[Config.NUM_MAX_FIRES + 1];
+		fires = new Fire[Config.NUM_MAX_FIRES + 1];
 		
-		this.currentNumFillingStations = 0;
-		this.currentNumAircraftsAgents = 0;
-		this.currentNumFires = 0;
+		currentNumFillingStations = 0;
+		currentNumAircrafts = 0;
+		currentNumFires = 0;
 	}
 	
 	/**
@@ -186,7 +176,7 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return a random coordinate X or Y
 	 */
-	private int generateRandomXOrY(int axisLimit) {
+	private  int generateRandomXOrY(int axisLimit) {
 		Random randomObject = new Random();
 		
 		return randomObject.nextInt(axisLimit) + 1;
@@ -197,14 +187,14 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return a random position in the matrix/grid that represents all the positions of the world
 	 */
-	public int[] generateRandomPos() {
+	public  int[] generateRandomPos() {
 				
-		int posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
-		int posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
+		int posX = generateRandomXOrY(Config.GRID_WIDTH) - 1;
+		int posY = generateRandomXOrY(Config.GRID_HEIGHT) - 1;
 		
     	while(worldMap[posX][posY] != null) {
-    		posX = this.generateRandomXOrY(Config.GRID_WIDTH) - 1;
-    		posY = this.generateRandomXOrY(Config.GRID_HEIGHT) - 1;
+    		posX = generateRandomXOrY(Config.GRID_WIDTH) - 1;
+    		posY = generateRandomXOrY(Config.GRID_HEIGHT) - 1;
     	}
     	
     	int[] pos = {posX, posY};
@@ -255,13 +245,13 @@ public class WorldAgent extends Agent {
 			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
-			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircraftsAgents, aircraftWorldObject);
+			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject, this);
 			
 			
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;
 			this.aircraftAgents[i] = aircraftAgent;
 			
-			this.currentNumAircraftsAgents++;
+			this.currentNumAircrafts++;
 		}
 	}
 	
@@ -282,5 +272,14 @@ public class WorldAgent extends Agent {
 	public void setup() {
 		addBehaviour(new GenerateFiresBehaviour(this, 6000));
 		addBehaviour(new PrintStatusBehaviour(this, 500));
+	}
+	
+
+	/**
+	 * Returns the current world map
+	 * @return current world map
+	 */
+	public  Object[][] getWorldMap() {
+		return worldMap;
 	}
 }
