@@ -1,4 +1,4 @@
-package firefighting;
+package firefighting.firestation;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -6,9 +6,11 @@ import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
+
+import firefighting.world.*;
+
 import java.util.Enumeration;
 
 /**
@@ -157,5 +159,10 @@ public class FireStationAgent extends Agent {
 		
 	protected void takeDown() {
 		System.out.println("Agent"+getAID().getName()+"terminating.");
+	}
+
+	public ContractNetInitiator createContractNetInitiator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

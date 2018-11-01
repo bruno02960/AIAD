@@ -1,4 +1,6 @@
-package firefighting;
+package firefighting.world;
+
+import firefighting.world.utils.*;
 
 import java.awt.Point;
 

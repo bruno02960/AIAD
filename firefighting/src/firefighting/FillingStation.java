@@ -2,6 +2,9 @@ package firefighting;
 
 import java.util.Random;
 
+import firefighting.utils.Config;
+import firefighting.world.*;
+
 /**
  * Class responsible for a Filling Station.
  */

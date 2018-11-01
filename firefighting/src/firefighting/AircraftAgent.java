@@ -13,7 +13,8 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
-
+import firefighting.utils.Config;
+import firefighting.world.*;
 
 /**
  * Class responsible for an Aircraft Agent and its behaviour.
@@ -52,7 +53,7 @@ public class AircraftAgent extends Agent {
 	 * @param id the Aircraft Agent's ID
 	 * @param worldObject the Aircraft's World Object
 	 */
-	AircraftAgent(byte id, WorldObject worldObject) {
+	public AircraftAgent(byte id, WorldObject worldObject) {
 		Random random = new Random();
 		
 		this.id = id;

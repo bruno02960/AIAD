@@ -1,4 +1,6 @@
-package firefighting;
+package firefighting.utils;
+
+import firefighting.world.*;
 
 import jade.Boot;
 import jade.core.Agent;
@@ -15,7 +17,7 @@ import firefighting.AircraftAgent;
  * Class responsible for running and controlling JADE execution
  */
 public class JADELauncher {
-    static World world = new World();
+    static WorldAgent worldAgent = new WorldAgent();
 	
 	public static void main(String[] args) throws ControllerException {		
 		Runtime rt = Runtime.instance();
@@ -26,11 +28,12 @@ public class JADELauncher {
 		
 		try {
 			
-			mainContainer.acceptNewAgent("FireStation", world.getFireStationAgent());
+			mainContainer.acceptNewAgent("FireStation", worldAgent.getFireStationAgent());
 			mainContainer.getAgent("FireStation").start();
-			for(int i = 0; i < world.getNumAircrafts(); i++) {
-				mainContainer.acceptNewAgent("aircraftAgent"+i, world.getAircraftAgents()[i]);
-				mainContainer.getAgent(world.getAircraftAgents()[i].getLocalName()).start();
+			
+			for(int i = 0; i < worldAgent.getNumAircraftsAgents(); i++) {
+				mainContainer.acceptNewAgent("aircraftAgent"+i, worldAgent.getAircraftAgents()[i]);
+				mainContainer.getAgent(worldAgent.getAircraftAgents()[i].getLocalName()).start();
 			}
 
 		} catch (StaleProxyException e) {
