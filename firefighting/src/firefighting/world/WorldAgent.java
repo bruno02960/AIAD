@@ -255,7 +255,7 @@ public class WorldAgent extends Agent {
 			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
-			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircraftsAgents, aircraftWorldObject);
+			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircraftsAgents, aircraftWorldObject, this);
 			
 			
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;

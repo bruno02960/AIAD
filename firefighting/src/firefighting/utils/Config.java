@@ -44,4 +44,9 @@ public abstract class Config {
 	 * Defines the maximum intensity of a fire.
 	 */
 	public final static int FIRE_MAX_INTENSITY = 9;
+	
+	/**
+	 * Milliseconds between aircraft moves
+	 */
+	public final static int MS_BETWEEN_AIRCRAFT_MOVES = 9;
 }
