@@ -82,6 +82,7 @@ public class FireStationAgent extends Agent {
 		// Hello Aircrafts behaviour (just for communications debugging)
 		HelloAircraftMessage helloAircraftMsg = new HelloAircraftMessage();
 		this.addBehaviour(new HelloAircraftBehaviour(this, helloAircraftMsg.getACLMessage()));
+		System.out.println("  ");
 	
 		
 	}
