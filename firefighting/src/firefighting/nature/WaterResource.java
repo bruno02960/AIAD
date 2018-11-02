@@ -1,11 +1,15 @@
-package firefighting;
+package firefighting.nature;
 
 import java.util.Random;
+
+import firefighting.utils.Config;
+import firefighting.world.*;
+import firefighting.world.utils.SeasonType;
 
 /**
  * Class responsible for a Filling Station.
  */
-public class FillingStation {
+public class WaterResource {
 	
 	// Global Instance Variables:
 	/**
@@ -21,7 +25,7 @@ public class FillingStation {
 	/**
 	 * Filling Station current status
 	 */
-	private int currentStatus;
+	private int waterCapacity;
 	
 	// Constructors:
 	/**
@@ -32,12 +36,12 @@ public class FillingStation {
 	 * @param the Filling Station's ID
 	 * @param the Filling Station's World Object
 	 */
-	public FillingStation(byte id, WorldObject worldObject) {
+	public WaterResource(byte id, WorldObject worldObject) {
 		Random random = new Random();
 		
 		this.id = id;
 		this.worldObject = worldObject;
-		this.currentStatus = random.nextInt(Config.FILLINGSTATION_MAX_CAPACITY) + 1;
+		this.waterCapacity = random.nextInt(Config.WATER_RESOURCE_MAX_CAPACITY) + 1;
 	}
 
 	// Methods:
@@ -58,9 +62,17 @@ public class FillingStation {
 	private WorldObject getWorldObject() {
 		return this.worldObject;
 	}
+	
+	public int getWaterCapacity() {
+		return this.waterCapacity;
+	}
 
+	public void autoRefill() {
+		
+	}
+	
 	@Override
 	public String toString() {
-		return "F" + this.currentStatus;
+		return "W" + this.waterCapacity;
 	}
 }

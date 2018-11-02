@@ -1,6 +1,10 @@
-package firefighting;
+package firefighting.nature;
 
+import java.awt.Point;
 import java.util.Random;
+
+import firefighting.utils.Config;
+import firefighting.world.*;
 
 /**
  * Class responsible for a Fire.
@@ -18,6 +22,8 @@ public class Fire {
 	 */
 	private WorldObject worldObject;
 
+	private long timestamp;
+	
 	/**
 	 * Current intensity of the Fire.
 	 */
@@ -32,6 +38,12 @@ public class Fire {
 	 * Probability of Fire spreading.
 	 */
 	private float spreadProbability;
+	
+	private int numSpreads;
+	
+	private boolean active;
+	
+	private boolean attended;
 	
 	
 	// Constructors:
@@ -49,10 +61,17 @@ public class Fire {
 		this.id = id;
 		this.worldObject = worldObject;
 		
+		this.timestamp = System.currentTimeMillis();
+		
 		this.currentIntensity = random.nextInt(Config.FIRE_MAX_INTENSITY) + 1;
 		this.originalIntensity = currentIntensity;
 		
 		this.spreadProbability = random.nextFloat();
+		
+		this.numSpreads = 0;
+		
+		this.active = true;
+		this.attended = false;
 	}
 	
 	// Methods:
@@ -61,7 +80,7 @@ public class Fire {
 	 * 
 	 * @return the Fire's ID
 	 */
-	private byte getID() {
+	public byte getID() {
 		return this.id;
 	}
 		
@@ -70,7 +89,7 @@ public class Fire {
 	 * 
 	 * @return the Fire's World Object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 	
@@ -79,7 +98,7 @@ public class Fire {
 	 * 
 	 * @return the current intensity of the Fire
 	 */
-	private int getCurrentIntensity() {
+	public int getCurrentIntensity() {
 		return this.currentIntensity;
 	}
 	
@@ -88,7 +107,7 @@ public class Fire {
 	 * 
 	 * @return the original intensity of the Fire
 	 */
-	private int getOriginalIntensity() {
+	public int getOriginalIntensity() {
 		return this.originalIntensity;
 	}
 
@@ -97,12 +116,39 @@ public class Fire {
 	 * 
 	 * @return the probability of spreading of the Fire
 	 */
-	private float getSpreadProbability() {
+	public float getSpreadProbability() {
 		return this.spreadProbability;
 	}
 
+	public int getNumSpreads() {
+		return this.numSpreads;
+	}
+	
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	public boolean isAttended() {
+		return this.attended;
+	}
+	
+	//	@Override
+	/*public String toString() {
+		
+		// TODO: Confirmar se Posicao pode ser double???
+		Point pos = this.getWorldObject().getPos();
+		
+		int firePosX = (int) pos.getX();
+		int firePosY = (int) pos.getY();
+		
+		String activeStatus = isActive() ? "Active" : "Not Active/Extinguished";
+		String attendedStatus = isAttended() ? "Attended at this moment" : "Not attended yet";
+		
+		return "Fire:\n - ID: " + this.getID() + ";\n - Position: (" + firePosX + "," + firePosY + ");\n - Current Intensity: " + this.getCurrentIntensity() + ";\n - Spread Probability: " + (this.getSpreadProbability() * 100) + "%;\n - Active Status: " + activeStatus + ";\n - Attended Status: " + attendedStatus + "\n";
+	}*/
+	
 	@Override
 	public String toString() {
-		return "f" + this.currentIntensity;
+		return "F" + this.currentIntensity;
 	}
 }

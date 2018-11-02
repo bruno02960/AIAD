@@ -1,15 +1,15 @@
 package firefighting.world.utils;
 
-public enum WorldObjectType {
-	FIRE_STATION((byte) 0, "Fire Station"),
-	WATER_RESOURCE((byte) 1, "Water Resource"),
-	AIRCRAFT((byte) 2, "Aircraft"),
-	FIRE((byte) 3, "Fire");
+public enum WindType {
+	
+	VERY_WINDY((byte) 0, "Very Windy"),
+	WINDY((byte) 1, "Windy"),
+	NO_WIND((byte) 2, "No Wind");
 
     private final byte id;
     private final String name;
 
-    private WorldObjectType(byte id, String name) {
+    private WindType(byte id, String name) {
         this.id = id;
         this.name = name;
     }
