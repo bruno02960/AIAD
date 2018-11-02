@@ -54,6 +54,10 @@ public class FireStationAgent extends Agent {
 
 	
 	// Methods:
+	
+	private WorldAgent getWorldAgent() {
+		return this.worldAgent;
+	}
 	/**
 	 * Return the Fire Station Agent's World Object.
 	 * 
@@ -80,11 +84,10 @@ public class FireStationAgent extends Agent {
 
 	protected void setup() {
 		// Hello Aircrafts behaviour (just for communications debugging)
-		HelloAircraftMessage helloAircraftMsg = new HelloAircraftMessage();
-		this.addBehaviour(new HelloAircraftBehaviour(this, helloAircraftMsg.getACLMessage()));
-		System.out.println("  ");
-	
+		//HelloAircraftMessage helloAircraftMsg = new HelloAircraftMessage();
+		//this.addBehaviour(new HelloAircraftBehaviour(this, helloAircraftMsg.getACLMessage()));
 		
+		this.addBehaviour(new DetectFiresBehaviour(this.getWorldAgent(), this, 10000));
 	}
 		
 	protected void takeDown() {

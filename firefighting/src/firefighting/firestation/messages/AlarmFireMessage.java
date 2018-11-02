@@ -8,7 +8,6 @@ import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 
-@SuppressWarnings("deprecation")
 public class AlarmFireMessage extends ACLMessage {
 
 	/**
@@ -16,25 +15,25 @@ public class AlarmFireMessage extends ACLMessage {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ACLMessage aclMessage;
+	private ACLMessage cfpMsg;
 	
 	private Fire associatedFire;
 	
 	public AlarmFireMessage(Fire associatedFire) {
-		this.aclMessage = null;
-		this.associatedFire = associatedFire;
+		super(ACLMessage.CFP);
 		setACLMessage();
+		this.associatedFire = associatedFire;
 	}
 
 	
 	public ACLMessage getACLMessage() {
-		return this.aclMessage;
+		return this.cfpMsg;
 	}
 	
 	private void setACLMessage() {
 		Object[] args = FireStationAgent.getAircraftAgentsNames();
 				 
-		ACLMessage cfpMsg = null;
+		cfpMsg = null;
 				
 		if (args != null && args.length > 0) {
 		      

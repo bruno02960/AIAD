@@ -42,11 +42,11 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 		FireStationAgent fireStationAgent = this.getFireStationAgent();
 		Fire[] fires = this.getCurrentFires();
 		
-		if(fires != null) {
+		if(fires.length > 0) {
 			for(int i = 0; i < Config.NUM_MAX_FIRES; i++) {
-				
+				System.out.println(fires[i]);
 				if(fires[i] != null) {
-					
+					System.out.println("vai adicionar alarme");
 					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
 					if(fires[i].isActive() && !fires[i].isAttended()) {
 						
@@ -55,8 +55,8 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 						
 						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished);	
 					    
-						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg);
-					    						
+						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg.getACLMessage());
+					
 					    fireStationAgent.addBehaviour(alarmToExtinguishFire);
 					}	
 				}

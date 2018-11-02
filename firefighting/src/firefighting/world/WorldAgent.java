@@ -356,9 +356,9 @@ public class WorldAgent extends Agent {
 	 */
 	public void setup() {
 		
-		//addBehaviour(new GenerateFiresBehaviour(this, 6000));
-		//addBehaviour(new PrintStatusBehaviour(this, 4000));
-		this.addBehaviour(new RefillWaterResourcesBehaviour(this, 1000));
+		addBehaviour(new GenerateFiresBehaviour(this, 6000));
+		addBehaviour(new PrintStatusBehaviour(this, 4000));
+		//this.addBehaviour(new RefillWaterResourcesBehaviour(this, 1000));
 	}
 	
 
