@@ -38,7 +38,7 @@ public abstract class Config {
 	/**
 	 * Defines the maximum capacity of a water resource.
 	 */
-	public final static int WATER_RESOURCE_MAX_CAPACITY = 8;
+	public final static int WATER_RESOURCE_INITIAL_MAX_CAPACITY = 8;
 	
 	/**
 	 * Defines the total number of seasons.
@@ -46,29 +46,38 @@ public abstract class Config {
 	public final static int NUM_SEASONS = 4;
 	
 	/**
-	 * Defines the amount of water provided by rain to the water resources in spring season.
+	 * Defines the factor value of water provided by rain to the water resources in spring season,
+	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_SPRING = 2;
+	public final static int RAIN_FACTOR_SPRING = 4;
 	
 	/**
-	 * Defines the amount of water provided by rain to the water resources in summer season.
+	 * Defines the factor value of water provided by rain to the water resources in summer season,
+	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_SUMMER = 1;
+	public final static int RAIN_FACTOR_SUMMER = 2;
 	
 	/**
-	 * Defines the amount of water provided by rain to the water resources in autumn season.
+	 * Defines the factor value of water provided by rain to the water resources in autumn season,
+	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_AUTUMN = 2;
+	public final static int RAIN_FACTOR_AUTUMN = 4;
 	
 	/**
-	 * Defines the amount of water provided by rain to the water resources in winter season.
+	 * Defines the factor value of water provided by rain to the water resources in winter season,
+	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_WINTER = 4;
+	public final static int RAIN_FACTOR_WINTER = 8;
 	
 	/**
 	 * Defines the total number of types of wind.
 	 */
 	public final static int NUM_TYPE_WINDS = 3;
+	
+	/**
+	 * Defines the penalty value of water resources, during drought situations, when it happens.
+	 */
+	public final static int DROUGHT_SITUATION_PENALTY = 6;
 	
 	/**
 	 * Defines the maximum intensity of a fire.

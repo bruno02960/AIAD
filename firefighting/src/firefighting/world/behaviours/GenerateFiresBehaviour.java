@@ -9,11 +9,9 @@ import firefighting.world.WorldObject;
 import firefighting.world.utils.WorldObjectType;
 import jade.core.behaviours.TickerBehaviour;
 
-import firefighting.world.*;
-
 public class GenerateFiresBehaviour extends TickerBehaviour {
 	
-	WorldAgent worldAgent;
+	public WorldAgent worldAgent;
 	
 	public GenerateFiresBehaviour(WorldAgent worldAgent, long period) {
 		super(worldAgent, period);

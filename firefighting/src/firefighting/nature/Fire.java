@@ -124,6 +124,20 @@ public class Fire {
 		return this.numSpreads;
 	}
 	
+	public void decreaseIntensity(int decreaseValue) {
+		
+		if((this.currentIntensity - decreaseValue) < 0) {
+			this.currentIntensity = 0;
+			this.active = false;
+		}
+		
+		this.currentIntensity -= decreaseValue;
+	}
+	
+	public void increaseIntensity(int increaseValue) {
+		this.currentIntensity += increaseValue;
+	}
+	
 	public boolean isActive() {
 		return this.active;
 	}
@@ -131,6 +145,7 @@ public class Fire {
 	public boolean isAttended() {
 		return this.attended;
 	}
+	
 	
 	//	@Override
 	/*public String toString() {

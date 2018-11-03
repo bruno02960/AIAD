@@ -9,7 +9,7 @@ import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
 import firefighting.world.behaviours.PrintStatusBehaviour;
-import firefighting.world.behaviours.RefillWaterResourcesBehaviour;
+import firefighting.world.behaviours.WeatherConditionsBehaviour;
 import firefighting.world.utils.SeasonType;
 import firefighting.world.utils.WindType;
 import firefighting.world.utils.WorldObjectType;
@@ -30,9 +30,25 @@ public class WorldAgent extends Agent {
 	private static SeasonType seasonType;	
 	
 	/**
-	 * current season type from the set {Very Windy, Windy and No Wind}
+	 * The current wind type from the set {Very Windy, Windy and No Wind}
 	 */
 	private static WindType windType;
+	
+	/**
+	 * The boolean value that keeps information that allows to know if can occur periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	private static boolean droughtSituation;
+	
+	/**
+	 * The float value that keeps the probability value of a drought (extreme dry situation) happens,
+	 * if it's possible and allowed
+	 * - [0%, 0%] probability interval,
+	 *   of drought (extreme dry situation) happen in spring, autumn and winter seasons
+	 * - a random [m%, n%] probability interval, from the set [0%, 100%],
+	 *   of drought (extreme dry situation) happen in summer season
+	 */
+	private static float[] droughtSituationProbabilityInterval;
 	
 	
 	// Global Instance Variables:
@@ -50,7 +66,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * The Water Resources in the world.
 	 */
-	private WaterResource[] waterResourses;
+	private WaterResource[] waterResources;
 	
 	// Mobile agents (with movement)
 	/**
@@ -131,7 +147,35 @@ public class WorldAgent extends Agent {
 		
 		// Sets all the world's environment conditions
 		WorldAgent.seasonType = seasonType;
-		WorldAgent.windType = windType;
+		WorldAgent.windType = windType; // TODO: REVER
+		
+		Random randomObject = new Random();
+		
+		// Verifies the current season type first. If the current season type defined previously was the summer,
+		// generates a random boolean value (true or false) to keep the information that allows to know
+		// if, at some moment, can occur droughts (extreme dry situations), that will affect the global behaviour
+		// of the world and its weather conditions
+		if(this.getSeasonType().getID() == SeasonType.SUMMER.getID())
+			WorldAgent.droughtSituation = randomObject.nextBoolean();
+		else
+			WorldAgent.droughtSituation = false;
+		
+		if(this.canOccurDroughtSituations()) {
+			float bound1 = randomObject.nextFloat();
+			float bound2 = randomObject.nextFloat();
+			
+			if(bound1 != bound2) {
+				float max = bound2 > bound1 ? bound2 : bound1;
+				float min = bound2 < bound1 ? bound2 : bound1;
+				
+				WorldAgent.droughtSituationProbabilityInterval = new float[]{min,max};
+			}
+			else
+				WorldAgent.droughtSituationProbabilityInterval = new float[]{bound1,bound2};
+		}
+		else
+			// Never occurs droughts (extreme dry situations)
+			WorldAgent.droughtSituationProbabilityInterval = new float[]{0.0f,0.0f};
 		
 		// Creation of world's elements
 		this.createWorld();
@@ -158,6 +202,28 @@ public class WorldAgent extends Agent {
 	 */
 	public WindType getWindType() {
 		return WorldAgent.windType;
+	}
+	
+	/**
+	 * Returns the boolean value that keeps the information that allows to know if can occur periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season.
+	 * 
+	 * @return the boolean value that keeps the information that allows to know if can occur periodically,
+	 * 		   in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	public boolean canOccurDroughtSituations() {
+		return WorldAgent.droughtSituation;
+	}
+	
+	/**
+	 * Returns the float array that keeps the possible probability interval of occurring periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season.
+	 * 
+	 * @return the boolean value that keep information that allows to know if can occur periodically,
+	 * 		   in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	public float[] getDroughtSituationProbabilityInterval() {
+		return WorldAgent.droughtSituationProbabilityInterval;
 	}
 	
 	/**
@@ -215,8 +281,8 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return all the natural water resources in the world
 	 */
-	public WaterResource[] getWaterResourses() {
-		return this.waterResourses;
+	public WaterResource[] getWaterResources() {
+		return this.waterResources;
 	}
 	
 	/**
@@ -301,7 +367,7 @@ public class WorldAgent extends Agent {
 	 * Generates all the natural water resources in the world.
 	 */
 	public void generateWaterResources() {
-		this.waterResourses = new WaterResource[Config.NUM_MAX_WATER_RESOURCES];
+		this.waterResources = new WaterResource[Config.NUM_MAX_WATER_RESOURCES];
 		
 		for(int i = 0; i < Config.NUM_MAX_WATER_RESOURCES; i++) {
 			int[] waterResourcePos = this.generateRandomPos();
@@ -310,7 +376,7 @@ public class WorldAgent extends Agent {
 			
 			WaterResource waterResource = new WaterResource((byte) this.numWaterResources, waterResourceWorldObject);
 			
-			this.waterResourses[i] = waterResource;
+			this.waterResources[i] = waterResource;
 			this.worldMap[waterResourcePos[0]][waterResourcePos[1]] = waterResource;
 			
 			this.numWaterResources++;
@@ -356,9 +422,9 @@ public class WorldAgent extends Agent {
 	 */
 	public void setup() {
 		
-		addBehaviour(new GenerateFiresBehaviour(this, 6000));
-		addBehaviour(new PrintStatusBehaviour(this, 4000));
-		//this.addBehaviour(new RefillWaterResourcesBehaviour(this, 1000));
+		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
+		this.addBehaviour(new PrintStatusBehaviour(this, 4000));
+		this.addBehaviour(new WeatherConditionsBehaviour(this));
 	}
 	
 

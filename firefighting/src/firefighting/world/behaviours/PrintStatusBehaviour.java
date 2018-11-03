@@ -1,7 +1,5 @@
 package firefighting.world.behaviours;
 
-import java.io.IOException;
-
 import firefighting.utils.Config;
 import firefighting.world.WorldAgent;
 import jade.core.behaviours.TickerBehaviour;

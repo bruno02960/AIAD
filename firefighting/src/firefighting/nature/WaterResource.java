@@ -4,7 +4,6 @@ import java.util.Random;
 
 import firefighting.utils.Config;
 import firefighting.world.*;
-import firefighting.world.utils.SeasonType;
 
 /**
  * Class responsible for a Filling Station.
@@ -41,7 +40,7 @@ public class WaterResource {
 		
 		this.id = id;
 		this.worldObject = worldObject;
-		this.waterCapacity = random.nextInt(Config.WATER_RESOURCE_MAX_CAPACITY) + 1;
+		this.waterCapacity = random.nextInt(Config.WATER_RESOURCE_INITIAL_MAX_CAPACITY) + 1;
 	}
 
 	// Methods:
@@ -66,9 +65,18 @@ public class WaterResource {
 	public int getWaterCapacity() {
 		return this.waterCapacity;
 	}
-
-	public void autoRefill() {
+	
+	public void decreasingCapacity(int decreaseValue) {
 		
+		if((this.waterCapacity - decreaseValue) < 0) {
+			this.waterCapacity = 0;
+		}
+		
+		this.waterCapacity -= decreaseValue;
+	}
+
+	public void increasingCapacity(int increaseValue) {
+		this.waterCapacity += increaseValue;
 	}
 	
 	@Override
