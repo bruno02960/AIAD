@@ -58,7 +58,7 @@ public class WaterResource {
 	 * 
 	 * @return the Filling Station's World Object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 	

@@ -417,6 +417,52 @@ public class WorldAgent extends Agent {
 		this.worldMap[firePosX][firePosY] = fire;
 	}
 	
+	public void refreshWorldMapPositions() {
+		Object[][] tmpWorldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+		
+		// 1) Switching/refreshing the fire station's position in the world map/grid 
+		FireStationAgent fireStationAgent = this.getFireStationAgent();
+		WorldObject fireStationWorldObject = fireStationAgent.getWorldObject();
+		
+		tmpWorldMap[fireStationWorldObject.getPosX()][fireStationWorldObject.getPosY()] = fireStationAgent;
+		
+		// 2) Switching/refreshing the water resources' positions in the world map/grid 
+		WaterResource[] waterResources = this.getWaterResources();
+		
+		for(int wr = 0; wr < waterResources.length; wr++) {
+			WaterResource waterResource = waterResources[wr];
+			WorldObject waterResourceWorldObject = waterResource.getWorldObject();
+			
+			tmpWorldMap[waterResourceWorldObject.getPosX()][waterResourceWorldObject.getPosY()] = waterResource;
+		}
+				
+		// 3) Switching/refreshing the aircraft agents' positions in the world map/grid 
+		AircraftAgent[] aircraftAgents = this.getAircraftAgents();
+				
+		for(int aa = 0; aa < aircraftAgents.length; aa++) {
+			AircraftAgent aircraftAgent = aircraftAgents[aa];
+			WorldObject aircraftWorldObject = aircraftAgent.getWorldObject();
+					
+			tmpWorldMap[aircraftWorldObject.getPosX()][aircraftWorldObject.getPosY()] = aircraftAgent;
+		}
+		
+		// 4) Switching/refreshing the fires' positions in the world map/grid 
+		Fire[] fires = this.getCurrentFires();
+				
+		for(int f = 0; f < fires.length; f++) {	
+			if(fires[f] != null) {
+				Fire fire = fires[f];
+				WorldObject fireWorldObject = fire.getWorldObject();
+				
+				tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;
+			}
+		}
+				
+		// 5) Switching/refreshing the world maps/grids objects
+		this.worldMap = null;
+		this.worldMap = tmpWorldMap;
+		tmpWorldMap = null;
+	}
 	/**
 	 * Generates all the Fires in the world, when is possible.
 	 */

@@ -52,6 +52,12 @@ public class AircraftAgent extends Agent {
 	 */
 	private WorldAgent worldAgent;
 
+	/**
+	 * 
+	 */
+	private boolean attendindFire;
+
+	
 
 	// Constructors:
 	/**
@@ -70,6 +76,7 @@ public class AircraftAgent extends Agent {
 		this.worldAgent = worldAgent;
 		this.tankCapacity = random.nextInt(Config.AIRCRAFT_MAX_TANK_CAPACITY) + 1;
 		this.tankStatus = 0;
+		this.attendindFire = false;
 	}
 
 
@@ -88,7 +95,7 @@ public class AircraftAgent extends Agent {
 	 * 
 	 * @return the Aircraft Agent's World Object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 
@@ -110,6 +117,18 @@ public class AircraftAgent extends Agent {
 		return this.getTankCapacity() == 0;
 	}
 
+	public boolean isAttendingFire() {
+		return this.attendindFire;
+	}
+	
+	public void attendFire() {
+		this.attendindFire = true;
+	}
+	
+	public void finishAttendingFire() {
+		this.attendindFire = false;
+	}
+	
 	@Override
 	public String toString() {
 		return "A" + tankStatus;

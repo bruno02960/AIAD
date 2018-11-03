@@ -63,7 +63,7 @@ public class FireStationAgent extends Agent {
 	 * 
 	 * @return the Fire Station Agent's World Object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 
