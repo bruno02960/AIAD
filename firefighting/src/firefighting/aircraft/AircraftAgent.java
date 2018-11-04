@@ -148,7 +148,7 @@ public class AircraftAgent extends Agent {
 	 * 
 	 * @return the aircraft agent's world object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 	
@@ -351,6 +351,12 @@ public class AircraftAgent extends Agent {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			
+			if(this.worldAgent.getWorldMap()[(int)this.auxPath.get(i).getX()][(int)this.auxPath.get(i).getY()] != null) {
+				Point point = auxPath.get(auxPath.size()-1);
+				this.auxPath.clear();
+				this.auxPath.addAll(this.pathToFire(point));
 			}
 			
 			this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
