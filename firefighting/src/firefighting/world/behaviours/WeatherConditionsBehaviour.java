@@ -3,7 +3,7 @@ package firefighting.world.behaviours;
 import java.util.Random;
 
 import firefighting.world.WorldAgent;
-import firefighting.world.utils.SeasonType;
+import firefighting.world.utils.environment.SeasonType;
 import jade.core.behaviours.CyclicBehaviour;
 
 public class WeatherConditionsBehaviour extends CyclicBehaviour {

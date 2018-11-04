@@ -22,7 +22,10 @@ public class Fire {
 	 */
 	private WorldObject worldObject;
 
-	private long timestamp;
+	/**
+	 * Fire's creation timestamp.
+	 */
+	private long creationTimestamp;
 	
 	/**
 	 * Current intensity of the Fire.
@@ -40,6 +43,8 @@ public class Fire {
 	private float spreadProbability;
 	
 	private int numSpreads;
+	
+	private int numIntensityIncreases;
 	
 	private boolean active;
 	
@@ -61,14 +66,15 @@ public class Fire {
 		this.id = id;
 		this.worldObject = worldObject;
 		
-		this.timestamp = System.currentTimeMillis();
+		this.creationTimestamp = System.currentTimeMillis();
 		
-		this.currentIntensity = random.nextInt(Config.FIRE_MAX_INTENSITY) + 1;
+		this.currentIntensity = random.nextInt(Config.FIRE_MAX_INITIAL_INTENSITY) + 1;
 		this.originalIntensity = currentIntensity;
 		
 		this.spreadProbability = random.nextFloat();
 		
 		this.numSpreads = 0;
+		this.numIntensityIncreases = 0;
 		
 		this.active = true;
 		this.attended = false;
@@ -91,6 +97,15 @@ public class Fire {
 	 */
 	public WorldObject getWorldObject() {
 		return this.worldObject;
+	}
+	
+	/**
+	 * Returns the Fire's creation timestamp.
+	 * 
+	 * @return the Fire's creation timestamp
+	 */
+	public long getTimestampCreation() {
+		return this.creationTimestamp;
 	}
 	
 	/**
@@ -124,6 +139,14 @@ public class Fire {
 		return this.numSpreads;
 	}
 	
+	public void increaseNumSpreads() {
+		this.numSpreads++;
+	}
+	
+	public int getNumIntensityIncreases() {
+		return this.numIntensityIncreases;
+	}
+	
 	public void decreaseIntensity(int decreaseValue) {
 		
 		if((this.currentIntensity - decreaseValue) < 0) {
@@ -135,7 +158,10 @@ public class Fire {
 	}
 	
 	public void increaseIntensity(int increaseValue) {
-		this.currentIntensity += increaseValue;
+		if((this.currentIntensity + increaseValue) > Config.FIRE_MAX_FINAL_INTENSITY) {
+			this.currentIntensity += increaseValue;
+			this.numIntensityIncreases++;
+		}
 	}
 	
 	public boolean isActive() {

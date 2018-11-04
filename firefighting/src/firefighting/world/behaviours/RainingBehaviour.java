@@ -5,7 +5,7 @@ import java.util.Random;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
 import firefighting.world.WorldAgent;
-import firefighting.world.utils.SeasonType;
+import firefighting.world.utils.environment.SeasonType;
 import jade.core.behaviours.TickerBehaviour;
 
 

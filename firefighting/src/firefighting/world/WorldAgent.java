@@ -8,11 +8,12 @@ import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
+import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
 import firefighting.world.behaviours.PrintStatusBehaviour;
 import firefighting.world.behaviours.WeatherConditionsBehaviour;
-import firefighting.world.utils.SeasonType;
-import firefighting.world.utils.WindType;
 import firefighting.world.utils.WorldObjectType;
+import firefighting.world.utils.environment.SeasonType;
+import firefighting.world.utils.environment.WindType;
 
 import java.awt.Point;
 import jade.core.Agent;
@@ -53,7 +54,7 @@ public class WorldAgent extends Agent {
 	
 	// Global Instance Variables:
 	/**
-	 * The matrix/grid that represents all the positions of the world.
+	 * The matrix of grid/map that represents all the positions of the world.
 	 */
 	private Object[][] worldMap;
 
@@ -102,7 +103,7 @@ public class WorldAgent extends Agent {
 	 */
 	public WorldAgent(byte seasonTypeID, byte windTypeID) {
 		
-		// Sets the season type
+		// Sets the type of season
 		SeasonType seasonType;
 		
 		switch(seasonTypeID) {
@@ -127,18 +128,25 @@ public class WorldAgent extends Agent {
 				break;
 		}
 		
-		// Sets the wind type
+		// Sets the type of wind
 		WindType windType;
 		
 		switch(windTypeID) {
+			// NO WIND
 			case 0:
-				windType = WindType.VERY_WINDY;
-				break;
-			case 1:
-				windType = WindType.WINDY;
-				break;
-			case 2:
 				windType = WindType.NO_WIND;
+				break;
+			// WEAK WIND
+			case 1:
+				windType = WindType.WEAK_WIND;
+				break;
+			// NORMAL WIND
+			case 2:
+				windType = WindType.NORMAL_WIND;
+				break;
+			// STRONG WIND
+			case 3:
+				windType = WindType.STRONG_WIND;
 				break;
 			default:
 				windType = null;
@@ -470,6 +478,7 @@ public class WorldAgent extends Agent {
 		
 		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
 		this.addBehaviour(new PrintStatusBehaviour(this, 4000));
+		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
 		this.addBehaviour(new WeatherConditionsBehaviour(this));
 	}
 	

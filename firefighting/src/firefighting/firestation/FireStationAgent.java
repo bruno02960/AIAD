@@ -26,9 +26,6 @@ public class FireStationAgent extends Agent {
 	
 	private int numAircraftsResponders;
 	
-	public FireStationAgent() {
-		
-	}
 	
 	// Global Instance Variables:
 	/**

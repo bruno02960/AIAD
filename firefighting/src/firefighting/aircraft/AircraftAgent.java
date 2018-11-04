@@ -1,3 +1,13 @@
+/**
+ * Agents and Distributed Artificial Intelligence
+ * Project 1 - Fire Fighting
+ * 
+ * Authors:
+ * 	@author Bernardo Coelho Leite - up201404464@fe.up.pt;
+ * 	@author Bruno Miguel Pinto - up201502960@fe.up.pt;
+ * 	@author Ruben Andre Barreiro - up201808917@fe.up.pt;
+ */
+
 package firefighting.aircraft;
 
 import java.awt.Point;
@@ -21,119 +31,246 @@ import firefighting.world.*;
 
 
 /**
- * Class responsible for an Aircraft Agent and its behaviour.
+ * Class responsible for an aircraft agent and its behaviour.
  */
-@SuppressWarnings("serial")
 public class AircraftAgent extends Agent {
 
-	// Global Instance Variables:
+	// Constants:
+	
 	/**
-	 * ID of the Aircraft Agent.
+	 * The default serial version ID to the selected type.
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * The maximum water tank's capacity of the aircraft agent.
+	 */
+	private static int maxWaterTankCapacity;
+	
+	/**
+	 * The maximum fuel tank's capacity of the aircraft agent.
+	 */
+	private static int maxFuelTankCapacity;
+	
+	
+	
+	// Global Instance Variables:
+	
+	/**
+	 * The id of the aircraft Agent.
 	 */
 	private byte id;
 
 	/**
-	 * World's object of the Aircraft Agent.
+	 * The world's object of the aircraft agent.
 	 */
 	private WorldObject worldObject;
 
 	/**
-	 * Capacity of the Aircraft Agent's tank.
+	 * The water tank's capacity of the aircraft agent.
 	 */
-	private int tankCapacity;
+	private int waterTankCapacity;
 
 	/**
-	 * Status of the Aircraft Agent's tank.
+	 * The fuel tank's capacity of the aircraft agent.
 	 */
-	private int tankStatus;
-
+	private int fuelTankCapacity;
+	
 	/**
-	 * World agent
+	 * TODO - The World agent (REMOVER????)
 	 */
 	private WorldAgent worldAgent;
 
 	/**
-	 * 
+	 * The boolean value to keep the information about if
+	 * the aircraft agent it's already attending a fire.
 	 */
 	private boolean attendindFire;
 
+	/**
+	 * The boolean value that keeps the information about if
+	 * the aircraft agent crashed or not.
+	 */
+	private boolean crashed;
+	
 	
 
 	// Constructors:
+	
 	/**
-	 * Constructor #1 of the Aircraft Agent.
+	 * Constructor #1 of the aircraft agent.
 	 * 
-	 * Creates a new Aircraft Agent, initialising its ID, its world's object and its tank capacity.
+	 * Creates a new aircraft agent, initialising its id, its world's object and its tank capacity.
 	 * 
-	 * @param id the Aircraft Agent's ID
-	 * @param worldObject the Aircraft's World Object
+	 * @param id the aircraft agent's id
+	 * @param worldObject the aircraft agent's world object
 	 */
 	public AircraftAgent(byte id, WorldObject worldObject, WorldAgent worldAgent) {
-		Random random = new Random();
-
 		this.id = id;
 		this.worldObject = worldObject;
+	
 		this.worldAgent = worldAgent;
-		this.tankCapacity = random.nextInt(Config.AIRCRAFT_MAX_TANK_CAPACITY) + 1;
-		this.tankStatus = 0;
+		
+		Random randomObject = new Random();
+		
+		this.waterTankCapacity = 0;
+		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY) + 1;
+
+		this.fuelTankCapacity = 0;
+		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_INITIAL_FUEL_TANK_CAPACITY) + 1;
+		
 		this.attendindFire = false;
+		
+		this.crashed = false;
 	}
 
 
-	// Methods:
+	
+	// Basic methods:
+	
 	/**
-	 * Returns the Aircraft Agent's ID.
+	 * Returns the aircraft agent's id.
 	 * 
-	 * @return the Aircraft Agent's ID
+	 * @return the aircraft agent's id
 	 */
 	private byte getID() {
 		return this.id;
 	}
 
 	/**
-	 * Return the Aircraft Agent's World Object.
+	 * Returns the aircraft agent's world object.
 	 * 
-	 * @return the Aircraft Agent's World Object
+	 * @return the aircraft agent's world object
 	 */
 	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
+	
+	/**
+	 * Returns the water tank's capacity of the aircraft agent.
+	 * 
+	 * @return the water tank's capacity of the aircraft agent
+	 */
+	public int getWaterTankCapacity() {
+		return this.waterTankCapacity;
+	}
 
 	/**
-	 * Return the Aircraft Agent's Tank Capacity.
+	 * Returns true if the aircraft agent have its water tank empty and false, otherwise.
 	 * 
-	 * @return the Aircraft Agent's Tank Capacity
+	 * @return true if the aircraft agent have its water tank empty and false, otherwise
 	 */
-	public int getTankCapacity() {
-		return this.tankCapacity;
+	public boolean haveEmptyWaterTank() {
+		return this.getWaterTankCapacity() == 0;
+	}
+
+	/**
+	 * Returns the maximum water tank's capacity of the aircraft agent.
+	 * 
+	 * @return the maximum water tank's capacity of the aircraft agent
+	 */
+	public int getMaxWaterTankCapacity() {
+		return AircraftAgent.maxWaterTankCapacity;
 	}
 	
 	/**
-	 * Returns true if the Aircraft Agent have its Tank empty and false, otherwise.
+	 * Returns the fuel tank's capacity of the aircraft agent.
 	 * 
-	 * @return true if the Aircraft Agent have its Tank empty and false, otherwise
+	 * @return the fuel tank's capacity of the aircraft agent
 	 */
-	public boolean haveEmptyTank() {
-		return this.getTankCapacity() == 0;
+	public int getFuelTankCapacity() {
+		return this.fuelTankCapacity;
 	}
 
+	/**
+	 * Returns true if the aircraft agent have its fuel tank empty and false, otherwise.
+	 * 
+	 * @return true if the aircraft agent have its fuel tank empty and false, otherwise
+	 */
+	public boolean haveEmptyFuelTank() {
+		return this.getFuelTankCapacity() == 0;
+	}
+	
+	/**
+	 * Returns true if the aircraft agent have enough fuel in the tank to fly to
+	 * some destination and false, otherwise.
+	 * 
+	 * @return true if the aircraft agent have enough fuel in the tank to fly to
+	 * 		   some destination and false, otherwise
+	 */
+	public boolean haveEnoughFuelToDest(int numPositions) {
+		return this.getFuelTankCapacity() > numPositions;
+	}
+	
+	/**
+	 * If the aircraft agent, at some moment, have its fuel tank empty,
+	 * it suffer an accident crash and become indefinitely inactive.
+	 */
+	public void accidentCrash() {
+		if(this.haveEmptyWaterTank()) {
+			this.crashed = true;
+			this.takeDown();
+		}
+	}
+
+	/**
+	 * Returns the maximum fuel tank's capacity of the aircraft agent.
+	 * 
+	 * @return the maximum fuel tank's capacity of the aircraft agent
+	 */
+	public int getMaxFuelTankCapacity() {
+		return AircraftAgent.maxFuelTankCapacity;
+	}
+	
+	/**
+	 * Returns true if the aircraft agent is attending some fire,
+	 * at the current moment.
+	 * 
+	 * @return true if the aircraft agent is attending some fire,
+	 * 		   at the current moment
+	 */
 	public boolean isAttendingFire() {
 		return this.attendindFire;
 	}
 	
+	/**
+	 * Sets the aircraft agent as attending some fire,
+	 * at the current moment.
+	 */
 	public void attendFire() {
 		this.attendindFire = true;
 	}
 	
+	/**
+	 * Sets the aircraft agent as not attending any fire,
+	 * at the current moment.
+	 */
 	public void finishAttendingFire() {
 		this.attendindFire = false;
 	}
 	
+	/**
+	 * Returns the boolean value that keeps the information about if
+	 * the aircraft agent crashed or not.
+	 * 
+	 * @return the boolean value that keeps the information about if
+	 * 		   the aircraft agent crashed or not
+	 */
+	public boolean isCrashed() {
+		return this.crashed;
+	}
+	
+	
+	// TODO - ver daqui para baixo
 	@Override
 	public String toString() {
-		return "A" + tankStatus;
+		return "A" + waterTankCapacity;
 	}
 
+	
+	
+	// Agent's methods:
+	
 	protected void setup() {
 		System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
 		MessageTemplate template = MessageTemplate.and(
@@ -190,17 +327,24 @@ public class AircraftAgent extends Agent {
 	}
 
 	/**
-	 * Calculates the path to a fire in a given location
+	 * Returns/Calculates the path to a fire in a given location,
+	 * in an array list with the path of points from the aircraft agent to the fire location.
+	 * 
 	 * @param fireLocation location of the fire
-	 * @return array list with the path of points from the airplane to the fire location
+	 * 
+	 * @return the path to a fire in a given location,
+	 * 		   in an array list with the path of points from the aircraft agent to
+	 * 		   the fire location.
+	 * 
 	 */
 	@SuppressWarnings("unchecked")
 	private ArrayList<Point> pathToFire(Point fireLocation) {
 		Point s = this.worldObject.getPos();
 		Point d = fireLocation;
 		
-		// To keep track of visited QItems. Marking blocked cells as visited
+		// To keep track of visited QItems, marking blocked cells as visited
 		boolean[][] visited = new boolean[Config.GRID_HEIGHT][Config.GRID_WIDTH];
+		
 		for (int i = 0; i < Config.GRID_HEIGHT; i++) {
 			for (int j = 0; j < Config.GRID_WIDTH; j++) {
 				if(worldAgent.getWorldMap()[i][j] == null)
@@ -210,10 +354,12 @@ public class AircraftAgent extends Agent {
 			}
 		}
 		
-		// Applying BFS on matrix cells starting from source
+		// Applying BFS (Breath First Search) on matrix cells starting from the source
 		Queue<QItem> q = new LinkedList<QItem>();
 		q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
+		
 		visited[(int) s.getX()][(int) s.getY()] = true;
+		
 		while (!q.isEmpty()) {
 			QItem p = q.remove();
 			
@@ -257,7 +403,13 @@ public class AircraftAgent extends Agent {
 		return new ArrayList<Point>();
 	}
 
+	/**
+	 * Behaviour to the aircraft agent takes in the case of take down.
+	 */
 	protected void takeDown() {
-		System.out.println("Agent " + getAID().getName() + " terminating.");
+		if(this.isCrashed())
+			System.out.println("Mayday, Mayday!!! Aircraft Agent " + getAID().getName() + " crashed and is terminating!");
+		else
+			System.out.println("Aircraft Agent " + getAID().getName() + " is terminating!");
 	}
 }
