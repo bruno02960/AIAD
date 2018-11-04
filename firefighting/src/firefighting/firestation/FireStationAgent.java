@@ -2,6 +2,9 @@ package firefighting.firestation;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
@@ -52,7 +55,7 @@ public class FireStationAgent extends Agent {
 	
 	// Methods:
 	
-	private WorldAgent getWorldAgent() {
+	public WorldAgent getWorldAgent() {
 		return this.worldAgent;
 	}
 	/**
@@ -84,7 +87,8 @@ public class FireStationAgent extends Agent {
 		//HelloAircraftMessage helloAircraftMsg = new HelloAircraftMessage();
 		//this.addBehaviour(new HelloAircraftBehaviour(this, helloAircraftMsg.getACLMessage()));
 		
-		this.addBehaviour(new DetectFiresBehaviour(this.getWorldAgent(), this, 10000));
+		//20segundos para se ver o caso de teste (apagar 1 fogo) com calma
+		this.addBehaviour(new DetectFiresBehaviour(this.getWorldAgent(), this, 20000));
 	}
 		
 	protected void takeDown() {

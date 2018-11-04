@@ -53,6 +53,8 @@ public class PrintStatusBehaviour extends TickerBehaviour {
 		
 		// Clean the console
 		PrintStatusBehaviour.clearConsole();
+		this.worldAgent.refreshWorldMapPositions();
+
 		
 		Object[][] worldMap = this.getWorldMap();
 		

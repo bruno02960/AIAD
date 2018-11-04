@@ -21,8 +21,8 @@ public class AlarmFireMessage extends ACLMessage {
 	
 	public AlarmFireMessage(Fire associatedFire) {
 		super(ACLMessage.CFP);
-		setACLMessage();
 		this.associatedFire = associatedFire;
+		setACLMessage();
 	}
 
 	
@@ -50,7 +50,7 @@ public class AlarmFireMessage extends ACLMessage {
 			// We want to receive a reply in 10 seconds
 			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 			
-			cfpMsg.setContent("Fire Alarm!!! It's necessary to some Aircraft Agent to extinguish the fire!");
+			cfpMsg.setContent("FIRE POS " + (int)this.associatedFire.getWorldObject().getPos().getX() + " " + (int)this.associatedFire.getWorldObject().getPos().getY());
 		}
 	}
 	

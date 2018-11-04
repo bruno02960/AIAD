@@ -17,6 +17,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
 import jade.lang.acl.MessageTemplate;
@@ -92,6 +93,11 @@ public class AircraftAgent extends Agent {
 	 * the aircraft agent crashed or not.
 	 */
 	private boolean crashed;
+
+	/**
+	 * Auxiliary variable for saving Paths
+	 */
+	private ArrayList<Point> auxPath = new  ArrayList<Point>();
 	
 	
 
@@ -142,7 +148,7 @@ public class AircraftAgent extends Agent {
 	 * 
 	 * @return the aircraft agent's world object
 	 */
-	public WorldObject getWorldObject() {
+	private WorldObject getWorldObject() {
 		return this.worldObject;
 	}
 	
@@ -280,7 +286,7 @@ public class AircraftAgent extends Agent {
 		addBehaviour(new ContractNetResponder(this, template) {
 			protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
 				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
-				int proposal = evaluateAction();
+				int proposal = evaluateAction(cfp.getContent());
 				if (proposal > 2) {
 					// We provide a proposal
 					System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
@@ -316,13 +322,41 @@ public class AircraftAgent extends Agent {
 		} );
 	}
 
-	private int evaluateAction() {
-		// Simulate an evaluation by generating a random number
+	private int evaluateAction(String message) {
+	
+		String[] tokens = message.split(" ");
+		
+		if(!tokens[0].equals("FIRE") && !tokens[1].equals("POS")) {
+			System.err.println("Invalid alert message received!");
+		}
+		
+		Point point = new Point(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
+		
+		this.auxPath.addAll(this.pathToFire(point));
+		
+		//return this.auxPath.size();
+		
 		return (int) (Math.random() * 10);
+		
 	}
 
 	private boolean performAction() {
+		
 		// Simulate action execution by generating a random number
+		
+		for(int i = 0; i < this.auxPath.size(); i++) {
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
+				
+		}
+
 		return (Math.random() > 0.2);
 	}
 
@@ -337,71 +371,72 @@ public class AircraftAgent extends Agent {
 	 * 		   the fire location.
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
+@SuppressWarnings("unchecked")
 	private ArrayList<Point> pathToFire(Point fireLocation) {
-		Point s = this.worldObject.getPos();
-		Point d = fireLocation;
-		
-		// To keep track of visited QItems, marking blocked cells as visited
-		boolean[][] visited = new boolean[Config.GRID_HEIGHT][Config.GRID_WIDTH];
-		
-		for (int i = 0; i < Config.GRID_HEIGHT; i++) {
-			for (int j = 0; j < Config.GRID_WIDTH; j++) {
-				if(worldAgent.getWorldMap()[i][j] == null)
-					visited[i][j] = false;
-				else
-					visited[i][j] = true;
-			}
-		}
-		
-		// Applying BFS (Breath First Search) on matrix cells starting from the source
-		Queue<QItem> q = new LinkedList<QItem>();
-		q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
-		
-		visited[(int) s.getX()][(int) s.getY()] = true;
-		
-		while (!q.isEmpty()) {
-			QItem p = q.remove();
-			
-			// Destination found
-			if (p.row == d.getX() && p.col == d.getY())
-				return p.path;
-			
-			// Moving up
-			if (p.row - 1 >= 0 && visited[p.row - 1][p.col] == false) {
-				ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-				path.add(new Point(p.row - 1, p.col));
-				q.add(new QItem(p.row - 1, p.col, p.dist + 1, path));
-				visited[p.row - 1][p.col] = true; 
-			}
-			
-			// Moving down
-			if (p.row + 1 < Config.GRID_HEIGHT && visited[p.row + 1][p.col] == false) {
-				ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-				path.add(new Point(p.row + 1, p.col));
-				q.add(new QItem(p.row + 1, p.col, p.dist + 1, path));
-				visited[p.row + 1][p.col] = true; 
-			}
-			
-			// Moving left
-			if (p.col - 1 >= 0 && visited[p.row][p.col - 1] == false) {
-				ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-				path.add(new Point(p.row, p.col - 1));
-				q.add(new QItem(p.row, p.col - 1, p.dist + 1, path));
-				visited[p.row][p.col - 1] = true;
-			}
-			
-			// Moving right
-			if (p.col + 1 < Config.GRID_WIDTH && visited[p.row][p.col + 1] == false) {
-				ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-				path.add(new Point(p.row, p.col + 1));
-				q.add(new QItem(p.row, p.col + 1, p.dist + 1, path));
-				visited[p.row][p.col + 1] = true;
-			}
-		}
-		
-		return new ArrayList<Point>();
-	}
+        Point s = this.worldObject.getPos();
+        Point d = fireLocation;
+        
+        // To keep track of visited QItems. Marking blocked cells as visited
+        boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+        for (int i = 0; i < Config.GRID_WIDTH; i++) {
+            for (int j = 0; j < Config.GRID_HEIGHT; j++) {
+                if(worldAgent.getWorldMap()[i][j] == null || (i == d.getX() && j == d.getY()))
+                    visited[i][j] = false;
+                else
+                    visited[i][j] = true;
+            }
+        }
+        
+        // Applying BFS on matrix cells starting from source
+        Queue<QItem> q = new LinkedList<QItem>();
+        q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
+        visited[(int) s.getX()][(int) s.getY()] = true;
+        while (!q.isEmpty()) {
+            QItem p = q.remove();
+            
+            // Destination found
+            if (p.row == d.getX() && p.col == d.getY()) {
+                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+                path.remove(path.size()-1);
+                return path;
+            }
+            
+            // Moving up
+            if (p.row - 1 >= 0 && visited[p.row - 1][p.col] == false) {
+                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+                path.add(new Point(p.row - 1, p.col));
+                q.add(new QItem(p.row - 1, p.col, p.dist + 1, path));
+                visited[p.row - 1][p.col] = true; 
+            }
+            
+            // Moving down
+            if (p.row + 1 < Config.GRID_WIDTH && visited[p.row + 1][p.col] == false) {
+                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+                path.add(new Point(p.row + 1, p.col));
+                q.add(new QItem(p.row + 1, p.col, p.dist + 1, path));
+                visited[p.row + 1][p.col] = true; 
+            }
+            
+            // Moving left
+            if (p.col - 1 >= 0 && visited[p.row][p.col - 1] == false) {
+                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+                path.add(new Point(p.row, p.col - 1));
+                q.add(new QItem(p.row, p.col - 1, p.dist + 1, path));
+                visited[p.row][p.col - 1] = true;
+            }
+            
+            // Moving right
+            if (p.col + 1 < Config.GRID_HEIGHT && visited[p.row][p.col + 1] == false) {
+                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+                path.add(new Point(p.row, p.col + 1));
+                q.add(new QItem(p.row, p.col + 1, p.dist + 1, path));
+                visited[p.row][p.col + 1] = true;
+            }
+        }
+        
+        return new ArrayList<Point>();
+    }
+
 
 	/**
 	 * Behaviour to the aircraft agent takes in the case of take down.
