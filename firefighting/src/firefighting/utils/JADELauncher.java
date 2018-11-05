@@ -23,8 +23,7 @@ import jade.wrapper.StaleProxyException;
 /**
  * Class responsible for running and controlling JADE execution.
  */
-public class JADELauncher {
-	
+public class JADELauncher {	
 	static Random random = new Random();
 	
 	// Setting global world's environment conditions
@@ -45,7 +44,6 @@ public class JADELauncher {
 		ContainerController mainContainer = rt.createMainContainer(profile);
 		
 		try {
-			
 			mainContainer.acceptNewAgent("WorldAgent", worldAgent);
 			mainContainer.getAgent("WorldAgent").start();
 			

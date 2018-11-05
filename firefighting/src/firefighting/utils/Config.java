@@ -7,7 +7,6 @@
  * 	@author Bruno Miguel Pinto - up201502960@fe.up.pt;
  * 	@author Ruben Andre Barreiro - up201808917@fe.up.pt;
  */
-
 package firefighting.utils;
 
 /**

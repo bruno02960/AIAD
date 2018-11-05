@@ -15,7 +15,6 @@ public class GenerateFiresBehaviour extends TickerBehaviour {
 	
 	public GenerateFiresBehaviour(WorldAgent worldAgent, long period) {
 		super(worldAgent, period);
-
 		this.worldAgent = worldAgent;
 	}
 

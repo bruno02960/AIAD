@@ -51,7 +51,6 @@ public class WorldAgent extends Agent {
 	 */
 	private static float[] droughtSituationProbabilityInterval;
 	
-	
 	// Global Instance Variables:
 	/**
 	 * The matrix of grid/map that represents all the positions of the world.
@@ -62,7 +61,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private FireStationAgent fireStationAgent;
+	private  FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Water Resources in the world.
@@ -73,13 +72,13 @@ public class WorldAgent extends Agent {
 	/**
 	 * The Aircraft Agents in the world.
 	 */
-	private AircraftAgent[] aircraftAgents;
+	private  AircraftAgent[] aircraftAgents;
 	
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
 	 */
-	private Fire[] fires;
+	private  Fire[] fires;
 	
 	/*
 	 * The number of water resources in the world.
@@ -89,7 +88,7 @@ public class WorldAgent extends Agent {
 	/*
 	 * The current number of aircrafts in the world.
 	 */
-	private int currentNumAircrafts;
+	private  int currentNumAircrafts;
 	
 	/*
 	 * The current number of fires in the world.

@@ -55,7 +55,6 @@ public class PrintStatusBehaviour extends TickerBehaviour {
 		PrintStatusBehaviour.clearConsole();
 		this.worldAgent.refreshWorldMapPositions();
 
-		
 		Object[][] worldMap = this.getWorldMap();
 		
 		for(int i = 0; i < Config.GRID_WIDTH * 3 + 1; i++) {

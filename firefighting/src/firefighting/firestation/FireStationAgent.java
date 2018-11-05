@@ -94,4 +94,9 @@ public class FireStationAgent extends Agent {
 	protected void takeDown() {
 		System.out.println("Agent " + this.getAID().getName() + " terminating!");
 	}
+
+	public ContractNetInitiator createContractNetInitiator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
