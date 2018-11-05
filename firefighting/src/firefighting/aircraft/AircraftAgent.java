@@ -278,6 +278,8 @@ public class AircraftAgent extends Agent {
 	// Agent's methods:
 	
 	protected void setup() {
+		System.out.println(pathToFire(new Point(3,4)));
+		
 		System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
@@ -383,15 +385,7 @@ public class AircraftAgent extends Agent {
         Point d = fireLocation;
         
         // To keep track of visited QItems. Marking blocked cells as visited
-        boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
-        for (int i = 0; i < Config.GRID_WIDTH; i++) {
-            for (int j = 0; j < Config.GRID_HEIGHT; j++) {
-                if(worldAgent.getWorldMap()[i][j] == null || (i == d.getX() && j == d.getY()))
-                    visited[i][j] = false;
-                else
-                    visited[i][j] = true;
-            }
-        }
+        boolean[][] visited = initialiseVisitedMatrix(d);
         
         // Applying BFS on matrix cells starting from source
         Queue<QItem> q = new LinkedList<QItem>();
@@ -407,41 +401,71 @@ public class AircraftAgent extends Agent {
                 return path;
             }
             
-            // Moving up
-            if (p.row - 1 >= 0 && visited[p.row - 1][p.col] == false) {
-                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.add(new Point(p.row - 1, p.col));
-                q.add(new QItem(p.row - 1, p.col, p.dist + 1, path));
-                visited[p.row - 1][p.col] = true; 
-            }
-            
-            // Moving down
-            if (p.row + 1 < Config.GRID_WIDTH && visited[p.row + 1][p.col] == false) {
-                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.add(new Point(p.row + 1, p.col));
-                q.add(new QItem(p.row + 1, p.col, p.dist + 1, path));
-                visited[p.row + 1][p.col] = true; 
-            }
-            
-            // Moving left
-            if (p.col - 1 >= 0 && visited[p.row][p.col - 1] == false) {
-                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.add(new Point(p.row, p.col - 1));
-                q.add(new QItem(p.row, p.col - 1, p.dist + 1, path));
-                visited[p.row][p.col - 1] = true;
-            }
-            
-            // Moving right
-            if (p.col + 1 < Config.GRID_HEIGHT && visited[p.row][p.col + 1] == false) {
-                ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.add(new Point(p.row, p.col + 1));
-                q.add(new QItem(p.row, p.col + 1, p.dist + 1, path));
-                visited[p.row][p.col + 1] = true;
-            }
+            processCellPathToFire(visited, q, p);
         }
         
         return new ArrayList<Point>();
     }
+
+
+	/**
+	 * Processes a new cell in the BFS process of searching a path to a given fire
+	 * @param visited Visited cells
+	 * @param q auxiliary queue
+	 * @param p processing cell
+	 */
+	private void processCellPathToFire(boolean[][] visited, Queue<QItem> q, QItem p) {
+		// Moving up
+		if (p.row - 1 >= 0 && visited[p.row - 1][p.col] == false) {
+		    ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+		    path.add(new Point(p.row - 1, p.col));
+		    q.add(new QItem(p.row - 1, p.col, p.dist + 1, path));
+		    visited[p.row - 1][p.col] = true; 
+		}
+		
+		// Moving down
+		if (p.row + 1 < Config.GRID_WIDTH && visited[p.row + 1][p.col] == false) {
+		    ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+		    path.add(new Point(p.row + 1, p.col));
+		    q.add(new QItem(p.row + 1, p.col, p.dist + 1, path));
+		    visited[p.row + 1][p.col] = true; 
+		}
+		
+		// Moving left
+		if (p.col - 1 >= 0 && visited[p.row][p.col - 1] == false) {
+		    ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+		    path.add(new Point(p.row, p.col - 1));
+		    q.add(new QItem(p.row, p.col - 1, p.dist + 1, path));
+		    visited[p.row][p.col - 1] = true;
+		}
+		
+		// Moving right
+		if (p.col + 1 < Config.GRID_HEIGHT && visited[p.row][p.col + 1] == false) {
+		    ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+		    path.add(new Point(p.row, p.col + 1));
+		    q.add(new QItem(p.row, p.col + 1, p.dist + 1, path));
+		    visited[p.row][p.col + 1] = true;
+		}
+	}
+
+
+	/**
+	 * Initialises a matrix of "visited" cells which marks as visited the cells that are not null
+	 * @param d destination point
+	 * @return visited matrix
+	 */
+	private boolean[][] initialiseVisitedMatrix(Point d) {
+		boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+        for (int i = 0; i < Config.GRID_WIDTH; i++) {
+            for (int j = 0; j < Config.GRID_HEIGHT; j++) {
+                if(worldAgent.getWorldMap()[i][j] == null || (i == d.getX() && j == d.getY()))
+                    visited[i][j] = false;
+                else
+                    visited[i][j] = true;
+            }
+        }
+		return visited;
+	}
 
 
 	/**
