@@ -1,4 +1,4 @@
-package firefighting;
+package firefighting.nature;
 
 import java.util.Random;
 
@@ -8,7 +8,7 @@ import firefighting.world.*;
 /**
  * Class responsible for a Filling Station.
  */
-public class FillingStation {
+public class WaterResource {
 	
 	// Global Instance Variables:
 	/**
@@ -24,7 +24,7 @@ public class FillingStation {
 	/**
 	 * Filling Station current status
 	 */
-	private int currentStatus;
+	private int waterCapacity;
 	
 	// Constructors:
 	/**
@@ -35,12 +35,12 @@ public class FillingStation {
 	 * @param the Filling Station's ID
 	 * @param the Filling Station's World Object
 	 */
-	public FillingStation(byte id, WorldObject worldObject) {
+	public WaterResource(byte id, WorldObject worldObject) {
 		Random random = new Random();
 		
 		this.id = id;
 		this.worldObject = worldObject;
-		this.currentStatus = random.nextInt(Config.FILLINGSTATION_MAX_CAPACITY) + 1;
+		this.waterCapacity = random.nextInt(Config.WATER_RESOURCE_INITIAL_MAX_CAPACITY) + 1;
 	}
 
 	// Methods:
@@ -58,12 +58,29 @@ public class FillingStation {
 	 * 
 	 * @return the Filling Station's World Object
 	 */
-	private WorldObject getWorldObject() {
+	public WorldObject getWorldObject() {
 		return this.worldObject;
 	}
+	
+	public int getWaterCapacity() {
+		return this.waterCapacity;
+	}
+	
+	public void decreasingCapacity(int decreaseValue) {
+		
+		if((this.waterCapacity - decreaseValue) < 0) {
+			this.waterCapacity = 0;
+		}
+		
+		this.waterCapacity -= decreaseValue;
+	}
 
+	public void increasingCapacity(int increaseValue) {
+		this.waterCapacity += increaseValue;
+	}
+	
 	@Override
 	public String toString() {
-		return "F" + this.currentStatus;
+		return "W" + this.waterCapacity;
 	}
 }

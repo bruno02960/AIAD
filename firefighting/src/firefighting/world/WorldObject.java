@@ -34,7 +34,11 @@ public class WorldObject {
 		this.worldObjectType = worldObjectType;
 		this.worldPosition = position;
 	}
-	
+
+	public void setPos(int x , int y) {
+		this.worldPosition.x = x;
+		this.worldPosition.y = y;
+	}
 	
 	// Methods:
 	/**
@@ -51,7 +55,7 @@ public class WorldObject {
 	 * 
 	 * @return the coordinate X of the point that represents the position of the world's object
 	 */
-	private int getPosX() {
+	int getPosX() {
 		return this.worldPosition.x;
 	}
 	
@@ -60,7 +64,7 @@ public class WorldObject {
 	 * 
 	 * @return the coordinate Y of the point that represents the position of the world's object
 	 */
-	private int getPosY() {
+	int getPosY() {
 		return this.worldPosition.y;
 	}
 

@@ -2,22 +2,19 @@ package firefighting.world.behaviours;
 
 import java.awt.Point;
 
-import firefighting.Fire;
+import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.world.WorldAgent;
 import firefighting.world.WorldObject;
 import firefighting.world.utils.WorldObjectType;
 import jade.core.behaviours.TickerBehaviour;
 
-import firefighting.world.*;
-
 public class GenerateFiresBehaviour extends TickerBehaviour {
 	
-	WorldAgent worldAgent;
+	public WorldAgent worldAgent;
 	
 	public GenerateFiresBehaviour(WorldAgent worldAgent, long period) {
 		super(worldAgent, period);
-		
 		this.worldAgent = worldAgent;
 	}
 
@@ -49,26 +46,15 @@ public class GenerateFiresBehaviour extends TickerBehaviour {
 		   		if(fires[currentPosFireToAdd] == null)
 		   			break;
 		   	
-		   	
 		   	Fire fire = new Fire((byte) currentPosFireToAdd, fireWorldObject);
 		    	
 		   	worldAgent.addFire(firePos[0], firePos[1], fire);
 	    		
-	   
-	    	int fireToCreatePosInArray;
-
-	    	for(fireToCreatePosInArray = 0; fireToCreatePosInArray < Config.NUM_MAX_FIRES; fireToCreatePosInArray++)
-	    		if(fires[fireToCreatePosInArray] != null)
-	    			break;
-	    		
-	    	if(fireToCreatePosInArray <= Config.NUM_MAX_FIRES) {
-		   		fires[fireToCreatePosInArray] = fire;
+	    	if(currentPosFireToAdd < Config.NUM_MAX_FIRES) {
+		   		fires[currentPosFireToAdd] = fire;
 		    		
 		   		worldAgent.incCurrentNumFires();
 	    	}
-	    
 	    }
-		
 	}
-
 }

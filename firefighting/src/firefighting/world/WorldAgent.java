@@ -2,14 +2,18 @@ package firefighting.world;
 
 import java.util.Random;
 
-import firefighting.AircraftAgent;
-import firefighting.FillingStation;
-import firefighting.Fire;
+import firefighting.aircraft.AircraftAgent;
 import firefighting.firestation.FireStationAgent;
+import firefighting.nature.WaterResource;
+import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
+import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
 import firefighting.world.behaviours.PrintStatusBehaviour;
+import firefighting.world.behaviours.WeatherConditionsBehaviour;
 import firefighting.world.utils.WorldObjectType;
+import firefighting.world.utils.environment.SeasonType;
+import firefighting.world.utils.environment.WindType;
 
 import java.awt.Point;
 import jade.core.Agent;
@@ -18,12 +22,40 @@ import jade.core.Agent;
  * Class responsible for managing, updating and printing the world status.
  */
 @SuppressWarnings("serial")
-public class WorldAgent extends Agent {	
+public class WorldAgent extends Agent {
+	
+	// Constants:
+	/**
+	 * The current season type from the set {Spring, Summer, Autumn and Winter}
+	 */
+	private static SeasonType seasonType;	
+	
+	/**
+	 * The current wind type from the set {Very Windy, Windy and No Wind}
+	 */
+	private static WindType windType;
+	
+	/**
+	 * The boolean value that keeps information that allows to know if can occur periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	private static boolean droughtSituation;
+	
+	/**
+	 * The float value that keeps the probability value of a drought (extreme dry situation) happens,
+	 * if it's possible and allowed
+	 * - [0%, 0%] probability interval,
+	 *   of drought (extreme dry situation) happen in spring, autumn and winter seasons
+	 * - a random [m%, n%] probability interval, from the set [0%, 100%],
+	 *   of drought (extreme dry situation) happen in summer season
+	 */
+	private static float[] droughtSituationProbabilityInterval;
+	
 	// Global Instance Variables:
 	/**
-	 * The matrix/grid that represents all the positions of the world.
+	 * The matrix of grid/map that represents all the positions of the world.
 	 */
-	private  Object[][] worldMap;
+	private Object[][] worldMap;
 
 	// Fixed agents (without movement)
 	/**
@@ -32,9 +64,9 @@ public class WorldAgent extends Agent {
 	private  FireStationAgent fireStationAgent;
 	
 	/**
-	 * The Filling Stations in the world.
+	 * The Water Resources in the world.
 	 */
-	private  FillingStation[] fillingStations;
+	private WaterResource[] waterResources;
 	
 	// Mobile agents (with movement)
 	/**
@@ -49,9 +81,9 @@ public class WorldAgent extends Agent {
 	private  Fire[] fires;
 	
 	/*
-	 * The current number of filling stations in the world.
+	 * The number of water resources in the world.
 	 */
-	private  int currentNumFillingStations;
+	private int numWaterResources;
 	
 	/*
 	 * The current number of aircrafts in the world.
@@ -68,22 +100,146 @@ public class WorldAgent extends Agent {
 	/**
 	 * 
 	 */
-	public WorldAgent() {
+	public WorldAgent(byte seasonTypeID, byte windTypeID) {
+		
+		// Sets the type of season
+		SeasonType seasonType;
+		
+		switch(seasonTypeID) {
+			// SPRING SEASON
+			case 0:
+				seasonType = SeasonType.SPRING;
+				break;
+			// SUMMER SEASON
+			case 1:
+				seasonType = SeasonType.SUMMER;
+				break;
+			// AUTUMN SEASON
+			case 2:
+				seasonType = SeasonType.AUTUMN;
+				break;
+			// WINTER SEASON
+			case 3:
+				seasonType = SeasonType.WINTER;
+				break;
+			default:
+				seasonType = null;
+				break;
+		}
+		
+		// Sets the type of wind
+		WindType windType;
+		
+		switch(windTypeID) {
+			// NO WIND
+			case 0:
+				windType = WindType.NO_WIND;
+				break;
+			// WEAK WIND
+			case 1:
+				windType = WindType.WEAK_WIND;
+				break;
+			// NORMAL WIND
+			case 2:
+				windType = WindType.NORMAL_WIND;
+				break;
+			// STRONG WIND
+			case 3:
+				windType = WindType.STRONG_WIND;
+				break;
+			default:
+				windType = null;
+				break;
+		}
+		
+		// Sets all the world's environment conditions
+		WorldAgent.seasonType = seasonType;
+		WorldAgent.windType = windType; // TODO: REVER
+		
+		Random randomObject = new Random();
+		
+		// Verifies the current season type first. If the current season type defined previously was the summer,
+		// generates a random boolean value (true or false) to keep the information that allows to know
+		// if, at some moment, can occur droughts (extreme dry situations), that will affect the global behaviour
+		// of the world and its weather conditions
+		if(this.getSeasonType().getID() == SeasonType.SUMMER.getID())
+			WorldAgent.droughtSituation = randomObject.nextBoolean();
+		else
+			WorldAgent.droughtSituation = false;
+		
+		if(this.canOccurDroughtSituations()) {
+			float bound1 = randomObject.nextFloat();
+			float bound2 = randomObject.nextFloat();
+			
+			if(bound1 != bound2) {
+				float max = bound2 > bound1 ? bound2 : bound1;
+				float min = bound2 < bound1 ? bound2 : bound1;
+				
+				WorldAgent.droughtSituationProbabilityInterval = new float[]{min,max};
+			}
+			else
+				WorldAgent.droughtSituationProbabilityInterval = new float[]{bound1,bound2};
+		}
+		else
+			// Never occurs droughts (extreme dry situations)
+			WorldAgent.droughtSituationProbabilityInterval = new float[]{0.0f,0.0f};
+		
+		// Creation of world's elements
 		this.createWorld();
 		this.createFireStationAgent();
-		this.generateFillingStations();
+		this.generateWaterResources();
 		this.generateAicraftAgents();
 	}
 	
 	
 	// Methods:
 	/**
-	 * Returns the number of filling stations in the world.
+	 * Returns the season type influencing the world.
 	 * 
-	 * @return the number of filling stations in the world
+	 * @return the season type influencing the world
 	 */
-	public int getNumFillingStations() {
-		return this.currentNumFillingStations;
+	public SeasonType getSeasonType() {
+		return WorldAgent.seasonType;
+	}
+	
+	/**
+	 * Returns the wind type influencing the world.
+	 * 
+	 * @return the wind type influencing the world
+	 */
+	public WindType getWindType() {
+		return WorldAgent.windType;
+	}
+	
+	/**
+	 * Returns the boolean value that keeps the information that allows to know if can occur periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season.
+	 * 
+	 * @return the boolean value that keeps the information that allows to know if can occur periodically,
+	 * 		   in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	public boolean canOccurDroughtSituations() {
+		return WorldAgent.droughtSituation;
+	}
+	
+	/**
+	 * Returns the float array that keeps the possible probability interval of occurring periodically,
+	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season.
+	 * 
+	 * @return the boolean value that keep information that allows to know if can occur periodically,
+	 * 		   in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
+	 */
+	public float[] getDroughtSituationProbabilityInterval() {
+		return WorldAgent.droughtSituationProbabilityInterval;
+	}
+	
+	/**
+	 * Returns the number of water resources in the world.
+	 * 
+	 * @return the number of water resources in the world
+	 */
+	public int getNumWaterResources() {
+		return this.numWaterResources;
 	}
 	
 	/**
@@ -128,12 +284,12 @@ public class WorldAgent extends Agent {
 	}
 	
 	/**
-	 * Returns all the filling stations in the world.
+	 * Returns all the natural water resources in the world.
 	 * 
-	 * @return all the filling stations in the world
+	 * @return all the natural water resources in the world
 	 */
-	public FillingStation[] getFillingStations() {
-		return this.fillingStations;
+	public WaterResource[] getWaterResources() {
+		return this.waterResources;
 	}
 	
 	/**
@@ -159,12 +315,12 @@ public class WorldAgent extends Agent {
 	/**
 	 * Creates the matrix/grid that represents all the positions of the world.
 	 */
-	public  void createWorld() {
+	public void createWorld() {
 		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 
-		fires = new Fire[Config.NUM_MAX_FIRES + 1];
+		fires = new Fire[Config.NUM_MAX_FIRES];
 		
-		currentNumFillingStations = 0;
+		numWaterResources = 0;
 		currentNumAircrafts = 0;
 		currentNumFires = 0;
 	}
@@ -210,27 +366,27 @@ public class WorldAgent extends Agent {
 		
 		WorldObject fireStationWorldObject = new WorldObject(WorldObjectType.FIRE_STATION, new Point(fireStationPos[0], fireStationPos[1]));
 		
-		this.fireStationAgent = new FireStationAgent(fireStationWorldObject);
+		this.fireStationAgent = new FireStationAgent(this, fireStationWorldObject);
 		this.worldMap[fireStationPos[0]][fireStationPos[1]] = this.fireStationAgent;
 	}
 	
 	/**
-	 * Generates all the Filling Stations in the world.
+	 * Generates all the natural water resources in the world.
 	 */
-	public void generateFillingStations() {
-		this.fillingStations = new FillingStation[Config.NUM_MAX_FILLING_STATIONS];
+	public void generateWaterResources() {
+		this.waterResources = new WaterResource[Config.NUM_MAX_WATER_RESOURCES];
 		
-		for(int i = 0; i < Config.NUM_MAX_FILLING_STATIONS; i++) {
-			int[] fillingStationPos = this.generateRandomPos();
+		for(int i = 0; i < Config.NUM_MAX_WATER_RESOURCES; i++) {
+			int[] waterResourcePos = this.generateRandomPos();
 			
-			WorldObject fillingStationWorldObject = new WorldObject(WorldObjectType.FILLING_STATION, new Point(fillingStationPos[0], fillingStationPos[1]));
+			WorldObject waterResourceWorldObject = new WorldObject(WorldObjectType.WATER_RESOURCE, new Point(waterResourcePos[0], waterResourcePos[1]));
 			
-			FillingStation fillingStation = new FillingStation((byte) this.currentNumFillingStations, fillingStationWorldObject);
+			WaterResource waterResource = new WaterResource((byte) this.numWaterResources, waterResourceWorldObject);
 			
-			this.fillingStations[i] = fillingStation;
-			this.worldMap[fillingStationPos[0]][fillingStationPos[1]] = fillingStation;
+			this.waterResources[i] = waterResource;
+			this.worldMap[waterResourcePos[0]][waterResourcePos[1]] = waterResource;
 			
-			this.currentNumFillingStations++;
+			this.numWaterResources++;
 		}
 	}
 	
@@ -242,6 +398,8 @@ public class WorldAgent extends Agent {
 		
 		for(int i = 0; i < Config.NUM_MAX_AIRCRAFTS; i++) {
 			int[] aircraftPos = this.generateRandomPos();
+			
+			
 			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
@@ -266,12 +424,61 @@ public class WorldAgent extends Agent {
 		this.worldMap[firePosX][firePosY] = fire;
 	}
 	
+	public void refreshWorldMapPositions() {
+		Object[][] tmpWorldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+		
+		// 1) Switching/refreshing the fire station's position in the world map/grid 
+		FireStationAgent fireStationAgent = this.getFireStationAgent();
+		WorldObject fireStationWorldObject = fireStationAgent.getWorldObject();
+		
+		tmpWorldMap[fireStationWorldObject.getPosX()][fireStationWorldObject.getPosY()] = fireStationAgent;
+		
+		// 2) Switching/refreshing the water resources' positions in the world map/grid 
+		WaterResource[] waterResources = this.getWaterResources();
+		
+		for(int wr = 0; wr < waterResources.length; wr++) {
+			WaterResource waterResource = waterResources[wr];
+			WorldObject waterResourceWorldObject = waterResource.getWorldObject();
+			
+			tmpWorldMap[waterResourceWorldObject.getPosX()][waterResourceWorldObject.getPosY()] = waterResource;
+		}
+				
+		// 3) Switching/refreshing the aircraft agents' positions in the world map/grid 
+		AircraftAgent[] aircraftAgents = this.getAircraftAgents();
+				
+		for(int aa = 0; aa < aircraftAgents.length; aa++) {
+			AircraftAgent aircraftAgent = aircraftAgents[aa];
+			WorldObject aircraftWorldObject = aircraftAgent.getWorldObject();
+					
+			tmpWorldMap[aircraftWorldObject.getPosX()][aircraftWorldObject.getPosY()] = aircraftAgent;
+		}
+		
+		// 4) Switching/refreshing the fires' positions in the world map/grid 
+		Fire[] fires = this.getCurrentFires();
+				
+		for(int f = 0; f < fires.length; f++) {	
+			if(fires[f] != null) {
+				Fire fire = fires[f];
+				WorldObject fireWorldObject = fire.getWorldObject();
+				
+				tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;
+			}
+		}
+				
+		// 5) Switching/refreshing the world maps/grids objects
+		this.worldMap = null;
+		this.worldMap = tmpWorldMap;
+		tmpWorldMap = null;
+	}
 	/**
 	 * Generates all the Fires in the world, when is possible.
 	 */
 	public void setup() {
-		addBehaviour(new GenerateFiresBehaviour(this, 6000));
-		addBehaviour(new PrintStatusBehaviour(this, 500));
+		
+		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
+		this.addBehaviour(new PrintStatusBehaviour(this, 1000));
+		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
+		this.addBehaviour(new WeatherConditionsBehaviour(this));
 	}
 	
 
