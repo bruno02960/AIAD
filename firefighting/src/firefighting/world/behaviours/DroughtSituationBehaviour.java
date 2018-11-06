@@ -32,9 +32,9 @@ public class DroughtSituationBehaviour extends TickerBehaviour {
 				
 		// Rain behaviour about all the water resources in the world
 		WaterResource[] waterResources = worldAgent.getWaterResources();
-
+/*
 		// Drought situation, affecting all the water resources in the world, decreasing its capacity
 		for(int wr = 0; wr < waterResources.length; wr++)
-			waterResources[wr].decreasingCapacity(Config.DROUGHT_SITUATION_PENALTY);
+			waterResources[wr].decreasingCapacity(Config.DROUGHT_SITUATION_PENALTY);*/
 	}
 }
