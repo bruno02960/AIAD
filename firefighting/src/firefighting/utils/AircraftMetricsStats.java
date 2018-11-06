@@ -222,7 +222,7 @@ public class AircraftMetricsStats {
 	public void incAverageTimeToFuelRefillByThisAircraft() {
 		this.averageTimeToFuelRefillByThisAircraft++;
 	}
-	
+	 
 	
 	
 	// 4) Messages exchanged (received/sent) metrics:

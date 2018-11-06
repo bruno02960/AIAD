@@ -180,7 +180,7 @@ public class WorldMetricsStats {
 		
 		this.numTotalOccurrenceDroughtSituations = 0;
 		
-		
+		 
 		
 		// 7) Environment effects metrics:
 		

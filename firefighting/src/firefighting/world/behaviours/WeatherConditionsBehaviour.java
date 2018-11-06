@@ -42,7 +42,7 @@ public class WeatherConditionsBehaviour extends CyclicBehaviour {
 		Random randomObject = new Random();
 		
 		int rainFrequencyTimeSec;
-		long rainFrequencyTimeMs;
+		long rainFrequencyTimeMs; 
 		
 		// Calculate a random time frequency in seconds of occurring precipitation/rain, from the global set [0s, 30s],
 		// accordingly with the current season
