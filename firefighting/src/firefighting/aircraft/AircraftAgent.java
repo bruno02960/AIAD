@@ -69,14 +69,14 @@ public class AircraftAgent extends Agent {
 	private WorldObject worldObject;
 
 	/**
-	 * The water tank's capacity of the aircraft agent.
+	 * The water tank's quantity of the aircraft agent.
 	 */
-	private int waterTankCapacity;
+	private int waterTankQuantity;
 
 	/**
-	 * The fuel tank's capacity of the aircraft agent.
+	 * The fuel tank's quantity of the aircraft agent.
 	 */
-	private int fuelTankCapacity;
+	private int fuelTankQuantity;
 	
 	/**
 	 * TODO - The World agent (REMOVER????)
@@ -120,10 +120,10 @@ public class AircraftAgent extends Agent {
 		
 		Random randomObject = new Random();
 		
-		this.waterTankCapacity = 0;
+		this.waterTankQuantity = 0;
 		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY) + 1;
 
-		this.fuelTankCapacity = 0;
+		this.fuelTankQuantity = 0;
 		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_INITIAL_FUEL_TANK_CAPACITY) + 1;
 		
 		this.attendindFire = false;
@@ -154,12 +154,12 @@ public class AircraftAgent extends Agent {
 	}
 	
 	/**
-	 * Returns the water tank's capacity of the aircraft agent.
+	 * Returns the water tank's quantity of the aircraft agent.
 	 * 
-	 * @return the water tank's capacity of the aircraft agent
+	 * @return the water tank's quantity of the aircraft agent
 	 */
-	public int getWaterTankCapacity() {
-		return this.waterTankCapacity;
+	public int getWaterTankQuantity() {
+		return this.waterTankQuantity;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class AircraftAgent extends Agent {
 	 * @return true if the aircraft agent have its water tank empty and false, otherwise
 	 */
 	public boolean haveEmptyWaterTank() {
-		return this.getWaterTankCapacity() == 0;
+		return this.getWaterTankQuantity() == 0;
 	}
 
 	/**
@@ -181,12 +181,12 @@ public class AircraftAgent extends Agent {
 	}
 	
 	/**
-	 * Returns the fuel tank's capacity of the aircraft agent.
+	 * Returns the fuel tank's quantity of the aircraft agent.
 	 * 
-	 * @return the fuel tank's capacity of the aircraft agent
+	 * @return the fuel tank's quantity of the aircraft agent
 	 */
-	public int getFuelTankCapacity() {
-		return this.fuelTankCapacity;
+	public int getFuelTankQuantity() {
+		return this.fuelTankQuantity;
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class AircraftAgent extends Agent {
 	 * @return true if the aircraft agent have its fuel tank empty and false, otherwise
 	 */
 	public boolean haveEmptyFuelTank() {
-		return this.getFuelTankCapacity() == 0;
+		return this.getFuelTankQuantity() == 0;
 	}
 	
 	/**
@@ -206,7 +206,7 @@ public class AircraftAgent extends Agent {
 	 * 		   some destination and false, otherwise
 	 */
 	public boolean haveEnoughFuelToDest(int numPositions) {
-		return this.getFuelTankCapacity() > numPositions;
+		return this.getFuelTankQuantity() > numPositions;
 	}
 	
 	/**
@@ -271,7 +271,7 @@ public class AircraftAgent extends Agent {
 	// TODO - ver daqui para baixo
 	@Override
 	public String toString() {
-		return "A" + waterTankCapacity;
+		return "A" + waterTankQuantity;
 	}
 
 	
