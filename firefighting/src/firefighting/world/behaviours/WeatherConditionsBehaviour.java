@@ -42,7 +42,7 @@ public class WeatherConditionsBehaviour extends CyclicBehaviour {
 		Random randomObject = new Random();
 		
 		int rainFrequencyTimeSec;
-		long rainFrequencyTimeMs;
+		long rainFrequencyTimeMs; 
 		
 		// Calculate a random time frequency in seconds of occurring precipitation/rain, from the global set [0s, 30s],
 		// accordingly with the current season
@@ -77,11 +77,19 @@ public class WeatherConditionsBehaviour extends CyclicBehaviour {
 		RainingBehaviour rainingBehaviour = new RainingBehaviour(worldAgent, rainFrequencyTimeMs);
 		worldAgent.addBehaviour(rainingBehaviour);
 		
+		// Destroying the ticker behaviours created previously and their respectively time counters
+		this.worldAgent.removeTimer(rainingBehaviour);
+		this.worldAgent.removeBehaviour(rainingBehaviour);
+				
 		
 		// 2) Handle wind behaviour
 		// TODO
 		
-		
+		// Destroying the ticker behaviours created previously and their respectively time counters
+		//this.worldAgent.removeTimer(rainingBehaviour);
+		//this.worldAgent.removeBehaviour(rainingBehaviour);
+				
+			
 		// 3) Handle drought (extreme dry situation) behaviour (if it's possible, can only occur in summer season)
 		if(worldAgent.canOccurDroughtSituations()) {
 			int droughtSituationFrequencyTimeSec;
@@ -100,11 +108,11 @@ public class WeatherConditionsBehaviour extends CyclicBehaviour {
 			
 				DroughtSituationBehaviour droughtSituationBehaviour = new DroughtSituationBehaviour(worldAgent, droughtSituationFrequencyTimeMs);
 				worldAgent.addBehaviour(droughtSituationBehaviour);
+		
+				// Destroying the ticker behaviours created previously and their respectively time counters
+				this.worldAgent.removeTimer(droughtSituationBehaviour);
+				this.worldAgent.removeBehaviour(droughtSituationBehaviour);
 			}
 		}
-		
-		// 4) Destroying the ticker behaviours created previously and their respectively time counters
-		this.worldAgent.removeTimer(rainingBehaviour);
-		this.worldAgent.removeBehaviour(rainingBehaviour);
 	}
 }
