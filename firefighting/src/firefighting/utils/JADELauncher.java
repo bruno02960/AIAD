@@ -12,6 +12,7 @@ package firefighting.utils;
 
 import java.util.Random;
 
+import firefighting.ui.GUI;
 import firefighting.world.*;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -25,6 +26,9 @@ import jade.wrapper.StaleProxyException;
  */
 public class JADELauncher {	
 	static Random random = new Random();
+
+	// GUI related stuff
+	static GUI gui;
 	
 	// Setting global world's environment conditions
 	static byte seasonTypeID = (byte) random.nextInt(Config.NUM_SEASONS);
@@ -36,11 +40,14 @@ public class JADELauncher {
 	
     
     // Main method
-	public static void main(String[] args) throws ControllerException {		
+	public static void main(String[] args) throws ControllerException {
+		// GUI related stuff
+		gui = new GUI(worldAgent);
+		gui.getFrame().setVisible(true);
+		
 		Runtime rt = Runtime.instance();
 		
 		Profile profile = new ProfileImpl();
-		profile.setParameter(Profile.GUI, "true");
 		ContainerController mainContainer = rt.createMainContainer(profile);
 		
 		try {

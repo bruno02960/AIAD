@@ -1,5 +1,6 @@
 package firefighting.world.behaviours;
 
+import firefighting.ui.GUI;
 import firefighting.utils.Config;
 import firefighting.world.WorldAgent;
 import jade.core.behaviours.TickerBehaviour;
@@ -56,6 +57,8 @@ public class PrintStatusBehaviour extends TickerBehaviour {
 		this.worldAgent.refreshWorldMapPositions();
 
 		Object[][] worldMap = this.getWorldMap();
+
+		GUI.fillGrid();
 		
 		for(int i = 0; i < Config.GRID_WIDTH * 3 + 1; i++) {
 			System.out.print('-');
