@@ -27,6 +27,7 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
 import firefighting.aircraft.utils.QItem;
+import firefighting.ui.GUI;
 import firefighting.utils.Config;
 import firefighting.world.*;
 
@@ -278,20 +279,21 @@ public class AircraftAgent extends Agent {
 	// Agent's methods:
 	
 	protected void setup() {
-		System.out.println(pathToFire(new Point(3,4)));
-		
-		System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
+		GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
+		//System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
 				MessageTemplate.MatchPerformative(ACLMessage.CFP) );
 
 		addBehaviour(new ContractNetResponder(this, template) {
 			protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
-				System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
+				GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
+				//System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 				int proposal = evaluateAction(cfp.getContent());
 				if (proposal > 2) {
 					// We provide a proposal
-					System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
+					GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
+					//System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
 					ACLMessage propose = cfp.createReply();
 					propose.setPerformative(ACLMessage.PROPOSE);
 					propose.setContent(String.valueOf(proposal));
@@ -299,27 +301,32 @@ public class AircraftAgent extends Agent {
 				}
 				else {
 					// We refuse to provide a proposal
-					System.out.println("Agent "+getLocalName()+": Refuse");
+					GUI.log("Agent "+getLocalName()+": Refuse");
+					//System.out.println("Agent "+getLocalName()+": Refuse");
 					throw new RefuseException("evaluation-failed");
 				}
 			}
 
 			protected ACLMessage prepareResultNotification(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
-				System.out.println("Agent "+getLocalName()+": Proposal accepted");
+				GUI.log("Agent "+getLocalName()+": Proposal accepted\n");
+				//System.out.println("Agent "+getLocalName()+": Proposal accepted");
 				if (performAction()) {
-					System.out.println("Agent "+getLocalName()+": Action successfully performed");
+					GUI.log("Agent "+getLocalName()+": Action successfully performed\n");
+					//System.out.println("Agent "+getLocalName()+": Action successfully performed");
 					ACLMessage inform = accept.createReply();
 					inform.setPerformative(ACLMessage.INFORM);
 					return inform;
 				}
 				else {
-					System.out.println("Agent "+getLocalName()+": Action execution failed");
+					GUI.log("Agent "+getLocalName()+": Action execution failed\n");
+					//System.out.println("Agent "+getLocalName()+": Action execution failed");
 					throw new FailureException("unexpected-error");
 				}	
 			}
 
 			protected void handleRejectProposal(ACLMessage reject) {
-				System.out.println("Agent "+getLocalName()+": Proposal rejected");
+				GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
+				//System.out.println("Agent "+getLocalName()+": Proposal rejected");
 			}
 		} );
 	}
@@ -472,9 +479,10 @@ public class AircraftAgent extends Agent {
 	 * Behaviour to the aircraft agent takes in the case of take down.
 	 */
 	protected void takeDown() {
-		if(this.isCrashed())
-			System.out.println("Mayday, Mayday!!! Aircraft Agent " + getAID().getName() + " crashed and is terminating!");
+		if(this.isCrashed()) {
+			System.err.println("Mayday, Mayday!!! Aircraft Agent " + getAID().getName() + " crashed and is terminating!");
+		}
 		else
-			System.out.println("Aircraft Agent " + getAID().getName() + " is terminating!");
+			System.err.println("Aircraft Agent " + getAID().getName() + " is terminating!");
 	}
 }

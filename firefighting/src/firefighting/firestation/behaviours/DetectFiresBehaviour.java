@@ -3,6 +3,7 @@ package firefighting.firestation.behaviours;
 import firefighting.firestation.FireStationAgent;
 import firefighting.firestation.messages.AlarmFireMessage;
 import firefighting.nature.Fire;
+import firefighting.ui.GUI;
 import firefighting.utils.Config;
 import firefighting.world.WorldAgent;
 import jade.core.behaviours.TickerBehaviour;
@@ -71,8 +72,9 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 			while(fires[i] != null) {
 					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
 					if(fires[i].isActive() && !fires[i].isAttended()) {
-						
-						System.out.println("Fire!! on index position: "+i);
+
+						GUI.log("Fire!! on index position: "+i + "\n");
+						//System.out.println("Fire!! on index position: "+i);
 						
 						// Get the Fire that needs to be extinguished
 						Fire fireToBeExtinguished = fires[i];

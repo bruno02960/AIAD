@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import firefighting.firestation.FireStationAgent;
+import firefighting.ui.GUI;
 import firefighting.utils.Config;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -30,7 +31,9 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Vector prepareCfps(ACLMessage helloAircraftCFPMsg) {
 		
-		System.out.println("preparing messages.......");
+
+		GUI.log("preparing messages.......\n");
+		//System.out.println("preparing messages.......");
 		Vector v = new Vector();		
 
 		v.add(this.helloAircraftCFPMsg);
@@ -40,11 +43,13 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 	
 	@SuppressWarnings("rawtypes")
 	protected void handlePropose(ACLMessage propose, Vector acceptances) {
-		System.out.println("Agent " + propose.getSender().getName() + " proposed " + propose.getContent());
+		GUI.log("Agent " + propose.getSender().getName() + " proposed " + propose.getContent() +"\n");
+		//System.out.println("Agent " + propose.getSender().getName() + " proposed " + propose.getContent());
     }
      
 	protected void handleRefuse(ACLMessage refuse) {
-        System.out.println("Agent " + refuse.getSender().getName() + " refused!");
+		GUI.log("Agent " + refuse.getSender().getName() + " refused!\n");
+        //System.out.println("Agent " + refuse.getSender().getName() + " refused!");
 	}
       
 	protected void handleFailure(ACLMessage failure) {
@@ -53,10 +58,10 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 
 			// FAILURE notification from the JADE runtime: the receiver
 			// does not exist
-			System.out.println("Responder does not exist"); 
+			System.err.println("Responder does not exist"); 
 		}
 		else {
-			System.out.println("Agent " + failure.getSender().getName() + " failed!");
+			System.err.println("Agent " + failure.getSender().getName() + " failed!");
 		}
 		// Immediate failure --> we will not receive a response from this agent
 		numAircraftResponders--;  
@@ -68,7 +73,7 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
     	  
 		if (responses.size() < numAircraftResponders) {
 			// Some responder didn't reply within the specified timeout
-			System.out.println("Timeout expired: missing " + (numAircraftResponders - responses.size()) + " responses!");  
+			System.err.println("Timeout expired: missing " + (numAircraftResponders - responses.size()) + " responses!");  
 		}
     	  
 		int bestProposal = -1;
@@ -100,12 +105,14 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
     	  
 		// Accept the proposal of the best proposer
 		if (accept != null) {
-			System.out.println("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName());
+			GUI.log("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName() + "\n");
+			//System.out.println("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName());
 			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 		} 
 	}
       
 	protected void handleInform(ACLMessage inform) {
-		System.out.println("Agent " + inform.getSender().getName() + " successfully performed the requested action!");
+		GUI.log("Agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
+		//System.out.println("Agent " + inform.getSender().getName() + " successfully performed the requested action!");
 	}	
 }
