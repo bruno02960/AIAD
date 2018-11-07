@@ -76,7 +76,7 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 			System.err.println("Timeout expired: missing " + (numAircraftResponders - responses.size()) + " responses!");  
 		}
     	  
-		int bestProposal = -1;
+		int bestProposal = 1000;
 		AID bestProposer = null;
 		ACLMessage accept = null;
 		
@@ -95,7 +95,7 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 				int proposal = Integer.parseInt(msg.getContent());
 				
 				// Evaluate proposals
-    			if (proposal > bestProposal) {
+    			if (proposal < bestProposal) {
     				bestProposal = proposal;
     				bestProposer = msg.getSender();
     				accept = reply;

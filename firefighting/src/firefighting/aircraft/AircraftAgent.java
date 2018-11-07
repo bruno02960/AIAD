@@ -27,6 +27,7 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
 import firefighting.aircraft.utils.QItem;
+import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
 import firefighting.ui.GUI;
 import firefighting.utils.Config;
@@ -89,6 +90,12 @@ public class AircraftAgent extends Agent {
 	 * the aircraft agent it's already attending a fire.
 	 */
 	private boolean attendindFire;
+	
+	/**
+	 * 
+	 * TODO
+	 */
+	private Fire currentAttendindFire;
 
 	/**
 	 * The boolean value that keeps the information about if
@@ -128,6 +135,7 @@ public class AircraftAgent extends Agent {
 		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_INITIAL_FUEL_TANK_CAPACITY) + 1;
 		
 		this.attendindFire = false;
+		this.currentAttendindFire = null;
 		
 		this.crashed = false;
 	}
@@ -291,7 +299,7 @@ public class AircraftAgent extends Agent {
 				GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
 				//System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 				int proposal = evaluateAction(cfp.getContent());
-				if (proposal > 2) {
+				if (!attendindFire) {
 					// We provide a proposal
 					GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
 					//System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
@@ -310,6 +318,7 @@ public class AircraftAgent extends Agent {
 
 			protected ACLMessage prepareResultNotification(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
 				GUI.log("Agent "+getLocalName()+": Proposal accepted\n");
+				attendindFire = true;
 				//System.out.println("Agent "+getLocalName()+": Proposal accepted");
 				if (performAction()) {
 					GUI.log("Agent "+getLocalName()+": Action successfully performed\n");
@@ -346,6 +355,8 @@ public class AircraftAgent extends Agent {
 		
 		Point firePos = new Point(Integer.parseInt(tokens[4]), Integer.parseInt(tokens[5]));
 		
+		this.currentAttendindFire = (Fire) this.worldAgent.getWorldMap()[firePos.x][firePos.y];
+		
 		ArrayList<Point> pathToFire = this.pathToFire(firePos);
 		
 		int distanceToFire = pathToFire.size();
@@ -370,7 +381,7 @@ public class AircraftAgent extends Agent {
 			waterTankQuantity = this.getWaterTankQuantity();
 			
 			if(waterTankQuantity < fireIntensity) {
-				// TODO - Usar fórmula --- dar pesos á agua e distância ??
+				// TODO - Usar fï¿½rmula --- dar pesos ï¿½ agua e distï¿½ncia ??
 				
 				int halfFireIntensity = fireIntensity / 2;
 				
@@ -418,8 +429,28 @@ public class AircraftAgent extends Agent {
 			this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
 				
 		}
-
-		return (Math.random() > 0.2);
+		
+		while(this.waterTankQuantity > 0) {
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//water decrement
+			this.waterTankQuantity--;
+			this.currentAttendindFire.decreaseIntensity(1);
+			
+			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
+				break;
+			}
+		}
+		
+		attendindFire = false;
+		
+		return true;
 	}
 
 	/**
