@@ -27,6 +27,7 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
 import firefighting.aircraft.utils.QItem;
+import firefighting.nature.WaterResource;
 import firefighting.ui.GUI;
 import firefighting.utils.Config;
 import firefighting.world.*;
@@ -98,7 +99,7 @@ public class AircraftAgent extends Agent {
 	/**
 	 * Auxiliary variable for saving Paths
 	 */
-	private ArrayList<Point> auxPath = new  ArrayList<Point>();
+	private ArrayList<Point> auxPath = new ArrayList<Point>();
 	
 	
 
@@ -120,7 +121,7 @@ public class AircraftAgent extends Agent {
 		
 		Random randomObject = new Random();
 		
-		this.waterTankQuantity = 0;
+		this.waterTankQuantity = 6;
 		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY) + 1;
 
 		this.fuelTankQuantity = 0;
@@ -335,17 +336,63 @@ public class AircraftAgent extends Agent {
 	
 		String[] tokens = message.split(" ");
 		
-		if(!tokens[0].equals("FIRE") && !tokens[1].equals("POS")) {
+		if(!tokens[0].equals("FIRE") && !tokens[1].equals("INTENSITY") && !tokens[3].equals("POS")) {
 			System.err.println("Invalid alert message received!");
 		}
 		
-		Point point = new Point(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3]));
+		int totalDistanceToMake = 0;
 		
-		this.auxPath.addAll(this.pathToFire(point));
+		int fireIntensity = Integer.parseInt(tokens[2]);
+		
+		Point firePos = new Point(Integer.parseInt(tokens[4]), Integer.parseInt(tokens[5]));
+		
+		ArrayList<Point> pathToFire = this.pathToFire(firePos);
+		
+		int distanceToFire = pathToFire.size();
+		
+	
+		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
+		
+		int distanceToNearestWaterResource = pathToNearestWaterResource.size();
+		
+		Point nearestWaterResourcePos = (Point) pathToNearestWaterResource.toArray()[distanceToNearestWaterResource - 1];
+		
+		ArrayList<Point> bestPathFromWaterResourceToFire = this.bestPathFromXYToWZ((int) nearestWaterResourcePos.getX(), (int) nearestWaterResourcePos.getY(), (int) firePos.getX(), (int) firePos.getY());
+	
+		int distanceFromNearestWaterResourceToFire = bestPathFromWaterResourceToFire.size();
+		
+		
+		this.auxPath.addAll(this.pathToFire(firePos));
+		
+		if(this.haveEmptyWaterTank())
+			totalDistanceToMake = distanceToNearestWaterResource + distanceFromNearestWaterResourceToFire;
+		else {
+			waterTankQuantity = this.getWaterTankQuantity();
+			
+			if(waterTankQuantity < fireIntensity) {
+				// TODO - Usar fórmula --- dar pesos á agua e distância ??
+				
+				int halfFireIntensity = fireIntensity / 2;
+				
+				if(waterTankQuantity >= halfFireIntensity) {
+					totalDistanceToMake = (int) (Math.round(0.25 * distanceToFire) + Math.round(0.75 * distanceFromNearestWaterResourceToFire));
+				}
+				else {
+					totalDistanceToMake = (int) (Math.round(0.7 * distanceToFire) + Math.round(0.3 * distanceFromNearestWaterResourceToFire));
+				}
+			}
+			else {
+				totalDistanceToMake = distanceToFire; 
+			}
+		}
 		
 		//return this.auxPath.size();
 		
-		return (int) (Math.random() * 10);
+		//return (int) (Math.random() * 10);
+		
+		System.out.println(totalDistanceToMake);
+		
+		return totalDistanceToMake;
 		
 	}
 
@@ -386,7 +433,7 @@ public class AircraftAgent extends Agent {
 	 * 		   the fire location.
 	 * 
 	 */
-@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	private ArrayList<Point> pathToFire(Point fireLocation) {
         Point s = this.worldObject.getPos();
         Point d = fireLocation;
@@ -413,8 +460,75 @@ public class AircraftAgent extends Agent {
         
         return new ArrayList<Point>();
     }
+	
+	
+	private ArrayList<Point> pathToNearestWaterResource() {
+	  Point s = this.worldObject.getPos();
 
+	  // To keep track of visited QItems. Marking blocked cells as visited
+	  boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+	  for (int i = 0; i < Config.GRID_WIDTH; i++) {
+	    for (int j = 0; j < Config.GRID_HEIGHT; j++) {
+	      if(worldAgent.getWorldMap()[i][j] == null || worldAgent.getWorldMap()[i][j] instanceof WaterResource)
+	        visited[i][j] = false;
+	      else
+	        visited[i][j] = true;
+	    }
+	  }
 
+	  // Applying BFS on matrix cells starting from source
+	  Queue<QItem> q = new LinkedList<QItem>();
+	  q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
+	  visited[(int) s.getX()][(int) s.getY()] = true;
+	  while (!q.isEmpty()) {
+	    QItem p = q.remove();
+
+	    // Destination found
+	    if (worldAgent.getWorldMap()[p.row][p.col] != null && worldAgent.getWorldMap()[p.row][p.col] instanceof WaterResource) {
+	      ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+	      return path;
+	    }
+
+	    processCellPathToFire(visited, q, p);
+	  }
+
+	  return new ArrayList<Point>();
+	}
+
+	
+	private ArrayList<Point> bestPathFromXYToWZ(int x, int y, int w, int z) {
+		  Point s = new Point(x,y);
+
+		  // To keep track of visited QItems. Marking blocked cells as visited
+		  boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
+		  for (int i = 0; i < Config.GRID_WIDTH; i++) {
+		    for (int j = 0; j < Config.GRID_HEIGHT; j++) {
+		      if(worldAgent.getWorldMap()[i][j] == null)
+		        visited[i][j] = false;
+		      else
+		        visited[i][j] = true;
+		    }
+		  }
+
+		  // Applying BFS on matrix cells starting from source
+		  Queue<QItem> q = new LinkedList<QItem>();
+		  q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
+		  visited[(int) s.getX()][(int) s.getY()] = true;
+		  while (!q.isEmpty()) {
+		    QItem p = q.remove();
+
+		    // Destination found
+		    if (worldAgent.getWorldMap()[p.row][p.col] != null) {
+		      ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
+		      return path;
+		    }
+
+		    processCellPathToFire(visited, q, p);
+		  }
+
+		  return new ArrayList<Point>();
+		}
+	
 	/**
 	 * Processes a new cell in the BFS process of searching a path to a given fire
 	 * @param visited Visited cells

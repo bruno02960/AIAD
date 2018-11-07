@@ -125,12 +125,12 @@ public abstract class Config {
 	/**
 	 * Defines the maximum initial intensity of a fire.
 	 */
-	public final static int FIRE_MAX_INITIAL_INTENSITY = 10;
+	public final static int FIRE_MAX_INITIAL_INTENSITY = 5;
 	
 	/**
 	 * Defines the maximum final intensity of a fire.
 	 */
-	public final static int FIRE_MAX_FINAL_INTENSITY = 30;
+	public final static int FIRE_MAX_FINAL_INTENSITY = 10;
 	
 	/**
 	 * Defines the a factor value to be used to calculate a new timeout, to verifies if the fire increases its intensity or not,

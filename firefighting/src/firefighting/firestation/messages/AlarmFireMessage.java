@@ -1,5 +1,6 @@
 package firefighting.firestation.messages;
 
+import java.awt.Point;
 import java.util.Date;
 
 import firefighting.firestation.FireStationAgent;
@@ -50,7 +51,9 @@ public class AlarmFireMessage extends ACLMessage {
 			// We want to receive a reply in 10 seconds
 			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
 			
-			cfpMsg.setContent("FIRE POS " + (int)this.associatedFire.getWorldObject().getPos().getX() + " " + (int)this.associatedFire.getWorldObject().getPos().getY());
+			Point firePos = this.associatedFire.getWorldObject().getPos();
+			
+			cfpMsg.setContent("FIRE INTENSITY " + this.associatedFire.getCurrentIntensity() + " POS " + (int)firePos.getX() + " " + (int)firePos.getY());
 		}
 	}
 	
