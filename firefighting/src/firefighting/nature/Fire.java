@@ -149,12 +149,13 @@ public class Fire {
 	
 	public void decreaseIntensity(int decreaseValue) {
 		
-		if((this.currentIntensity - decreaseValue) < 0) {
-			this.currentIntensity = 0;
-			this.active = false;
-		}
+		this.currentIntensity = this.currentIntensity - decreaseValue;
 		
-		this.currentIntensity -= decreaseValue;
+		if(this.currentIntensity == 0) {
+			this.active = false;
+			this.attended = true;
+		}
+
 	}
 	
 	public void increaseIntensity(int increaseValue) {

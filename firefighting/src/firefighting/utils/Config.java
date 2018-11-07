@@ -27,7 +27,7 @@ public abstract class Config {
 	/**
 	 * Defines the maximum number of filling stations that can exist.
 	 */
-	public final static int NUM_MAX_WATER_RESOURCES = 8;
+	public final static int NUM_MAX_WATER_RESOURCES = 3;
 	
 	/**
 	 * Defines the maximum number of aircrafts that can exist.

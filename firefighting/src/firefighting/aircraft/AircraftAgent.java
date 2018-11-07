@@ -26,6 +26,7 @@ import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
+import firefighting.aircraft.behaviours.DetectEnoughWaterQty;
 import firefighting.aircraft.utils.QItem;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
@@ -128,7 +129,7 @@ public class AircraftAgent extends Agent {
 		
 		Random randomObject = new Random();
 		
-		this.waterTankQuantity = 6;
+		this.waterTankQuantity = 0;
 		AircraftAgent.maxWaterTankCapacity = randomObject.nextInt(Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY) + 1;
 
 		this.fuelTankQuantity = 0;
@@ -170,6 +171,14 @@ public class AircraftAgent extends Agent {
 	public int getWaterTankQuantity() {
 		return this.waterTankQuantity;
 	}
+	
+	public void increaseWaterQuantity() {
+		this.waterTankQuantity++;
+	}
+	
+	public void decreaseWaterQuantity() {
+		this.waterTankQuantity--;
+	}
 
 	/**
 	 * Returns true if the aircraft agent have its water tank empty and false, otherwise.
@@ -180,6 +189,10 @@ public class AircraftAgent extends Agent {
 		return this.getWaterTankQuantity() == 0;
 	}
 
+	public boolean haveFullWaterTank() {
+		return this.getWaterTankQuantity() == Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY;
+	}
+	
 	/**
 	 * Returns the maximum water tank's capacity of the aircraft agent.
 	 * 
@@ -288,6 +301,10 @@ public class AircraftAgent extends Agent {
 	// Agent's methods:
 	
 	protected void setup() {
+		
+		//verify if has enough water
+		addBehaviour(new DetectEnoughWaterQty(this, 1000));
+		
 		GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
 		//System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
 		MessageTemplate template = MessageTemplate.and(
@@ -299,7 +316,7 @@ public class AircraftAgent extends Agent {
 				GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
 				//System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 				int proposal = evaluateAction(cfp.getContent());
-				if (!attendindFire) {
+				if (!attendindFire && proposal < Integer.MAX_VALUE) {
 					// We provide a proposal
 					GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
 					//System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
@@ -361,8 +378,9 @@ public class AircraftAgent extends Agent {
 		
 		int distanceToFire = pathToFire.size();
 		
-	
+	/*
 		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
+		System.out.println("caminho até water" + pathToNearestWaterResource);
 		
 		int distanceToNearestWaterResource = pathToNearestWaterResource.size();
 		
@@ -371,30 +389,32 @@ public class AircraftAgent extends Agent {
 		ArrayList<Point> bestPathFromWaterResourceToFire = this.bestPathFromXYToWZ((int) nearestWaterResourcePos.getX(), (int) nearestWaterResourcePos.getY(), (int) firePos.getX(), (int) firePos.getY());
 	
 		int distanceFromNearestWaterResourceToFire = bestPathFromWaterResourceToFire.size();
-		
+	*/
 		
 		this.auxPath.addAll(this.pathToFire(firePos));
 		
-		if(this.haveEmptyWaterTank())
-			totalDistanceToMake = distanceToNearestWaterResource + distanceFromNearestWaterResourceToFire;
-		else {
-			waterTankQuantity = this.getWaterTankQuantity();
+	
+		//if(this.haveEmptyWaterTank())
+			totalDistanceToMake = distanceToFire;
+		//else {
+			//waterTankQuantity = this.getWaterTankQuantity();
 			
-			if(waterTankQuantity < fireIntensity) {
+			if(waterTankQuantity > fireIntensity/2) {
 				// TODO - Usar f�rmula --- dar pesos � agua e dist�ncia ??
 				
-				int halfFireIntensity = fireIntensity / 2;
+				//int halfFireIntensity = fireIntensity / 2;
 				
-				if(waterTankQuantity >= halfFireIntensity) {
-					totalDistanceToMake = (int) (Math.round(0.25 * distanceToFire) + Math.round(0.75 * distanceFromNearestWaterResourceToFire));
-				}
-				else {
-					totalDistanceToMake = (int) (Math.round(0.7 * distanceToFire) + Math.round(0.3 * distanceFromNearestWaterResourceToFire));
-				}
-			}
-			else {
+				//if(waterTankQuantity >= halfFireIntensity) {
+				//	totalDistanceToMake = (int) (Math.round(0.25 * distanceToFire) + Math.round(0.75 * distanceFromNearestWaterResourceToFire));
+				//}
+			//	else {
+				//	totalDistanceToMake = (int) (Math.round(0.7 * distanceToFire) + Math.round(0.3 * distanceFromNearestWaterResourceToFire));
+				//}
 				totalDistanceToMake = distanceToFire; 
 			}
+			else {
+				return Integer.MAX_VALUE;
+			//}
 		}
 		
 		//return this.auxPath.size();
@@ -444,6 +464,8 @@ public class AircraftAgent extends Agent {
 			this.currentAttendindFire.decreaseIntensity(1);
 			
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
+				//this.worldAgent.getWorldMap()[(int) this.currentAttendindFire.getWorldObject().getPos().getX()][(int) this.currentAttendindFire.getWorldObject().getPos().getY()] = null;
+				this.currentAttendindFire = null;
 				break;
 			}
 		}
@@ -493,7 +515,7 @@ public class AircraftAgent extends Agent {
     }
 	
 	
-	private ArrayList<Point> pathToNearestWaterResource() {
+	public ArrayList<Point> pathToNearestWaterResource() {
 	  Point s = this.worldObject.getPos();
 
 	  // To keep track of visited QItems. Marking blocked cells as visited
@@ -629,5 +651,44 @@ public class AircraftAgent extends Agent {
 		}
 		else
 			System.err.println("Aircraft Agent " + getAID().getName() + " is terminating!");
+	}
+
+
+
+	public void goToNearestWaterResource() {
+		
+		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
+		
+		for(int i = 0; i < pathToNearestWaterResource.size(); i++) {
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(this.worldAgent.getWorldMap()[(int)pathToNearestWaterResource.get(i).getX()][(int)pathToNearestWaterResource.get(i).getY()] == null) {
+				this.worldObject.setPos((int)pathToNearestWaterResource.get(i).getX(), (int)pathToNearestWaterResource.get(i).getY());
+			}	
+			
+			
+		}
+		
+		while(!this.haveFullWaterTank()) {
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			this.increaseWaterQuantity();
+			
+		}
+		
+		
+		
 	}
 }

@@ -10,10 +10,14 @@
 
 package firefighting.aircraft.behaviours;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import firefighting.aircraft.AircraftAgent;
+import firefighting.utils.Config;
 import jade.core.behaviours.TickerBehaviour;
 
-public class DetectEmptyWaterTankBehaviour extends TickerBehaviour { // TODO - TickerBehaviour ou Behaviour simples????
+public class DetectEnoughWaterQty extends TickerBehaviour { // TODO - TickerBehaviour ou Behaviour simples????
 
 	// Constants:
 	/**
@@ -40,10 +44,12 @@ public class DetectEmptyWaterTankBehaviour extends TickerBehaviour { // TODO - T
 	 * @param aircraftAgent the aircraft agent responsible for the behaviour
 	 * @param period
 	 */
-	public DetectEmptyWaterTankBehaviour(AircraftAgent aircraftAgent, long period) {
+	public DetectEnoughWaterQty(AircraftAgent aircraftAgent, long period) {
 		super(aircraftAgent, period);
 	
 		this.aircraftAgent = aircraftAgent;
+		
+		
 	}
 	
 	
@@ -71,8 +77,13 @@ public class DetectEmptyWaterTankBehaviour extends TickerBehaviour { // TODO - T
 
 		AircraftAgent aircraftAgent = this.getAircraftAgent();
 		
-		if(aircraftAgent.haveEmptyWaterTank()) {
+		if(aircraftAgent.getWaterTankQuantity() < (Config.AIRCRAFT_MAX_WATER_TANK_CAPACITY/2) && !this.aircraftAgent.isAttendingFire() ) {
 			
+			this.aircraftAgent.goToNearestWaterResource();
 		}
+		
 	}
+
+
+
 }
