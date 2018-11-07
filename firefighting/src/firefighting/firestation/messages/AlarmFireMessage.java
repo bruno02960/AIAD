@@ -40,7 +40,7 @@ public class AlarmFireMessage extends ACLMessage {
 		      
 			// Fill the CFP message
 			cfpMsg = new ACLMessage(ACLMessage.CFP);
-			      
+			       
 			// Add all the pretended receivers a
 			for (int i = 0; i < args.length; ++i)  
 				cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
