@@ -505,8 +505,13 @@ public class AircraftAgent extends Agent {
             // Destination found
             if (p.row == d.getX() && p.col == d.getY()) {
                 ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.remove(path.size()-1);
-                return path;
+                if(path.size() ==0) {
+                	return new ArrayList<Point>();
+                }
+                else {
+	                path.remove(path.size()-1);
+	                return path;
+                }
             }
             
             processCellPathToFire(visited, q, p);
