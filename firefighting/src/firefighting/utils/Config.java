@@ -125,7 +125,7 @@ public abstract class Config {
 	/**
 	 * Defines the maximum initial intensity of a fire.
 	 */
-	public final static int FIRE_MAX_INITIAL_INTENSITY = 5;
+	public final static int FIRE_MAX_INITIAL_INTENSITY = 6;
 	
 	/**
 	 * Defines the maximum final intensity of a fire.

@@ -394,7 +394,7 @@ public class AircraftAgent extends Agent {
 		
 		return totalDistanceToMake;
 		
-	} 
+	}
 
 	private boolean performAction() {
 		

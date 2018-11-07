@@ -38,7 +38,7 @@ public class FireStationAgent extends Agent {
 	
 	private WorldObject worldObject;
 	
-	 
+	
 	// Constructors:
 	/**
 	 * Constructor #1 of the Fire Station Agent.
