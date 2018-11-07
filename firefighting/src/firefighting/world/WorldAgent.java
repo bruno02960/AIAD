@@ -424,6 +424,20 @@ public class WorldAgent extends Agent {
 		this.worldMap[firePosX][firePosY] = fire;
 	}
 	
+	public void removeFire(int firePosX, int firePosY) {
+		Fire[] fires = this.getCurrentFires();
+		
+		for(int f = 0; f < fires.length; f++) {
+			WorldObject fire = fires[f].getWorldObject();
+			if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
+				fires[f] = null;
+				break;
+			}
+		}
+		
+		this.worldMap[firePosX][firePosY] = null;
+	}
+	
 	public void refreshWorldMapPositions() {
 		Object[][] tmpWorldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 		
@@ -480,6 +494,7 @@ public class WorldAgent extends Agent {
 		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
 		this.addBehaviour(new WeatherConditionsBehaviour(this));
 	}
+	
 	
 
 	/**

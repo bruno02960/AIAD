@@ -96,7 +96,7 @@ public class AircraftAgent extends Agent {
 	 * 
 	 * TODO
 	 */
-	private Fire currentAttendindFire;
+	private Fire currentAttendindFire ;
 
 	/**
 	 * The boolean value that keeps the information about if
@@ -463,8 +463,9 @@ public class AircraftAgent extends Agent {
 			this.waterTankQuantity--;
 			this.currentAttendindFire.decreaseIntensity(1);
 			
+			
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
-				//this.worldAgent.getWorldMap()[(int) this.currentAttendindFire.getWorldObject().getPos().getX()][(int) this.currentAttendindFire.getWorldObject().getPos().getY()] = null;
+				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
 				this.currentAttendindFire = null;
 				break;
 			}
