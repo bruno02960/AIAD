@@ -80,7 +80,7 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 						// Get the Fire that needs to be extinguished
 						Fire fireToBeExtinguished = fires[i];
 						
-						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished);	
+						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished, worldAgent);	
 					    
 						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg.getACLMessage());
 					

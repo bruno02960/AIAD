@@ -25,6 +25,7 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 	public AlarmAircraftsAboutFiresBehaviour(FireStationAgent fireStationAgent, ACLMessage helloAircraftCFPMsg) {
 		super(fireStationAgent, helloAircraftCFPMsg);
 		this.helloAircraftCFPMsg = helloAircraftCFPMsg;
+		System.out.println("1 instance......");
 		
 	}
 	
@@ -115,4 +116,13 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 		GUI.log("Agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
 		//System.out.println("Agent " + inform.getSender().getName() + " successfully performed the requested action!");
 	}	
+	
+	@Override
+	public int onEnd() {
+		
+		System.out.println("acabou......");
+		
+		return super.onEnd();
+		
+	}
 }

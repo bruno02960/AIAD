@@ -304,16 +304,13 @@ public class AircraftAgent extends Agent {
 	// Agent's methods:
 	
 	protected void setup() {
-		GUI.log("Agent responder " + getLocalName() + " waiting for Messages...\n");
 		
+		//verify if has enough water
 		addBehaviour(new DetectEnoughWaterQty(this, 1000));
 		
 		//Cyclic check inbox
-		addBehaviour(new ReceiveCFPs(this));
-		
-		/*
-		//verify if has enough water
-		addBehaviour(new DetectEnoughWaterQty(this, 1000));
+		//addBehaviour(new ReceiveCFPs(this));
+
 		
 		GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
 		//System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
@@ -365,7 +362,7 @@ public class AircraftAgent extends Agent {
 				GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
 				//System.out.println("Agent "+getLocalName()+": Proposal rejected");
 			}
-		} );*/
+		} );
 	}
 
 	public int evaluateAction(String message) {
@@ -415,19 +412,18 @@ public class AircraftAgent extends Agent {
 		int pos = 0;
 		for(pos = 0; pos < this.worldAgent.getCurrentFires().length ; pos++)
 		{
-			
-			if(this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
-			&& this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
-			{
-				this.worldAgent.getCurrentFires()[pos].attended = true;
-				break;
+			if(this.worldAgent.getCurrentFires()[pos] != null) {
+				if(this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
+						&& this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
+						{
+							this.worldAgent.getCurrentFires()[pos].attended = true;
+							break;
+						}
 			}
+			
 		}
 		
 		// Simulate action execution by generating a random number
-		
-		System.out.println("I was chosen!. Im on " + this.worldObject.getPos() + " and this is my path:" + " current fire on: " + this.currentAttendindFire.getWorldObject().getPos());
-		System.out.println(this.auxPath);
 		
 		for(int i = 0; i < this.auxPath.size(); i++) {
 			
@@ -464,14 +460,17 @@ public class AircraftAgent extends Agent {
 			
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
 				this.worldAgent.getCurrentFires()[pos].attended = false;
+				
+				System.out.println(this.currentAttendindFire);
+				
 				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
 				this.currentAttendindFire = null;
-				extinguish = true;
+				//extinguish = true;
 				break;
 			}
 		}
 		
-		if(!extinguish) 
+		if(this.worldAgent.getCurrentFires()[pos]!=null) 
 			this.worldAgent.getCurrentFires()[pos].attended = false;
 			
 		

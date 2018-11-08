@@ -425,13 +425,16 @@ public class WorldAgent extends Agent {
 	}
 	
 	public void removeFire(int firePosX, int firePosY) {
+		
 		Fire[] fires = this.getCurrentFires();
 		
 		for(int f = 0; f < fires.length; f++) {
-			WorldObject fire = fires[f].getWorldObject();
-			if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
-				fires[f] = null;
-				break;
+			if(fires[f] != null)  {
+				WorldObject fire = fires[f].getWorldObject();
+				if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
+					fires[f] = null;
+					break;
+				}
 			}
 		}
 		

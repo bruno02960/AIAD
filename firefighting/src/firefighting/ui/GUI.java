@@ -112,10 +112,10 @@ public class GUI {
 	 */
 	private void scrollPaneInitialize(JPanel panel_2) {
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		//scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		panel_2.add(scrollPane); //We add the scroll, since the scroll already contains the textArea
-		panel_2.setPreferredSize(new Dimension(600,500));
+		panel_2.setPreferredSize(new Dimension(800,500));
 	}
 	
 	/**
