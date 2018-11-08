@@ -364,6 +364,23 @@ public class AircraftAgent extends Agent {
 			}
 		} );
 	}
+	
+	public Fire getthisFire(int x, int y) {
+		
+		Fire currentFire = null ;
+		
+		for(int pos = 0; pos < this.worldAgent.getCurrentFires().size() ; pos++)
+		{
+			
+		if(this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getX() == x && this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getY() == y)
+			{
+				currentFire = this.worldAgent.getCurrentFires().get(pos);
+			}
+			
+			
+		}
+		return currentFire;
+	}
 
 	public int evaluateAction(String message) {
 	
@@ -379,7 +396,7 @@ public class AircraftAgent extends Agent {
 		
 		Point firePos = new Point(Integer.parseInt(tokens[4]), Integer.parseInt(tokens[5]));
 		
-		this.currentAttendindFire = (Fire) this.worldAgent.getWorldMap()[firePos.x][firePos.y];
+		this.currentAttendindFire = getthisFire(Integer.parseInt(tokens[4]), Integer.parseInt(tokens[5]));
 		
 		ArrayList<Point> pathToFire = this.pathToFire(firePos);
 		
@@ -406,22 +423,12 @@ public class AircraftAgent extends Agent {
 	}
 
 	public boolean performAction() {
+
 		
-		boolean extinguish = false;
-		
-		int pos = 0;
-		for(pos = 0; pos < this.worldAgent.getCurrentFires().size() ; pos++)
+		if(this.currentAttendindFire != null)
+			
 		{
-			
-		if(this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
-				&& this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
-						{
-							this.worldAgent.getCurrentFires().get(pos).attended = true;
-							break;
-						}
-			
-			
-		}
+		this.currentAttendindFire.attended = true;
 		
 		// Simulate action execution by generating a random number
 		
@@ -457,25 +464,28 @@ public class AircraftAgent extends Agent {
 			this.waterTankQuantity--;
 			this.currentAttendindFire.decreaseIntensity(1);
 			
-			
+	
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
-				this.worldAgent.getCurrentFires().get(pos).attended = false;
-
-				
+				//this.currentAttendindFire.attended = false;
 				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
 				this.currentAttendindFire = null;
-				//extinguish = true;
 				break;
 			}
 		}
 		
 		if(this.worldAgent.getCurrentFires().contains(this.currentAttendindFire))
-			this.worldAgent.getCurrentFires().get(pos).attended = false;
+			this.currentAttendindFire.attended = false;
 			
 		
 		this.attendindFire = false;
 		
 		this.auxPath.clear();
+		
+		return true;
+		
+
+		}
+		this.attendindFire = false;
 		return true;
 	}
 

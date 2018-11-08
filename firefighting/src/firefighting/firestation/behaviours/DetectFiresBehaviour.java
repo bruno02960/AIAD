@@ -39,6 +39,8 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 		return this.getWorldAgent().getCurrentFires();
 	}
 	
+
+	
 	@Override
 	protected void onTick() {
 		
@@ -71,10 +73,10 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 		//para ser um fogo de cada vez
 		if(fires.size() > 0) {
 			int i = 0;
-			while(true) {
+			for(i = 0; i < fires.size(); i++) {
 					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
 					if(fires.get(i).isActive() && !fires.get(i).isAttended()) {
-
+						
 						GUI.log("Fire!! on index position: "+i + "\n");
 						
 						System.out.println("There are " + fires.size() + " fires and this is the fire on POS"+ fires.get(i).getWorldObject().getPos());
@@ -90,7 +92,7 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 					    
 					    break; //!!!!!!!!!!!ADICIONADO SÓ PARA FAZER PARA O PRIMEIRO INCENDIO
 					}	
-					i++;
+					
 				}
 			}
 		}

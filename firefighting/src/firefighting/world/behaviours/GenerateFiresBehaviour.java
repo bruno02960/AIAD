@@ -35,19 +35,22 @@ public class GenerateFiresBehaviour extends TickerBehaviour {
 		
 		// It's possible to add a fire
 		if(this.getWorldAgent().getCurrentNumFires() < Config.NUM_MAX_FIRES) {
-		   	int[] firePos = worldAgent.generateRandomPos();
+		   	
+			int[] firePos = worldAgent.generateRandomPos();
 		    	
 		   	WorldObject fireWorldObject = new WorldObject(WorldObjectType.FIRE, new Point(firePos[0], firePos[1]));
 		    
 		   	ArrayList<Fire> fires = worldAgent.getCurrentFires();
 
 		   	Fire fire = new Fire(fireWorldObject);
-		    	
+		    
+		   	//in map
 		   	worldAgent.addFire(firePos[0], firePos[1], fire);
 	   
+		   	//in array
 		   	fires.add(fire);
 		    		
-		   	worldAgent.incCurrentNumFires();
+		   	//worldAgent.incCurrentNumFires();
 	    	
 	    }
 	}

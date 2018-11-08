@@ -47,15 +47,15 @@ public class AlarmFireMessage extends ACLMessage {
 			      
 			// Add all the pretended receivers a
 			for (int i = 0; i < args.length; ++i)  {
-				//if(!worldAgent.getAircraftAgents()[i].attendindFire)
+				if(!worldAgent.getAircraftAgents()[i].attendindFire)
 					cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
 			}
 					      
 			cfpMsg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 					 
 			
-			// We want to receive a reply in 10 seconds
-			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+			// We want to receive a reply in 20 seconds
+			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 20000));
 			
 			Point firePos = this.associatedFire.getWorldObject().getPos();
 			

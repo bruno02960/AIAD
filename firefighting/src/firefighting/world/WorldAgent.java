@@ -259,14 +259,7 @@ public class WorldAgent extends Agent {
 	 * @return the current number of fires in the world
 	 */
 	public int getCurrentNumFires() {
-		return this.currentNumFires;
-	}
-	
-	/**
-	 * Increases the current number of fires in the world.
-	 */
-	public void incCurrentNumFires() {
-		this.currentNumFires++;
+		return this.getCurrentFires().size();
 	}
 	
 	/**
