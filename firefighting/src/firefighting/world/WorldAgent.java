@@ -491,8 +491,8 @@ public class WorldAgent extends Agent {
 		
 		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
 		this.addBehaviour(new PrintStatusBehaviour(this, 1000));
-		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
-		this.addBehaviour(new WeatherConditionsBehaviour(this));
+		//this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
+		//this.addBehaviour(new WeatherConditionsBehaviour(this));
 	}
 	
 	

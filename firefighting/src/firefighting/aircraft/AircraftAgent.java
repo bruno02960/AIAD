@@ -328,7 +328,7 @@ public class AircraftAgent extends Agent {
 				else {
 					// We refuse to provide a proposal
 					GUI.log("Agent "+getLocalName()+": Refuse");
-					//System.out.println("Agent "+getLocalName()+": Refuse");
+					System.out.println("Agent "+getLocalName()+": Refuse");
 					throw new RefuseException("evaluation-failed");
 				}
 			}
@@ -378,50 +378,21 @@ public class AircraftAgent extends Agent {
 		
 		int distanceToFire = pathToFire.size();
 		
-	/*
-		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
-		System.out.println("caminho até water" + pathToNearestWaterResource);
-		
-		int distanceToNearestWaterResource = pathToNearestWaterResource.size();
-		
-		Point nearestWaterResourcePos = (Point) pathToNearestWaterResource.toArray()[distanceToNearestWaterResource - 1];
-		
-		ArrayList<Point> bestPathFromWaterResourceToFire = this.bestPathFromXYToWZ((int) nearestWaterResourcePos.getX(), (int) nearestWaterResourcePos.getY(), (int) firePos.getX(), (int) firePos.getY());
-	
-		int distanceFromNearestWaterResourceToFire = bestPathFromWaterResourceToFire.size();
-	*/
+		this.auxPath.clear();
 		
 		this.auxPath.addAll(this.pathToFire(firePos));
-		
-	
-		//if(this.haveEmptyWaterTank())
-			totalDistanceToMake = distanceToFire;
-		//else {
-			//waterTankQuantity = this.getWaterTankQuantity();
+
+		totalDistanceToMake = distanceToFire;
 			
-			if(waterTankQuantity > fireIntensity/2) {
-				// TODO - Usar f�rmula --- dar pesos � agua e dist�ncia ??
-				
-				//int halfFireIntensity = fireIntensity / 2;
-				
-				//if(waterTankQuantity >= halfFireIntensity) {
-				//	totalDistanceToMake = (int) (Math.round(0.25 * distanceToFire) + Math.round(0.75 * distanceFromNearestWaterResourceToFire));
-				//}
-			//	else {
-				//	totalDistanceToMake = (int) (Math.round(0.7 * distanceToFire) + Math.round(0.3 * distanceFromNearestWaterResourceToFire));
-				//}
-				totalDistanceToMake = distanceToFire; 
-			}
-			else {
-				return Integer.MAX_VALUE;
-			//}
+		if(waterTankQuantity > fireIntensity/2) {
+
+			totalDistanceToMake = distanceToFire; 
 		}
-		
-		//return this.auxPath.size();
-		
-		//return (int) (Math.random() * 10);
-		
-		System.out.println(totalDistanceToMake);
+		else {
+				
+			return 100;
+			
+		}
 		
 		return totalDistanceToMake;
 		
@@ -429,22 +400,39 @@ public class AircraftAgent extends Agent {
 
 	private boolean performAction() {
 		
+		boolean extinguish = false;
+		
+		int pos = 0;
+		for(pos = 0; pos < this.worldAgent.getCurrentFires().length ; pos++)
+		{
+			
+			if(this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
+			&& this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
+			{
+				this.worldAgent.getCurrentFires()[pos].attended = true;
+				break;
+			}
+		}
+		
 		// Simulate action execution by generating a random number
+		
+		System.out.println("I was chosen!. Im on " + this.worldObject.getPos() + " and this is my path:" + " current fire on: " + this.currentAttendindFire.getWorldObject().getPos());
+		System.out.println(this.auxPath);
 		
 		for(int i = 0; i < this.auxPath.size(); i++) {
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			/*
 			if(this.worldAgent.getWorldMap()[(int)this.auxPath.get(i).getX()][(int)this.auxPath.get(i).getY()] != null) {
 				Point point = auxPath.get(auxPath.size()-1);
 				this.auxPath.clear();
 				this.auxPath.addAll(this.pathToFire(point));
-			}
+			}*/
 			
 			this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
 				
@@ -465,14 +453,22 @@ public class AircraftAgent extends Agent {
 			
 			
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
+				this.worldAgent.getCurrentFires()[pos].attended = false;
 				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
 				this.currentAttendindFire = null;
+				extinguish = true;
 				break;
 			}
 		}
 		
-		attendindFire = false;
+		if(!extinguish) 
+			this.worldAgent.getCurrentFires()[pos].attended = false;
+			
 		
+		this.attendindFire = false;
+		
+		System.out.println("Mission completed!!!!!! I have" + this.waterTankQuantity);
+		this.auxPath.clear();
 		return true;
 	}
 
@@ -505,8 +501,14 @@ public class AircraftAgent extends Agent {
             // Destination found
             if (p.row == d.getX() && p.col == d.getY()) {
                 ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                path.remove(path.size()-1);
-                return path;
+                
+                if(path.size() == 0) {
+                    return new ArrayList<Point>();
+                }
+                else {
+                    path.remove(path.size()-1);
+                    return path;
+                }
             }
             
             processCellPathToFire(visited, q, p);

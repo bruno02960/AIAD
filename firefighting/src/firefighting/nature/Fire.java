@@ -48,7 +48,7 @@ public class Fire {
 	
 	private boolean active;
 	
-	private boolean attended;
+	public boolean attended;
 	
 	
 	// Constructors:

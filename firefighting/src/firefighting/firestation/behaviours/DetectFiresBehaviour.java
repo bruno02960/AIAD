@@ -74,7 +74,8 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 					if(fires[i].isActive() && !fires[i].isAttended()) {
 
 						GUI.log("Fire!! on index position: "+i + "\n");
-						//System.out.println("Fire!! on index position: "+i);
+						
+						System.out.println("There are " + fires.length + " fires and this is the fire on POS"+ fires[i].getWorldObject().getPos());
 						
 						// Get the Fire that needs to be extinguished
 						Fire fireToBeExtinguished = fires[i];
