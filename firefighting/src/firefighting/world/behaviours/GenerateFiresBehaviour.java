@@ -1,6 +1,7 @@
 package firefighting.world.behaviours;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
@@ -38,23 +39,16 @@ public class GenerateFiresBehaviour extends TickerBehaviour {
 		    	
 		   	WorldObject fireWorldObject = new WorldObject(WorldObjectType.FIRE, new Point(firePos[0], firePos[1]));
 		    
-		   	Fire[] fires = worldAgent.getCurrentFires();
-		   	
-		   	int currentPosFireToAdd = 0;
-		   	
-		   	for(currentPosFireToAdd = 0; currentPosFireToAdd < Config.NUM_MAX_FIRES; currentPosFireToAdd++)
-		   		if(fires[currentPosFireToAdd] == null)
-		   			break;
-		   	
-		   	Fire fire = new Fire((byte) currentPosFireToAdd, fireWorldObject);
+		   	ArrayList<Fire> fires = worldAgent.getCurrentFires();
+
+		   	Fire fire = new Fire(fireWorldObject);
 		    	
 		   	worldAgent.addFire(firePos[0], firePos[1], fire);
-	    		
-	    	if(currentPosFireToAdd < Config.NUM_MAX_FIRES) {
-		   		fires[currentPosFireToAdd] = fire;
+	   
+		   	fires.add(fire);
 		    		
-		   		worldAgent.incCurrentNumFires();
-	    	}
+		   	worldAgent.incCurrentNumFires();
+	    	
 	    }
 	}
 }

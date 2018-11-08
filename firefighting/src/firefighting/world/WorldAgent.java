@@ -1,5 +1,6 @@
 package firefighting.world;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import firefighting.aircraft.AircraftAgent;
@@ -78,7 +79,8 @@ public class WorldAgent extends Agent {
 	/**
 	 * The current fires in the world.
 	 */
-	private  Fire[] fires;
+	//private  Fire[] fires;
+	private ArrayList<Fire> fires;
 	
 	/*
 	 * The number of water resources in the world.
@@ -306,7 +308,7 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return all the current fires in the world
 	 */
-	public Fire[] getCurrentFires() {
+	public ArrayList<Fire> getCurrentFires() {
 		return this.fires;
 	}
 	
@@ -318,7 +320,8 @@ public class WorldAgent extends Agent {
 	public void createWorld() {
 		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 
-		fires = new Fire[Config.NUM_MAX_FIRES];
+		//fires = new Fire[Config.NUM_MAX_FIRES];
+		fires = new ArrayList<Fire>();
 		
 		numWaterResources = 0;
 		currentNumAircrafts = 0;
@@ -426,16 +429,16 @@ public class WorldAgent extends Agent {
 	
 	public void removeFire(int firePosX, int firePosY) {
 		
-		Fire[] fires = this.getCurrentFires();
+		ArrayList<Fire> fires = this.getCurrentFires();
 		
-		for(int f = 0; f < fires.length; f++) {
-			if(fires[f] != null)  {
-				WorldObject fire = fires[f].getWorldObject();
+		for(int f = 0; f < fires.size(); f++) {
+			
+				WorldObject fire = fires.get(f).getWorldObject();
 				if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
-					fires[f] = null;
+					fires.remove(f);
 					break;
 				}
-			}
+			
 		}
 		
 		this.worldMap[firePosX][firePosY] = null;
@@ -471,15 +474,15 @@ public class WorldAgent extends Agent {
 		}
 		
 		// 4) Switching/refreshing the fires' positions in the world map/grid 
-		Fire[] fires = this.getCurrentFires();
+		ArrayList<Fire> fires = this.getCurrentFires();
 				
-		for(int f = 0; f < fires.length; f++) {	
-			if(fires[f] != null) {
-				Fire fire = fires[f];
+		for(int f = 0; f < fires.size(); f++) {	
+		
+				Fire fire = fires.get(f);
 				WorldObject fireWorldObject = fire.getWorldObject();
 				
 				tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;
-			}
+			
 		}
 				
 		// 5) Switching/refreshing the world maps/grids objects

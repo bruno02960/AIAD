@@ -13,11 +13,6 @@ public class Fire {
 	
 	// Global Instance Variables:
 	/**
-	 * ID of the Fire.
-	 */
-	private byte id;
-		
-	/**
 	 * World's object of the Fire.
 	 */
 	private WorldObject worldObject;
@@ -60,10 +55,9 @@ public class Fire {
 	 * @param the Fire's ID
 	 * @param the Fire's World Object
 	 */
-	public Fire(byte id, WorldObject worldObject) {
+	public Fire(WorldObject worldObject) {
 		Random random = new Random();
 		
-		this.id = id;
 		this.worldObject = worldObject;
 		
 		this.creationTimestamp = System.currentTimeMillis();
@@ -86,9 +80,7 @@ public class Fire {
 	 * 
 	 * @return the Fire's ID
 	 */
-	public byte getID() {
-		return this.id;
-	}
+
 		
 	/**
 	 * Returns the Fire's World Object.

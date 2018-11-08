@@ -410,16 +410,16 @@ public class AircraftAgent extends Agent {
 		boolean extinguish = false;
 		
 		int pos = 0;
-		for(pos = 0; pos < this.worldAgent.getCurrentFires().length ; pos++)
+		for(pos = 0; pos < this.worldAgent.getCurrentFires().size() ; pos++)
 		{
-			if(this.worldAgent.getCurrentFires()[pos] != null) {
-				if(this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
-						&& this.worldAgent.getCurrentFires()[pos].getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
+			
+		if(this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getX() == this.currentAttendindFire.getWorldObject().getPos().getX()
+				&& this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getY() == this.currentAttendindFire.getWorldObject().getPos().getY())
 						{
-							this.worldAgent.getCurrentFires()[pos].attended = true;
+							this.worldAgent.getCurrentFires().get(pos).attended = true;
 							break;
 						}
-			}
+			
 			
 		}
 		
@@ -459,9 +459,8 @@ public class AircraftAgent extends Agent {
 			
 			
 			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
-				this.worldAgent.getCurrentFires()[pos].attended = false;
-				
-				System.out.println(this.currentAttendindFire);
+				this.worldAgent.getCurrentFires().get(pos).attended = false;
+
 				
 				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
 				this.currentAttendindFire = null;
@@ -470,13 +469,12 @@ public class AircraftAgent extends Agent {
 			}
 		}
 		
-		if(this.worldAgent.getCurrentFires()[pos]!=null) 
-			this.worldAgent.getCurrentFires()[pos].attended = false;
+		if(this.worldAgent.getCurrentFires().contains(this.currentAttendindFire))
+			this.worldAgent.getCurrentFires().get(pos).attended = false;
 			
 		
 		this.attendindFire = false;
 		
-		System.out.println("Mission completed!!!!!! I have" + this.waterTankQuantity);
 		this.auxPath.clear();
 		return true;
 	}
