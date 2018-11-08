@@ -431,7 +431,7 @@ public class AircraftAgent extends Agent {
 		
 		// Simulate action execution by generating a random number
 		
-		for(int i = 0; i < this.auxPath.size(); i++) {
+		for(int i = 0; i < this.auxPath.size()-1; i++) {
 			
 			try {
 				Thread.sleep(1000);
@@ -505,13 +505,7 @@ public class AircraftAgent extends Agent {
             // Destination found
             if (p.row == d.getX() && p.col == d.getY()) {
                 ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-                if(path.size() ==0) {
-                	return new ArrayList<Point>();
-                }
-                else {
-	                path.remove(path.size()-1);
-	                return path;
-                }
+	            return path;
             }
             
             processCellPathToFire(visited, q, p);
