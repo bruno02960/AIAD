@@ -18,6 +18,7 @@ import java.util.Random;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import jade.lang.acl.MessageTemplate;
@@ -27,6 +28,8 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
 import firefighting.aircraft.behaviours.DetectEnoughWaterQty;
+import firefighting.aircraft.behaviours.HandleContractNet;
+import firefighting.aircraft.behaviours.ReceiveCFPs;
 import firefighting.aircraft.utils.QItem;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
@@ -90,7 +93,7 @@ public class AircraftAgent extends Agent {
 	 * The boolean value to keep the information about if
 	 * the aircraft agent it's already attending a fire.
 	 */
-	private boolean attendindFire;
+	public boolean attendindFire;
 	
 	/**
 	 * 
@@ -301,7 +304,14 @@ public class AircraftAgent extends Agent {
 	// Agent's methods:
 	
 	protected void setup() {
+		GUI.log("Agent responder " + getLocalName() + " waiting for Messages...\n");
 		
+		addBehaviour(new DetectEnoughWaterQty(this, 1000));
+		
+		//Cyclic check inbox
+		addBehaviour(new ReceiveCFPs(this));
+		
+		/*
 		//verify if has enough water
 		addBehaviour(new DetectEnoughWaterQty(this, 1000));
 		
@@ -355,10 +365,10 @@ public class AircraftAgent extends Agent {
 				GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
 				//System.out.println("Agent "+getLocalName()+": Proposal rejected");
 			}
-		} );
+		} );*/
 	}
 
-	private int evaluateAction(String message) {
+	public int evaluateAction(String message) {
 	
 		String[] tokens = message.split(" ");
 		
@@ -398,7 +408,7 @@ public class AircraftAgent extends Agent {
 		
 	}
 
-	private boolean performAction() {
+	public boolean performAction() {
 		
 		boolean extinguish = false;
 		

@@ -374,7 +374,7 @@ public class WorldAgent extends Agent {
 	 * Generates all the natural water resources in the world.
 	 */
 	public void generateWaterResources() {
-		this.waterResources = new WaterResource[Config.NUM_MAX_WATER_RESOURCES]; 
+		this.waterResources = new WaterResource[Config.NUM_MAX_WATER_RESOURCES];
 		
 		for(int i = 0; i < Config.NUM_MAX_WATER_RESOURCES; i++) {
 			int[] waterResourcePos = this.generateRandomPos();
