@@ -17,27 +17,27 @@ public abstract class Config {
 	/**
 	 * Defines the world map/grid width.
 	 */
-	public final static int GRID_WIDTH = 7;
+	public static int GRID_WIDTH = 7;
 
 	/**
 	 * Defines the world map/grid height.
 	 */
-	public final static int GRID_HEIGHT = 8;
+	public static int GRID_HEIGHT = 8;
 	
 	/**
 	 * Defines the maximum number of filling stations that can exist.
 	 */
-	public final static int NUM_MAX_WATER_RESOURCES = 3;
+	public static int NUM_MAX_WATER_RESOURCES = 3;
 	
 	/**
 	 * Defines the maximum number of aircrafts that can exist.
 	 */
-	public final static int NUM_MAX_AIRCRAFTS = 3;
+	public static int NUM_MAX_AIRCRAFTS = 3;
 	
 	/**
 	 * Defines the maximum number of fires that can occur.
 	 */
-	public final static int NUM_MAX_FIRES = 8;
+	public static int NUM_MAX_FIRES = 8;
 	
 	/**
 	 * Defines the maximum water tank's capacity of an aircraft agent.

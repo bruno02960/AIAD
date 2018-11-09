@@ -26,7 +26,7 @@ import javax.swing.ScrollPaneConstants;
 public class GUI {
 
 	private static WorldAgent worldAgent;
-	private JFrame frame;
+	private JFrame mainFrame;
 	private static JLabel[][] grid;
     private static JTextArea textArea;
 
@@ -44,7 +44,6 @@ public class GUI {
 		frameInitialize(panel, panel_1, panel_2);
 	    
 	    FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
-	    flowLayout.setHgap(100);
 	    flowLayout.setAlignment(FlowLayout.LEFT);
 	    
 	    captionInitialize(panel, panel_1);
@@ -97,13 +96,13 @@ public class GUI {
 	 * @param panel_2 info panel
 	 */
 	private void frameInitialize(JPanel panel, JPanel panel_1, JPanel panel_2) {
-		frame = new JFrame();
-		frame.setTitle("Firefighting");
-	    frame.getContentPane().add(panel);
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setBounds(100, 100, 1000, 500);
-	    frame.getContentPane().add(panel_1, BorderLayout.SOUTH);
-		frame.getContentPane().add(panel_2, BorderLayout.EAST);
+		mainFrame = new JFrame();
+		mainFrame.setTitle("Firefighting");
+	    mainFrame.getContentPane().add(panel);
+		mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		mainFrame.setBounds(100, 100, 1200, 500);
+	    mainFrame.getContentPane().add(panel_1, BorderLayout.SOUTH);
+		mainFrame.getContentPane().add(panel_2, BorderLayout.EAST);
 	}
 
 	/**
@@ -170,7 +169,7 @@ public class GUI {
 	 * @return the frame
 	 */
 	public JFrame getFrame() {
-		return frame;
+		return mainFrame;
 	}
 	
 	
