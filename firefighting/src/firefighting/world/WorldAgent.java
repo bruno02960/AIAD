@@ -17,7 +17,17 @@ import firefighting.world.utils.environment.SeasonType;
 import firefighting.world.utils.environment.WindType;
 
 import java.awt.Point;
+
+import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
 import jade.core.Agent;
+import jade.domain.FIPANames;
+import jade.domain.JADEAgentManagement.JADEManagementOntology;
+import jade.domain.JADEAgentManagement.ShutdownPlatform;
+import jade.lang.acl.ACLMessage;
 
 /**
  * Class responsible for managing, updating and printing the world status.
@@ -502,5 +512,25 @@ public class WorldAgent extends Agent {
 	 */
 	public  Object[][] getWorldMap() {
 		return worldMap;
+	}
+
+
+	/**
+	 * Shuts JADE down
+	 */
+	public void shutDown() {
+		ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
+        Codec codec = new SLCodec();
+        this.getContentManager().registerLanguage(codec);
+        this.getContentManager().registerOntology(JADEManagementOntology.getInstance());
+        shutdownMessage.addReceiver(this.getAMS());
+        shutdownMessage.setLanguage(FIPANames.ContentLanguage.FIPA_SL);
+        shutdownMessage.setOntology(JADEManagementOntology.getInstance().getName());
+        try {
+			this.getContentManager().fillContent(shutdownMessage,new Action(this.getAID(), new ShutdownPlatform()));
+		} catch (CodecException | OntologyException e) {
+			e.printStackTrace();
+		}
+        this.send(shutdownMessage);
 	}
 }

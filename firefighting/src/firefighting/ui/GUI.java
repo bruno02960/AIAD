@@ -22,6 +22,10 @@ import javax.swing.JTextArea;
 
 import java.awt.FlowLayout;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUI {
 
@@ -29,6 +33,7 @@ public class GUI {
 	private JFrame mainFrame;
 	private static JLabel[][] grid;
     private static JTextArea textArea;
+    private JPanel panel_3;
 
 	/**
 	 * Creates the graphic user interface
@@ -38,15 +43,25 @@ public class GUI {
 		GUI.worldAgent = worldAgent;
 		
 		JPanel panel = new JPanel();
-		JPanel panel_1 = new JPanel();
+		panel.setBounds(0, 0, 384, 368);
+		panel_3 = new JPanel();
+		panel_3.setBounds(10, 368, 1164, 93);
 		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(384, 0, 800, 368);
 
-		frameInitialize(panel, panel_1, panel_2);
+		frameInitialize(panel, panel_3, panel_2);
 	    
-	    FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
-	    flowLayout.setAlignment(FlowLayout.LEFT);
+	    captionInitialize(panel, panel_3);
 	    
-	    captionInitialize(panel, panel_1);
+	    JButton btnNewButton = new JButton("Stop");
+	    btnNewButton.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		worldAgent.shutDown();
+	    		btnNewButton.setVisible(false);
+	    	}
+	    });
+	    btnNewButton.setAlignmentY(0.0f);
+	    panel_3.add(btnNewButton, BorderLayout.EAST);
 
         textArea = new JTextArea(10, 20);
         textArea.setEditable(false);
@@ -82,10 +97,11 @@ public class GUI {
 	 * @param panel_1 captionPanel
 	 */
 	private void captionInitialize(JPanel panel, JPanel panel_1) {
+		panel_3.setLayout(new BorderLayout(0, 0));
 		JLabel lblCaption = new JLabel("<html>Caption:<br>1) ST - Fire Station<br>2) W[c] - Filling Station, where [c] is its capacity"
 	    		+ "<br>3) F[i] - Fire, where [i] is its intensity<br>4) A[t] - Aircraft, where [t] is its tank capacity</html>");
-	    lblCaption.setHorizontalAlignment(SwingConstants.LEFT);
-	    panel_1.add(lblCaption);
+		lblCaption.setHorizontalAlignment(SwingConstants.LEFT);
+	    panel_1.add(lblCaption, BorderLayout.WEST);
 		panel.setLayout(new GridLayout(Config.GRID_HEIGHT, Config.GRID_WIDTH));
 	}
 
@@ -98,11 +114,12 @@ public class GUI {
 	private void frameInitialize(JPanel panel, JPanel panel_1, JPanel panel_2) {
 		mainFrame = new JFrame();
 		mainFrame.setTitle("Firefighting");
+	    mainFrame.getContentPane().setLayout(null);
 	    mainFrame.getContentPane().add(panel);
 		mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		mainFrame.setBounds(100, 100, 1200, 500);
-	    mainFrame.getContentPane().add(panel_1, BorderLayout.SOUTH);
-		mainFrame.getContentPane().add(panel_2, BorderLayout.EAST);
+	    mainFrame.getContentPane().add(panel_1);
+		mainFrame.getContentPane().add(panel_2);
 	}
 
 	/**
