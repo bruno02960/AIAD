@@ -28,8 +28,6 @@ import jade.domain.FIPAAgentManagement.NotUnderstoodException;
 import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.domain.FIPAAgentManagement.FailureException;
 import firefighting.aircraft.behaviours.DetectEnoughWaterQty;
-import firefighting.aircraft.behaviours.HandleContractNet;
-import firefighting.aircraft.behaviours.ReceiveCFPs;
 import firefighting.aircraft.utils.QItem;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
