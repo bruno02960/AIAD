@@ -5,6 +5,7 @@ import java.util.Date;
 
 import firefighting.firestation.FireStationAgent;
 import firefighting.nature.Fire;
+import firefighting.world.WorldAgent;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
@@ -18,11 +19,14 @@ public class AlarmFireMessage extends ACLMessage {
 	
 	private ACLMessage cfpMsg;
 	
+	private WorldAgent worldAgent;
+	
 	private Fire associatedFire;
 	
-	public AlarmFireMessage(Fire associatedFire) {
+	public AlarmFireMessage(Fire associatedFire, WorldAgent worldAgent) {
 		super(ACLMessage.CFP);
 		this.associatedFire = associatedFire;
+		this.worldAgent = worldAgent;
 		setACLMessage();
 	}
 
@@ -42,14 +46,16 @@ public class AlarmFireMessage extends ACLMessage {
 			cfpMsg = new ACLMessage(ACLMessage.CFP);
 			      
 			// Add all the pretended receivers a
-			for (int i = 0; i < args.length; ++i)  
-				cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
+			for (int i = 0; i < args.length; ++i)  {
+				if(!worldAgent.getAircraftAgents()[i].attendindFire)
+					cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
+			}
 					      
 			cfpMsg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
 					 
 			
-			// We want to receive a reply in 10 seconds
-			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 10000));
+			// We want to receive a reply in 20 seconds
+			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 20000));
 			
 			Point firePos = this.associatedFire.getWorldObject().getPos();
 			

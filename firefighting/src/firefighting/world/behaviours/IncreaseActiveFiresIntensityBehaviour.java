@@ -1,5 +1,6 @@
 package firefighting.world.behaviours;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import firefighting.nature.Fire;
@@ -26,31 +27,30 @@ public class IncreaseActiveFiresIntensityBehaviour extends TickerBehaviour {
 		return this.worldAgent;
 	}
 	
-	public Fire[] getCurrentFires() {
+	public ArrayList<Fire> getCurrentFires() {
 		return this.getWorldAgent().getCurrentFires();
 	}
 	
 	@Override
 	protected void onTick() {
 		
-		Fire[] fires = this.getCurrentFires();
+		ArrayList<Fire> fires = this.getCurrentFires();
 		
-		for(int f = 0; f < fires.length; f++) {
-			Fire fire = fires[f];
+		for(int f = 0; f < fires.size(); f++) {
+			Fire fire = fires.get(f);
+	
+			long timeoutFireIntensityIncrease = (fire.getNumIntensityIncreases() + 1) * Config.FIRE_ACTIVE_FACTOR_TIMEOUT;
 			
-			if(fire != null) {
-				long timeoutFireIntensityIncrease = (fire.getNumIntensityIncreases() + 1) * Config.FIRE_ACTIVE_FACTOR_TIMEOUT;
+			long activeFireTime = System.currentTimeMillis() - fire.getTimestampCreation();
+			
+			if(activeFireTime > timeoutFireIntensityIncrease) {
+				Random randomObject = new Random();
 				
-				long activeFireTime = System.currentTimeMillis() - fire.getTimestampCreation();
+				int intensityPenalty = randomObject.nextInt(Config.FIRE_ACTIVE_INTENSITY_MAX_PENALTY);
 				
-				if(activeFireTime > timeoutFireIntensityIncrease) {
-					Random randomObject = new Random();
-					
-					int intensityPenalty = randomObject.nextInt(Config.FIRE_ACTIVE_INTENSITY_MAX_PENALTY);
-					
-					fire.increaseIntensity(intensityPenalty);	
-				}
+				fire.increaseIntensity(intensityPenalty);	
 			}
+			
 		}
 	}
 }

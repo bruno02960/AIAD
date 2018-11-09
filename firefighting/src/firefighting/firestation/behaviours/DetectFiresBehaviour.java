@@ -1,5 +1,7 @@
 package firefighting.firestation.behaviours;
 
+import java.util.ArrayList;
+
 import firefighting.firestation.FireStationAgent;
 import firefighting.firestation.messages.AlarmFireMessage;
 import firefighting.nature.Fire;
@@ -33,15 +35,17 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 		return this.fireStationAgent;
 	}
 	
-	public Fire[] getCurrentFires() {
+	public ArrayList<Fire> getCurrentFires() {
 		return this.getWorldAgent().getCurrentFires();
 	}
+	
+
 	
 	@Override
 	protected void onTick() {
 		
 		FireStationAgent fireStationAgent = this.getFireStationAgent();
-		Fire[] fires = this.getCurrentFires();
+		ArrayList<Fire> fires = this.getCurrentFires();
 	/*	
 		if(fires.length > 0) {
 			for(int i = 0; i < Config.NUM_MAX_FIRES; i++) {
@@ -67,19 +71,20 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 }*/
 
 		//para ser um fogo de cada vez
-		if(fires.length > 0) {
+		if(fires.size() > 0) {
 			int i = 0;
-			while(fires[i] != null) {
+			for(i = 0; i < fires.size(); i++) {
 					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
-					if(fires[i].isActive() && !fires[i].isAttended()) {
-
+					if(fires.get(i).isActive() && !fires.get(i).isAttended()) {
+						
 						GUI.log("Fire!! on index position: "+i + "\n");
-						//System.out.println("Fire!! on index position: "+i);
+						
+						System.out.println("There are " + fires.size() + " fires and this is the fire on POS"+ fires.get(i).getWorldObject().getPos());
 						
 						// Get the Fire that needs to be extinguished
-						Fire fireToBeExtinguished = fires[i];
+						Fire fireToBeExtinguished = fires.get(i);
 						
-						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished);	
+						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished, worldAgent);	
 					    
 						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg.getACLMessage());
 					
@@ -87,7 +92,7 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 					    
 					    break; //!!!!!!!!!!!ADICIONADO SÓ PARA FAZER PARA O PRIMEIRO INCENDIO
 					}	
-					i++;
+					
 				}
 			}
 		}

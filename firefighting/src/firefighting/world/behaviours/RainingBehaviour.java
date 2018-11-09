@@ -1,5 +1,6 @@
 package firefighting.world.behaviours;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import firefighting.nature.Fire;
@@ -73,18 +74,18 @@ public class RainingBehaviour extends TickerBehaviour {
 		
 		
 		// Rain behaviour about the current active fires in the world
-		Fire[] fires = worldAgent.getCurrentFires();
+		ArrayList<Fire> fires = worldAgent.getCurrentFires();
 				
 		// Raining above the fires, decreasing its intensity
-		for(int f = 0; f < fires.length; f++) {
-			if(fires[f] != null) {
-				fires[f].decreaseIntensity(finalRainAmount);
+		for(int f = 0; f < fires.size(); f++) {
+			
+				fires.get(f).decreaseIntensity(finalRainAmount);
 				
 				// Fire extinguished
-				if(!fires[f].isActive()) {
-					fires[f] = null;
+				if(!fires.get(f).isActive()) {
+					fires.remove(f);
 				}
-			}
+			
 		}
 		
 		
