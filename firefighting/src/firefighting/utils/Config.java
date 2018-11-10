@@ -47,12 +47,17 @@ public abstract class Config {
 	/**
 	 * Defines the initial maximum fuel tank's capacity of an aircraft agent.
 	 */
-	public final static int AIRCRAFT_MAX_INITIAL_FUEL_TANK_CAPACITY = (int) Math.round((2 * (Math.sqrt( (GRID_WIDTH ^ 2) + (GRID_HEIGHT ^ 2) ))));
+	public final static int AIRCRAFT_MAX_INITIAL_FUEL_TANK_CAPACITY = (int) (2 * Math.round(((Math.sqrt( (Math.pow(GRID_WIDTH, 2) + Math.pow(GRID_HEIGHT, 2) ))))));
 	
 	/**
 	 * Defines the final maximum fuel tank's capacity of an aircraft agent.
 	 */
-	public final static int AIRCRAFT_MAX_FINAL_FUEL_TANK_CAPACITY = GRID_WIDTH * GRID_HEIGHT;
+	public final static int AIRCRAFT_MAX_FINAL_FUEL_TANK_CAPACITY = (int) Math.round(((GRID_WIDTH * GRID_HEIGHT) / 1.5));
+	
+	/**
+	 * Defines the fuel tank's capacity factor of an aircraft agent to perform a secure travel.
+	 */
+	public final static int AIRCRAFT_FUEL_TANK_CAPACITY_SECURE_TRAVEL_FACTOR = 6;
 	
 	/**
 	 * Defines the minimum capacity of a water resource.
