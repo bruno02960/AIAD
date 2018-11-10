@@ -1,7 +1,7 @@
 package firefighting.world.behaviours;
 
 import java.awt.Point;
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
@@ -34,24 +34,21 @@ public class GenerateFiresBehaviour extends TickerBehaviour {
 		WorldAgent worldAgent = this.getWorldAgent();
 		
 		// It's possible to add a fire
-		if(this.getWorldAgent().getCurrentNumFires() < Config.NUM_MAX_FIRES) {
+		if(this.getWorldAgent().getNumCurrentFires() < Config.NUM_MAX_FIRES) {
 		   	
 			int[] firePos = worldAgent.generateRandomPos();
 		    	
 		   	WorldObject fireWorldObject = new WorldObject(WorldObjectType.FIRE, new Point(firePos[0], firePos[1]));
 		    
-		   	ArrayList<Fire> fires = worldAgent.getCurrentFires();
+		   	ConcurrentNavigableMap<Integer, Fire> fires = worldAgent.getCurrentFires();
 
-		   	Fire fire = new Fire(fireWorldObject);
+		   	Fire fire = new Fire((byte) worldAgent.getNumTotalFiresGenerated(), fireWorldObject);
 		    
 		   	//in map
 		   	worldAgent.addFire(firePos[0], firePos[1], fire);
 	   
-		   	//in array
-		   	fires.add(fire);
-		    		
-		   	//worldAgent.incCurrentNumFires();
-	    	
+		   	// TODO
+		   	fires.put((int) fire.getID(), fire);
 	    }
 	}
 }

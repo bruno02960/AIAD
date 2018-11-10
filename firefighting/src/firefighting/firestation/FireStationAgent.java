@@ -1,34 +1,16 @@
 package firefighting.firestation;
 
-import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.TickerBehaviour;
-import jade.domain.FIPANames;
-import jade.lang.acl.ACLMessage;
 import jade.proto.ContractNetInitiator;
 
-import java.util.Date;
-import java.util.Vector;
-
 import firefighting.firestation.behaviours.DetectFiresBehaviour;
-import firefighting.firestation.behaviours.HelloAircraftBehaviour;
-import firefighting.firestation.messages.AlarmFireMessage;
-import firefighting.firestation.messages.HelloAircraftMessage;
-import firefighting.nature.Fire;
 import firefighting.world.*;
-
-import java.util.Enumeration;
 
 /**
  * Class responsible for a Fire Station Agent and its behaviour.
  */
 @SuppressWarnings("serial")
 public class FireStationAgent extends Agent {
-	
-	private int numAircraftsResponders;
-	
 	
 	// Global Instance Variables:
 	/**
@@ -79,7 +61,7 @@ public class FireStationAgent extends Agent {
 	
 	@Override
 	public String toString() {
-		return "ST";
+		return "Fire Station";
 	}
 
 	protected void setup() {

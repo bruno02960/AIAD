@@ -1,7 +1,7 @@
 package firefighting.world.behaviours;
 
-import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
@@ -27,17 +27,16 @@ public class IncreaseActiveFiresIntensityBehaviour extends TickerBehaviour {
 		return this.worldAgent;
 	}
 	
-	public ArrayList<Fire> getCurrentFires() {
+	public ConcurrentNavigableMap<Integer, Fire> getCurrentFires() {
 		return this.getWorldAgent().getCurrentFires();
 	}
 	
 	@Override
 	protected void onTick() {
 		
-		ArrayList<Fire> fires = this.getCurrentFires();
+		ConcurrentNavigableMap<Integer, Fire> fires = this.getCurrentFires();
 		
-		for(int f = 0; f < fires.size(); f++) {
-			Fire fire = fires.get(f);
+		for(Fire fire: fires.values()) {
 	
 			long timeoutFireIntensityIncrease = (fire.getNumIntensityIncreases() + 1) * Config.FIRE_ACTIVE_FACTOR_TIMEOUT;
 			

@@ -45,21 +45,19 @@ public class AlarmFireMessage extends ACLMessage {
 			// Fill the CFP message
 			cfpMsg = new ACLMessage(ACLMessage.CFP);
 			      
-			// Add all the pretended receivers a
-			for (int i = 0; i < args.length; ++i)  {
-				if(!worldAgent.getAircraftAgents()[i].attendindFire)
+			// Add all the pretended aircraft agents receivers
+			for (int i = 0; i < args.length; ++i)
+				if(!worldAgent.getAircraftAgents().get(i).isBusy())
 					cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
-			}
 					      
 			cfpMsg.setProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET);
-					 
 			
 			// We want to receive a reply in 20 seconds
 			cfpMsg.setReplyByDate(new Date(System.currentTimeMillis() + 20000));
 			
 			Point firePos = this.associatedFire.getWorldObject().getPos();
 			
-			cfpMsg.setContent("FIRE INTENSITY " + this.associatedFire.getCurrentIntensity() + " POS " + (int)firePos.getX() + " " + (int)firePos.getY());
+			cfpMsg.setContent("FIRE ALARM!!! - Fire [ ID: " + (int) this.associatedFire.getID()  + " Intensity: " + this.associatedFire.getCurrentIntensity() + " Position: (" + (int)firePos.getX() + "," + (int)firePos.getY() + ") ]");
 		}
 	}
 	

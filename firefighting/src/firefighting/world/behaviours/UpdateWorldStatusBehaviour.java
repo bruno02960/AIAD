@@ -1,17 +1,15 @@
 package firefighting.world.behaviours;
 
-import firefighting.ui.GUI;
-import firefighting.utils.Config;
+import firefighting.graphics.GraphicUserInterface;
 import firefighting.world.WorldAgent;
 import jade.core.behaviours.TickerBehaviour;
 
-public class PrintStatusBehaviour extends TickerBehaviour {
+public class UpdateWorldStatusBehaviour extends TickerBehaviour {
 
 	WorldAgent worldAgent;
 	
-	public PrintStatusBehaviour(WorldAgent worldAgent, long period) {
+	public UpdateWorldStatusBehaviour(WorldAgent worldAgent, long period) {
 		super(worldAgent, period);
-		
 		this.worldAgent = worldAgent;
 	}
 
@@ -31,6 +29,6 @@ public class PrintStatusBehaviour extends TickerBehaviour {
 	@Override
 	protected void onTick() {
 		this.worldAgent.refreshWorldMapPositions();
-		GUI.fillGrid();
+		GraphicUserInterface.fillGrid();
 	}
 }

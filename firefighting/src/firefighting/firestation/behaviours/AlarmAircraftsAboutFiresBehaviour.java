@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import firefighting.firestation.FireStationAgent;
-import firefighting.ui.GUI;
+import firefighting.graphics.GraphicUserInterface;
 import firefighting.utils.Config;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -25,15 +25,15 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 	public AlarmAircraftsAboutFiresBehaviour(FireStationAgent fireStationAgent, ACLMessage helloAircraftCFPMsg) {
 		super(fireStationAgent, helloAircraftCFPMsg);
 		this.helloAircraftCFPMsg = helloAircraftCFPMsg;
-		
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Vector prepareCfps(ACLMessage helloAircraftCFPMsg) {
 		
-
-		GUI.log("preparing messages.......\n");
-		//System.out.println("preparing messages.......");
+		GraphicUserInterface.log("\n");
+		GraphicUserInterface.log("Fire station is preparing fire alarm messages about the detected fire...\n");
+		GraphicUserInterface.log("\n");
+		
 		Vector v = new Vector();		
 
 		v.add(this.helloAircraftCFPMsg);
@@ -43,38 +43,30 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 	
 	@SuppressWarnings("rawtypes")
 	protected void handlePropose(ACLMessage propose, Vector acceptances) {
-		GUI.log("Agent " + propose.getSender().getName() + " proposed " + propose.getContent() +"\n");
-		//System.out.println("Agent " + propose.getSender().getName() + " proposed " + propose.getContent());
+		GraphicUserInterface.log("Aircraft agent Responder " + propose.getSender().getName() + " answer with proposal value of " + propose.getContent() + "!\n");
     }
      
 	protected void handleRefuse(ACLMessage refuse) {
-		GUI.log("Agent " + refuse.getSender().getName() + " refused!\n");
-        //System.out.println("Agent " + refuse.getSender().getName() + " refused!");
+		GraphicUserInterface.log("Aicraft agent " + refuse.getSender().getName() + " refused to propose!\n");
 	}
       
 	protected void handleFailure(ACLMessage failure) {
         
-		if (failure.getSender().equals(myAgent.getAMS())) {
-
-			// FAILURE notification from the JADE runtime: the receiver
-			// does not exist
-			System.err.println("Responder does not exist"); 
-		}
-		else {
-			System.err.println("Agent " + failure.getSender().getName() + " failed!");
-		}
+		if (failure.getSender().equals(myAgent.getAMS()))
+			// FAILURE notification from the JADE runtime: the receiver doesn't exist
+			System.err.println("Responder doesn't exist!"); 
+		else
+			System.err.println("Aircraft agent responder " + failure.getSender().getName() + " failed!");
+	
 		// Immediate failure --> we will not receive a response from this agent
 		numAircraftResponders--;  
 	}
-  
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void handleAllResponses(Vector responses, Vector acceptances) {
-    	  
-		if (responses.size() < numAircraftResponders) {
+		if(responses.size() < numAircraftResponders)
 			// Some responder didn't reply within the specified timeout
-			System.err.println("Timeout expired: missing " + (numAircraftResponders - responses.size()) + " responses!");  
-		}
+			System.err.println("Timeout expired: Missing " + (numAircraftResponders - responses.size()) + " responses from aircraft agents!");  
     	  
 		int bestProposal = 1000;
 		AID bestProposer = null;
@@ -82,12 +74,11 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 		
 		Enumeration e = responses.elements();
     	  
-		while (e.hasMoreElements()) {
+		while(e.hasMoreElements()) {
     	
 			ACLMessage msg = (ACLMessage) e.nextElement();
     		
-			if (msg.getPerformative() == ACLMessage.PROPOSE) {
-				
+			if(msg.getPerformative() == ACLMessage.PROPOSE) {
 				ACLMessage reply = msg.createReply();
     			reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
     			acceptances.addElement(reply);
@@ -95,7 +86,7 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 				int proposal = Integer.parseInt(msg.getContent());
 				
 				// Evaluate proposals
-    			if (proposal < bestProposal) {
+    			if(proposal < bestProposal) {
     				bestProposal = proposal;
     				bestProposer = msg.getSender();
     				accept = reply;
@@ -103,16 +94,14 @@ public class AlarmAircraftsAboutFiresBehaviour extends ContractNetInitiator {
 			}
 		}
     	  
-		// Accept the proposal of the best proposer
+		// Accept the proposal of the best aircraft agent proposer
 		if (accept != null) {
-			GUI.log("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName() + "\n");
-			//System.out.println("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName());
+			GraphicUserInterface.log("Accepting proposal " + bestProposal + " from aircraft agent responder " + bestProposer.getName() + "!\n");
 			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 		} 
 	}
       
 	protected void handleInform(ACLMessage inform) {
-		GUI.log("Agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
-		//System.out.println("Agent " + inform.getSender().getName() + " successfully performed the requested action!");
+		GraphicUserInterface.log("Aircraft agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
 	}	
 }

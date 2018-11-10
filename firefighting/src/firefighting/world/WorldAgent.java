@@ -2,6 +2,8 @@ package firefighting.world;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import firefighting.aircraft.AircraftAgent;
 import firefighting.firestation.FireStationAgent;
@@ -10,7 +12,7 @@ import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
 import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
-import firefighting.world.behaviours.PrintStatusBehaviour;
+import firefighting.world.behaviours.UpdateWorldStatusBehaviour;
 import firefighting.world.behaviours.WeatherConditionsBehaviour;
 import firefighting.world.utils.WorldObjectType;
 import firefighting.world.utils.environment.SeasonType;
@@ -22,10 +24,15 @@ import jade.core.Agent;
 /**
  * Class responsible for managing, updating and printing the world status.
  */
-@SuppressWarnings("serial")
 public class WorldAgent extends Agent {
 	
 	// Constants:
+	
+	/**
+	 * The serial version UID.
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The current season type from the set {Spring, Summer, Autumn and Winter}
 	 */
@@ -52,7 +59,10 @@ public class WorldAgent extends Agent {
 	 */
 	private static float[] droughtSituationProbabilityInterval;
 	
+	
+	
 	// Global Instance Variables:
+	
 	/**
 	 * The matrix of grid/map that represents all the positions of the world.
 	 */
@@ -62,45 +72,41 @@ public class WorldAgent extends Agent {
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private  FireStationAgent fireStationAgent;
+	private FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Water Resources in the world.
 	 */
-	private WaterResource[] waterResources;
+	private ArrayList<WaterResource> waterResources;
 	
 	// Mobile agents (with movement)
 	/**
 	 * The Aircraft Agents in the world.
 	 */
-	private  AircraftAgent[] aircraftAgents;
+	private ArrayList<AircraftAgent> aircraftAgents;
 	
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
 	 */
-	//private  Fire[] fires;
-	private ArrayList<Fire> fires;
+	private ConcurrentNavigableMap<Integer, Fire> currentFires;
+	
+	/**
+	 * The current extinguished fires in the world.
+	 */
+	private ArrayList<Fire> currentExtinguishedFires;
 	
 	/*
-	 * The number of water resources in the world.
+	 * The total number of fires generated in the world.
 	 */
-	private int numWaterResources;
+	private int numTotalFiresGenerated;
 	
-	/*
-	 * The current number of aircrafts in the world.
-	 */
-	private  int currentNumAircrafts;
-	
-	/*
-	 * The current number of fires in the world.
-	 */
-	private  int currentNumFires;
 	
 	
 	//Constructors:
+	
 	/**
-	 * 
+	 * TODO 
 	 */
 	public WorldAgent(byte seasonTypeID, byte windTypeID) {
 		
@@ -241,7 +247,7 @@ public class WorldAgent extends Agent {
 	 * @return the number of water resources in the world
 	 */
 	public int getNumWaterResources() {
-		return this.numWaterResources;
+		return this.waterResources.size();
 	}
 	
 	/**
@@ -250,7 +256,7 @@ public class WorldAgent extends Agent {
 	 * @return the number of aircrafts the world.
 	 */
 	public int getNumAircraftsAgents() {
-		return this.currentNumAircrafts;
+		return this.aircraftAgents.size();
 	}
 	
 	/**
@@ -258,15 +264,17 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return the current number of fires in the world
 	 */
-	public int getCurrentNumFires() {
-		return this.getCurrentFires().size();
+	public int getNumCurrentFires() {
+		return this.currentFires.size();
 	}
 	
 	/**
-	 * Decreases the current number of fires in the world.
+	 * Returns the total number of fires generated in the world.
+	 * 
+	 * @return the total number of fires generated in the world
 	 */
-	public void decCurrentNumFires() {
-		this.currentNumFires--;
+	public int getNumTotalFiresGenerated() {
+		return this.numTotalFiresGenerated;
 	}
 	
 	/**
@@ -283,7 +291,7 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return all the natural water resources in the world
 	 */
-	public WaterResource[] getWaterResources() {
+	public ArrayList<WaterResource> getWaterResources() {
 		return this.waterResources;
 	}
 	
@@ -292,7 +300,7 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return all the aircraft agents in the world
 	 */
-	public AircraftAgent[] getAircraftAgents() {
+	public ArrayList<AircraftAgent> getAircraftAgents() {
 		return this.aircraftAgents;
 	}
 	
@@ -301,9 +309,19 @@ public class WorldAgent extends Agent {
 	 * 
 	 * @return all the current fires in the world
 	 */
-	public ArrayList<Fire> getCurrentFires() {
-		return this.fires;
+	public ConcurrentNavigableMap<Integer, Fire> getCurrentFires() {
+		return this.currentFires;
 	}
+	
+	/**
+	 * Returns all the current extinguished fires in the world.
+	 * 
+	 * @return all the current extinguished fires in the world
+	 */
+	public ArrayList<Fire> getCurrentExtinguishedFires() {
+		return this.currentExtinguishedFires;
+	}
+	
 	
 	
 	// Methods:
@@ -313,12 +331,11 @@ public class WorldAgent extends Agent {
 	public void createWorld() {
 		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 
-		//fires = new Fire[Config.NUM_MAX_FIRES];
-		fires = new ArrayList<Fire>();
+		this.currentFires = new ConcurrentSkipListMap<Integer, Fire>();
 		
-		numWaterResources = 0;
-		currentNumAircrafts = 0;
-		currentNumFires = 0;
+		this.currentExtinguishedFires = new ArrayList<Fire>();
+		
+		this.numTotalFiresGenerated = 0;
 	}
 	
 	/**
@@ -370,19 +387,17 @@ public class WorldAgent extends Agent {
 	 * Generates all the natural water resources in the world.
 	 */
 	public void generateWaterResources() {
-		this.waterResources = new WaterResource[Config.NUM_MAX_WATER_RESOURCES];
+		this.waterResources = new ArrayList<WaterResource>();
 		
 		for(int i = 0; i < Config.NUM_MAX_WATER_RESOURCES; i++) {
 			int[] waterResourcePos = this.generateRandomPos();
 			
 			WorldObject waterResourceWorldObject = new WorldObject(WorldObjectType.WATER_RESOURCE, new Point(waterResourcePos[0], waterResourcePos[1]));
 			
-			WaterResource waterResource = new WaterResource((byte) this.numWaterResources, waterResourceWorldObject);
+			WaterResource waterResource = new WaterResource((byte) this.getNumWaterResources(), waterResourceWorldObject);
 			
-			this.waterResources[i] = waterResource;
+			this.waterResources.add(waterResource);
 			this.worldMap[waterResourcePos[0]][waterResourcePos[1]] = waterResource;
-			
-			this.numWaterResources++;
 		}
 	}
 	
@@ -390,22 +405,17 @@ public class WorldAgent extends Agent {
 	 * Generates all the Aircraft Agents in the world.
 	 */
 	public void generateAicraftAgents() {
-		this.aircraftAgents = new AircraftAgent[Config.NUM_MAX_AIRCRAFTS];
+		this.aircraftAgents = new ArrayList<AircraftAgent>();
 		
 		for(int i = 0; i < Config.NUM_MAX_AIRCRAFTS; i++) {
 			int[] aircraftPos = this.generateRandomPos();
 			
-			
-			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
-			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject, this);
+			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.getNumAircraftsAgents(), aircraftWorldObject, this);
 			
-			
+			this.aircraftAgents.add(aircraftAgent);
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;
-			this.aircraftAgents[i] = aircraftAgent;
-			
-			this.currentNumAircrafts++;
 		}
 	}
 	
@@ -417,26 +427,25 @@ public class WorldAgent extends Agent {
 	 * @param fire the fire object to add
 	 */
 	public void addFire(int firePosX, int firePosY, Fire fire) {
+		this.currentFires.put((int)fire.getID(), fire);
 		this.worldMap[firePosX][firePosY] = fire;
+		
+		this.numTotalFiresGenerated++;
 	}
 	
-	public void removeFire(int firePosX, int firePosY) {
-		
-		ArrayList<Fire> fires = this.getCurrentFires();
-		
-		for(int f = 0; f < fires.size(); f++) {
-			
-				WorldObject fire = fires.get(f).getWorldObject();
-				if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
-					fires.remove(f);
-					break;
-				}
-			
-		}
-		
-		this.worldMap[firePosX][firePosY] = null;
+	/**
+	 * TODO
+	 * 
+	 * @param fireExtinguishedID
+	 */
+	public void fireExtinguished(byte fireExtinguishedID) {
+		Fire fireExtiguished = this.currentFires.remove((int) fireExtinguishedID);
+		this.currentExtinguishedFires.add(fireExtiguished);
 	}
 	
+	/**
+	 * Refreshes all the world objects' positions in the current world's status grid/map.
+	 */
 	public void refreshWorldMapPositions() {
 		Object[][] tmpWorldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 		
@@ -447,35 +456,27 @@ public class WorldAgent extends Agent {
 		tmpWorldMap[fireStationWorldObject.getPosX()][fireStationWorldObject.getPosY()] = fireStationAgent;
 		
 		// 2) Switching/refreshing the water resources' positions in the world map/grid 
-		WaterResource[] waterResources = this.getWaterResources();
+		ArrayList<WaterResource> waterResources = this.getWaterResources();
 		
-		for(int wr = 0; wr < waterResources.length; wr++) {
-			WaterResource waterResource = waterResources[wr];
+		for(WaterResource waterResource: waterResources) {
 			WorldObject waterResourceWorldObject = waterResource.getWorldObject();
-			
 			tmpWorldMap[waterResourceWorldObject.getPosX()][waterResourceWorldObject.getPosY()] = waterResource;
 		}
-				
+						
 		// 3) Switching/refreshing the aircraft agents' positions in the world map/grid 
-		AircraftAgent[] aircraftAgents = this.getAircraftAgents();
+		ArrayList<AircraftAgent> aircraftAgents = this.getAircraftAgents();
 				
-		for(int aa = 0; aa < aircraftAgents.length; aa++) {
-			AircraftAgent aircraftAgent = aircraftAgents[aa];
+		for(AircraftAgent aircraftAgent: aircraftAgents) {
 			WorldObject aircraftWorldObject = aircraftAgent.getWorldObject();
-					
 			tmpWorldMap[aircraftWorldObject.getPosX()][aircraftWorldObject.getPosY()] = aircraftAgent;
 		}
 		
 		// 4) Switching/refreshing the fires' positions in the world map/grid 
-		ArrayList<Fire> fires = this.getCurrentFires();
+		ConcurrentNavigableMap<Integer, Fire> fires = this.getCurrentFires();
 				
-		for(int f = 0; f < fires.size(); f++) {	
-		
-				Fire fire = fires.get(f);
-				WorldObject fireWorldObject = fire.getWorldObject();
-				
-				tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;
-			
+		for(Fire fire: fires.values()) {	
+			WorldObject fireWorldObject = fire.getWorldObject();		
+			tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;	
 		}
 				
 		// 5) Switching/refreshing the world maps/grids objects
@@ -483,24 +484,23 @@ public class WorldAgent extends Agent {
 		this.worldMap = tmpWorldMap;
 		tmpWorldMap = null;
 	}
+	
 	/**
-	 * Generates all the Fires in the world, when is possible.
+	 * Handle all the behaviours of the world and its respectively elements.
 	 */
 	public void setup() {
-		
-		this.addBehaviour(new GenerateFiresBehaviour(this, 8000));
-		this.addBehaviour(new PrintStatusBehaviour(this, 1000));
-		//this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
-		//this.addBehaviour(new WeatherConditionsBehaviour(this));
+		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
+		this.addBehaviour(new UpdateWorldStatusBehaviour(this, 1000));
+		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 10000));
+		this.addBehaviour(new WeatherConditionsBehaviour(this, 20000));
 	}
 	
-	
-
 	/**
-	 * Returns the current world map
-	 * @return current world map
+	 * Returns the current world's status map/grid.
+	 * 
+	 * @return current world's status map/grid
 	 */
-	public  Object[][] getWorldMap() {
+	public Object[][] getWorldMap() {
 		return worldMap;
 	}
 }

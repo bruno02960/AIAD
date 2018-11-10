@@ -12,7 +12,8 @@ package firefighting.utils;
 
 import java.util.Random;
 
-import firefighting.ui.GUI;
+import firefighting.aircraft.AircraftAgent;
+import firefighting.graphics.GraphicUserInterface;
 import firefighting.world.*;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -27,8 +28,8 @@ import jade.wrapper.StaleProxyException;
 public class JADELauncher {	
 	static Random random = new Random();
 
-	// GUI related stuff
-	static GUI gui;
+	// Graphic user interface
+	static GraphicUserInterface gui;
 	
 	// Setting global world's environment conditions
 	static byte seasonTypeID = (byte) random.nextInt(Config.NUM_SEASONS);
@@ -41,8 +42,9 @@ public class JADELauncher {
     
     // Main method
 	public static void main(String[] args) throws ControllerException {
-		// GUI related stuff
-		gui = new GUI(worldAgent);
+		
+		// Creation of the graphic user interface
+		gui = new GraphicUserInterface(worldAgent);
 		gui.getFrame().setVisible(true);
 		
 		Runtime rt = Runtime.instance();
@@ -57,9 +59,28 @@ public class JADELauncher {
 			mainContainer.acceptNewAgent("FireStation", worldAgent.getFireStationAgent());
 			mainContainer.getAgent("FireStation").start();
 			
-			for(int i = 0; i < worldAgent.getNumAircraftsAgents(); i++) {
-				mainContainer.acceptNewAgent("AircraftAgent" + i, worldAgent.getAircraftAgents()[i]);
-				mainContainer.getAgent(worldAgent.getAircraftAgents()[i].getLocalName()).start();
+			GraphicUserInterface.log("Agents and Distributed Artificial Intelligence\n");
+			GraphicUserInterface.log("Project 1 - Fire Fighting\n");
+			GraphicUserInterface.log("\n");
+			GraphicUserInterface.log("Authors:\n");
+			GraphicUserInterface.log("Bernardo Coelho Leite - up201404464@fe.up.pt;\n");
+			GraphicUserInterface.log("Bruno Miguel Pinto - up201502960@fe.up.pt;\n");
+			GraphicUserInterface.log("Ruben Andre Barreiro - up201808917@fe.up.pt;\n");
+			
+			GraphicUserInterface.log("\n\n");
+		
+			GraphicUserInterface.log("Starting world... Creating the environment and, all the elements and agents!!!\n");
+			
+			GraphicUserInterface.log("CURRENT SEASON: " + worldAgent.getSeasonType().getName() + "\n");
+			GraphicUserInterface.log("TYPE OF WIND: " + worldAgent.getWindType().getName() + "\n");
+			String isPossibleToOccurDroughtSituations = worldAgent.canOccurDroughtSituations() ? "yes" : "no";
+			GraphicUserInterface.log("OCCURRENCE OF DROUGHTS (EXTREME DRY SITUATIONS): " + isPossibleToOccurDroughtSituations + "\n");
+			
+			GraphicUserInterface.log("\n\n");
+			
+			for(AircraftAgent aircraftAgent: worldAgent.getAircraftAgents()) {
+				mainContainer.acceptNewAgent("AircraftAgent" + (int)aircraftAgent.getID(), aircraftAgent);
+				mainContainer.getAgent(aircraftAgent.getLocalName()).start();
 			}
 		}
 		catch (StaleProxyException e) {

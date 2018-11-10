@@ -27,12 +27,12 @@ public abstract class Config {
 	/**
 	 * Defines the maximum number of filling stations that can exist.
 	 */
-	public final static int NUM_MAX_WATER_RESOURCES = 3;
+	public final static int NUM_MAX_WATER_RESOURCES = 4;
 	
 	/**
 	 * Defines the maximum number of aircrafts that can exist.
 	 */
-	public final static int NUM_MAX_AIRCRAFTS = 3;
+	public final static int NUM_MAX_AIRCRAFTS = 4;
 	
 	/**
 	 * Defines the maximum number of fires that can occur.
@@ -55,9 +55,14 @@ public abstract class Config {
 	public final static int AIRCRAFT_MAX_FINAL_FUEL_TANK_CAPACITY = GRID_WIDTH * GRID_HEIGHT;
 	
 	/**
+	 * Defines the minimum capacity of a water resource.
+	 */
+	public final static int WATER_RESOURCE_INITIAL_MIN_CAPACITY = 6;
+	
+	/**
 	 * Defines the maximum capacity of a water resource.
 	 */
-	public final static int WATER_RESOURCE_INITIAL_MAX_CAPACITY = 8;
+	public final static int WATER_RESOURCE_INITIAL_MAX_CAPACITY = 16;
 	
 	/**
 	 * Defines the total number of seasons.
@@ -68,25 +73,25 @@ public abstract class Config {
 	 * Defines the factor value of water provided by rain to the water resources in spring season,
 	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_FACTOR_SPRING = 4;
+	public final static int RAIN_FACTOR_SPRING = 2;
 	
 	/**
 	 * Defines the factor value of water provided by rain to the water resources in summer season,
 	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_FACTOR_SUMMER = 2;
+	public final static int RAIN_FACTOR_SUMMER = 1;
 	
 	/**
 	 * Defines the factor value of water provided by rain to the water resources in autumn season,
 	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_FACTOR_AUTUMN = 4;
+	public final static int RAIN_FACTOR_AUTUMN = 2;
 	
 	/**
 	 * Defines the factor value of water provided by rain to the water resources in winter season,
 	 * to calculate the amount of rain.
 	 */
-	public final static int RAIN_FACTOR_WINTER = 8;
+	public final static int RAIN_FACTOR_WINTER = 3;
 	
 	/**
 	 * Defines the total number of types of wind.
@@ -120,7 +125,7 @@ public abstract class Config {
 	/**
 	 * Defines the penalty value of water resources, during drought situations, when it happens.
 	 */
-	public final static int DROUGHT_SITUATION_PENALTY = 6;
+	public final static int DROUGHT_OCCURRENCE_PENALTY = 2;
 	
 	/**
 	 * Defines the maximum initial intensity of a fire.

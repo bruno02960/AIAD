@@ -10,6 +10,7 @@ import java.awt.Point;
 public class WorldObject {
 	
 	// Global Instance Variables:
+	
 	/**
 	 * The type of the world's object.
 	 */
@@ -21,7 +22,9 @@ public class WorldObject {
 	private Point worldPosition;
 	
 	
+	
 	// Constructors:
+	
 	/**
 	 * Constructor #1 of the World's Object.
 	 * 
@@ -35,17 +38,27 @@ public class WorldObject {
 		this.worldPosition = position;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void setPos(int x , int y) {
 		this.worldPosition.x = x;
 		this.worldPosition.y = y;
 	}
 	
+	
+	
 	// Methods:
+	
 	/**
 	 * Returns the type of the world's object.
 	 * 
 	 * @return the type of the world's object
 	 */
+	@SuppressWarnings("unused")
 	private WorldObjectType getWorldObjectType() {
 		return this.worldObjectType;
 	}

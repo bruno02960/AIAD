@@ -4,7 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import firefighting.firestation.FireStationAgent;
-import firefighting.ui.GUI;
+import firefighting.graphics.GraphicUserInterface;
 import firefighting.utils.Config;
 import jade.core.AID;
 import jade.domain.FIPANames;
@@ -31,10 +31,7 @@ public class HelloAircraftBehaviour extends ContractNetInitiator {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Vector prepareCfps(ACLMessage helloAircraftCFPMsg) {
-		
-
-		GUI.log("preparing messages.......\n");
-		//System.out.println("preparing messages.......");
+		GraphicUserInterface.log("preparing messages.......\n");
 		Vector v = new Vector();		
 
 		v.add(this.helloAircraftCFPMsg);
@@ -44,14 +41,12 @@ public class HelloAircraftBehaviour extends ContractNetInitiator {
 	
 	@SuppressWarnings("rawtypes")
 	protected void handlePropose(ACLMessage propose, Vector acceptances) {
-		GUI.log("Agent " + propose.getSender().getName() + " proposed " + propose.getContent() + "\n");
-		//System.out.println("Agent " + propose.getSender().getName() + " proposed " + propose.getContent());
-    }
+		GraphicUserInterface.log("Agent " + propose.getSender().getName() + " proposed " + propose.getContent() + "\n");
+	}
      
 	protected void handleRefuse(ACLMessage refuse) {
-		GUI.log("Agent " + refuse.getSender().getName() + " refused!\n");
-        //System.out.println("Agent " + refuse.getSender().getName() + " refused!");
-	}
+		GraphicUserInterface.log("Agent " + refuse.getSender().getName() + " refused!\n");
+    }
       
 	protected void handleFailure(ACLMessage failure) {
         
@@ -106,14 +101,12 @@ public class HelloAircraftBehaviour extends ContractNetInitiator {
     	  
 		// Accept the proposal of the best proposer
 		if (accept != null) {
-			GUI.log("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName() + "\n");
-			//System.out.println("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName());
+			GraphicUserInterface.log("Accepting proposal " + bestProposal + " from responder " + bestProposer.getName() + "\n");
 			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 		} 
 	}
       
 	protected void handleInform(ACLMessage inform) {
-		GUI.log("Agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
-		//System.out.println("Agent " + inform.getSender().getName() + " successfully performed the requested action!");
+		GraphicUserInterface.log("Agent " + inform.getSender().getName() + " successfully performed the requested action!\n");
 	}	
 }
