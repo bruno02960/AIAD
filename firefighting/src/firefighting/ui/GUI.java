@@ -40,11 +40,11 @@ public class GUI {
 		GUI.worldAgent = worldAgent;
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 384, 368);
+		panel.setBounds(0, 0, 800, 800);
 		panel_3 = new JPanel();
-		panel_3.setBounds(10, 368, 1164, 93);
+		panel_3.setBounds(10, 368, 1800, 93);
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(384, 0, 800, 368);
+		panel_2.setBounds(900, 0, 800, 600);
 
 		frameInitialize(panel, panel_3, panel_2);
 	    
@@ -89,12 +89,12 @@ public class GUI {
 	}
 
 	/**
-	 * Initializes the capiton area
+	 * Initialises the capiton area
 	 * @param panel main panel
 	 * @param panel_1 captionPanel
 	 */
 	private void captionInitialize(JPanel panel, JPanel panel_1) {
-		panel_3.setLayout(new BorderLayout(0, 0));
+		panel_3.setLayout(new BorderLayout(1000, 1000));
 		JLabel lblCaption = new JLabel("<html>Caption:<br>1) ST - Fire Station<br>2) W[c] - Filling Station, where [c] is its capacity"
 	    		+ "<br>3) F[i] - Fire, where [i] is its intensity<br>4) A[t] - Aircraft, where [t] is its tank capacity</html>");
 		lblCaption.setHorizontalAlignment(SwingConstants.LEFT);
@@ -103,7 +103,7 @@ public class GUI {
 	}
 
 	/**
-	 * Initializes the frame
+	 * Initialises the frame
 	 * @param panel main panel
 	 * @param panel_1 caption panel
 	 * @param panel_2 info panel
@@ -114,7 +114,7 @@ public class GUI {
 	    mainFrame.getContentPane().setLayout(null);
 	    mainFrame.getContentPane().add(panel);
 		mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		mainFrame.setBounds(100, 100, 1200, 500);
+		mainFrame.setBounds(100, 100, 1800, 900);
 	    mainFrame.getContentPane().add(panel_1);
 		mainFrame.getContentPane().add(panel_2);
 	}
