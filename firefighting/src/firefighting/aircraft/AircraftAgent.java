@@ -32,6 +32,7 @@ import firefighting.aircraft.utils.QItem;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
 import firefighting.ui.GUI;
+import firefighting.utils.AircraftMetricsStats;
 import firefighting.utils.Config;
 import firefighting.world.*;
 
@@ -109,6 +110,11 @@ public class AircraftAgent extends Agent {
 	 * Auxiliary variable for saving Paths
 	 */
 	private ArrayList<Point> auxPath = new ArrayList<Point>();
+
+	/**
+	 * The execution metrics stats of the aircraft agent.
+	 */
+	private AircraftMetricsStats aircraftMetricsStats;
 	
 	
 
@@ -140,9 +146,11 @@ public class AircraftAgent extends Agent {
 		this.currentAttendindFire = null;
 		
 		this.crashed = false;
+		
+		this.aircraftMetricsStats = new AircraftMetricsStats();
 	}
-
-
+	
+	
 	
 	// Basic methods:
 	
@@ -291,6 +299,10 @@ public class AircraftAgent extends Agent {
 	}
 	
 	
+	public AircraftMetricsStats getAircraftMetricsStats() {
+		return this.aircraftMetricsStats;	
+	}
+	
 	// TODO - ver daqui para baixo
 	@Override
 	public String toString() {
@@ -305,11 +317,7 @@ public class AircraftAgent extends Agent {
 		
 		//verify if has enough water
 		addBehaviour(new DetectEnoughWaterQty(this, 1000));
-		
-		//Cyclic check inbox
-		//addBehaviour(new ReceiveCFPs(this));
-
-		
+				
 		GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
 		//System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
 		MessageTemplate template = MessageTemplate.and(
@@ -319,15 +327,17 @@ public class AircraftAgent extends Agent {
 		addBehaviour(new ContractNetResponder(this, template) {
 			protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
 				GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
-				//System.out.println("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent());
 				int proposal = evaluateAction(cfp.getContent());
+				
 				if (!attendindFire && proposal < Integer.MAX_VALUE) {
 					// We provide a proposal
 					GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
-					//System.out.println("Agent "+getLocalName()+": Proposing "+proposal);
 					ACLMessage propose = cfp.createReply();
 					propose.setPerformative(ACLMessage.PROPOSE);
 					propose.setContent(String.valueOf(proposal));
+			
+					aircraftMetricsStats.incNumTotalMessagesSentByThisAircraft();
+					
 					return propose;
 				}
 				else {
@@ -341,42 +351,33 @@ public class AircraftAgent extends Agent {
 			protected ACLMessage prepareResultNotification(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
 				GUI.log("Agent "+getLocalName()+": Proposal accepted\n");
 				attendindFire = true;
-				//System.out.println("Agent "+getLocalName()+": Proposal accepted");
+	
 				if (performAction()) {
 					GUI.log("Agent "+getLocalName()+": Action successfully performed\n");
-					//System.out.println("Agent "+getLocalName()+": Action successfully performed");
 					ACLMessage inform = accept.createReply();
 					inform.setPerformative(ACLMessage.INFORM);
+				
 					return inform;
 				}
 				else {
 					GUI.log("Agent "+getLocalName()+": Action execution failed\n");
-					//System.out.println("Agent "+getLocalName()+": Action execution failed");
 					throw new FailureException("unexpected-error");
 				}	
 			}
 
 			protected void handleRejectProposal(ACLMessage reject) {
 				GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
-				//System.out.println("Agent "+getLocalName()+": Proposal rejected");
 			}
 		} );
 	}
 	
 	public Fire getthisFire(int x, int y) {
-		
 		Fire currentFire = null ;
 		
 		for(int pos = 0; pos < this.worldAgent.getCurrentFires().size() ; pos++)
-		{
-			
-		if(this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getX() == x && this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getY() == y)
-			{
-				currentFire = this.worldAgent.getCurrentFires().get(pos);
-			}
-			
-			
-		}
+			if(this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getX() == x && this.worldAgent.getCurrentFires().get(pos).getWorldObject().getPos().getY() == y)
+				currentFire = this.worldAgent.getCurrentFires().get(pos);	
+		
 		return currentFire;
 	}
 
@@ -387,6 +388,9 @@ public class AircraftAgent extends Agent {
 		if(!tokens[0].equals("FIRE") && !tokens[1].equals("INTENSITY") && !tokens[3].equals("POS")) {
 			System.err.println("Invalid alert message received!");
 		}
+		
+		this.aircraftMetricsStats.incNumTotalFireAlertMessagesReceivedByThisAircraft();
+		
 		
 		int totalDistanceToMake = 0;
 		
@@ -406,84 +410,75 @@ public class AircraftAgent extends Agent {
 
 		totalDistanceToMake = distanceToFire;
 			
-		if(waterTankQuantity > fireIntensity/2) {
-
+		if(waterTankQuantity > fireIntensity/2)
 			totalDistanceToMake = distanceToFire; 
-		}
-		else {
-				
-			return 100;
-			
-		}
+		else	
+			return Integer.MAX_VALUE;
 		
 		return totalDistanceToMake;
-		
 	}
 
 	public boolean performAction() {
-
-		
-		if(this.currentAttendindFire != null)
+		if(this.currentAttendindFire != null) {
+			this.currentAttendindFire.attended = true;
 			
-		{
-		this.currentAttendindFire.attended = true;
-		
-		// Simulate action execution by generating a random number
-		
-		for(int i = 0; i < this.auxPath.size(); i++) {
+			long startFireAttendTravelTime = System.currentTimeMillis();
 			
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			/*
-			if(this.worldAgent.getWorldMap()[(int)this.auxPath.get(i).getX()][(int)this.auxPath.get(i).getY()] != null) {
-				Point point = auxPath.get(auxPath.size()-1);
-				this.auxPath.clear();
-				this.auxPath.addAll(this.pathToFire(point));
-			}*/
-			
-			this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
+			// Simulate action execution by generating a random number
+			for(int i = 0; i < this.auxPath.size(); i++) {
+				try {
+					Thread.sleep(2000);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				
-		}
-		
-		while(this.waterTankQuantity > 0) {
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
 			}
 			
-			//water decrement
-			this.waterTankQuantity--;
-			this.currentAttendindFire.decreaseIntensity(1);
+			this.aircraftMetricsStats.incNumTotalTravelsByThisAircraft();
+			this.aircraftMetricsStats.incTotalTimeInTravelsByThisAircraft(startFireAttendTravelTime);
 			
-	
-			if(this.currentAttendindFire.getCurrentIntensity() == 0) {
-				//this.currentAttendindFire.attended = false;
-				this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
-				this.currentAttendindFire = null;
-				break;
+			
+			long startPutOutFireTime = System.currentTimeMillis();
+			
+			while(this.waterTankQuantity > 0) {
+				try {
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				// Water decrement
+				this.waterTankQuantity--;
+				this.currentAttendindFire.decreaseIntensity(1);
+				
+				if(this.currentAttendindFire.getCurrentIntensity() == 0) {
+					this.worldAgent.removeFire((int)this.currentAttendindFire.getWorldObject().getPos().getX(), (int)this.currentAttendindFire.getWorldObject().getPos().getY());
+					this.currentAttendindFire = null;
+					
+					this.aircraftMetricsStats.incNumTotalFiresExtinguishedByThisAircraft();
+					this.aircraftMetricsStats.incTotalTimeToExtinguishFiresByThisAircraft(startPutOutFireTime);
+					
+					break;
+				}
 			}
-		}
-		
-		if(this.worldAgent.getCurrentFires().contains(this.currentAttendindFire))
-			this.currentAttendindFire.attended = false;
 			
-		
-		this.attendindFire = false;
-		
-		this.auxPath.clear();
-		
-		return true;
-		
+			this.aircraftMetricsStats.incNumTotalFiresAttendedByThisAircraft();
+			this.aircraftMetricsStats.incTotalTimeToAttendFiresByThisAircraft(startPutOutFireTime);
 
+			if(this.worldAgent.getCurrentFires().contains(this.currentAttendindFire))
+				this.currentAttendindFire.attended = false;
+				
+			this.attendindFire = false;
+			this.auxPath.clear();
+			
+			return true;
 		}
+		
 		this.attendindFire = false;
+		
 		return true;
 	}
 
@@ -565,41 +560,7 @@ public class AircraftAgent extends Agent {
 
 	  return new ArrayList<Point>();
 	}
-
-	
-	private ArrayList<Point> bestPathFromXYToWZ(int x, int y, int w, int z) {
-		  Point s = new Point(x,y);
-
-		  // To keep track of visited QItems. Marking blocked cells as visited
-		  boolean[][] visited = new boolean[Config.GRID_WIDTH][Config.GRID_HEIGHT];
-		  for (int i = 0; i < Config.GRID_WIDTH; i++) {
-		    for (int j = 0; j < Config.GRID_HEIGHT; j++) {
-		      if(worldAgent.getWorldMap()[i][j] == null)
-		        visited[i][j] = false;
-		      else
-		        visited[i][j] = true;
-		    }
-		  }
-
-		  // Applying BFS on matrix cells starting from source
-		  Queue<QItem> q = new LinkedList<QItem>();
-		  q.add(new QItem((int) s.getX(),(int) s.getY(),0, new ArrayList<Point>()));
-		  visited[(int) s.getX()][(int) s.getY()] = true;
-		  while (!q.isEmpty()) {
-		    QItem p = q.remove();
-
-		    // Destination found
-		    if (worldAgent.getWorldMap()[p.row][p.col] != null) {
-		      ArrayList<Point> path = (ArrayList<Point>) p.path.clone();
-		      return path;
-		    }
-
-		    processCellPathToFire(visited, q, p);
-		  }
-
-		  return new ArrayList<Point>();
-		}
-	
+		
 	/**
 	 * Processes a new cell in the BFS process of searching a path to a given fire
 	 * @param visited Visited cells
@@ -659,54 +620,54 @@ public class AircraftAgent extends Agent {
 		return visited;
 	}
 
-
 	/**
 	 * Behaviour to the aircraft agent takes in the case of take down.
 	 */
 	protected void takeDown() {
-		if(this.isCrashed()) {
+		if(this.isCrashed())
 			System.err.println("Mayday, Mayday!!! Aircraft Agent " + getAID().getName() + " crashed and is terminating!");
-		}
 		else
 			System.err.println("Aircraft Agent " + getAID().getName() + " is terminating!");
 	}
-
-
 
 	public void goToNearestWaterResource() {
 		
 		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
 		
+		long startWaterRefillTravelTime = System.currentTimeMillis();
+		
+		
 		for(int i = 0; i < pathToNearestWaterResource.size(); i++) {
 			
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			if(this.worldAgent.getWorldMap()[(int)pathToNearestWaterResource.get(i).getX()][(int)pathToNearestWaterResource.get(i).getY()] == null) {
-				this.worldObject.setPos((int)pathToNearestWaterResource.get(i).getX(), (int)pathToNearestWaterResource.get(i).getY());
-			}	
-			
-			
+			if(this.worldAgent.getWorldMap()[(int)pathToNearestWaterResource.get(i).getX()][(int)pathToNearestWaterResource.get(i).getY()] == null)
+				this.worldObject.setPos((int)pathToNearestWaterResource.get(i).getX(), (int)pathToNearestWaterResource.get(i).getY());			
 		}
+
+		this.aircraftMetricsStats.incNumTotalTravelsByThisAircraft();
+		this.aircraftMetricsStats.incTotalTimeInTravelsByThisAircraft(startWaterRefillTravelTime);
+
+		
+		long startWaterRefillTime = System.currentTimeMillis();
 		
 		while(!this.haveFullWaterTank()) {
-			
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
 			this.increaseWaterQuantity();
-			
-		}
+		}		
 		
-		
-		
+		this.aircraftMetricsStats.incNumTotalWaterRefillsByThisAircraft();
+		this.aircraftMetricsStats.incTotalTimeInWaterRefillsByThisAircraft(startWaterRefillTime);
 	}
 }
