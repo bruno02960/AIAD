@@ -37,7 +37,7 @@ public class JADELauncher {
 	
 	
 	// Creation of the world agent
-    static WorldAgent worldAgent = new WorldAgent(seasonTypeID, windTypeID);
+    static WorldAgent worldAgent = new WorldAgent(seasonTypeID, windTypeID, System.currentTimeMillis());
 	
     
     // Main method

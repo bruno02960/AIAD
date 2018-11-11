@@ -44,6 +44,11 @@ public class WorldAgent extends Agent {
 	private static WindType windType;
 	
 	/**
+	 * The timestamp of creation of the world.
+	 */
+	private static long timestampCreation;
+	
+	/**
 	 * The boolean value that keeps information that allows to know if can occur periodically,
 	 * in a rare way, droughts (extreme dry situations) - Can only occurs in summer season
 	 */
@@ -108,7 +113,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * TODO 
 	 */
-	public WorldAgent(byte seasonTypeID, byte windTypeID) {
+	public WorldAgent(byte seasonTypeID, byte windTypeID, long timestamp) {
 		
 		// Sets the type of season
 		SeasonType seasonType;
@@ -163,6 +168,7 @@ public class WorldAgent extends Agent {
 		// Sets all the world's environment conditions
 		WorldAgent.seasonType = seasonType;
 		WorldAgent.windType = windType; // TODO: REVER
+		WorldAgent.timestampCreation = timestamp;
 		
 		Random randomObject = new Random();
 		
@@ -239,6 +245,27 @@ public class WorldAgent extends Agent {
 	 */
 	public float[] getDroughtSituationProbabilityInterval() {
 		return WorldAgent.droughtSituationProbabilityInterval;
+	}
+	
+	/**
+	 * Returns the timestamp of creation of the world.
+	 * 
+	 * @return the timestamp of creation of the world
+	 */
+	public long getTimestampCreation() {
+		return WorldAgent.timestampCreation;
+	}
+	
+	/**
+	 * Returns true if the demo execution has already ended, or false, otherwise.
+	 * 
+	 * @return true if the demo execution has already ended, or false, otherwise
+	 */
+	public boolean hasDemoExecutionEnded() {
+		
+		long currentTimeOfDemoExecution = System.currentTimeMillis() - this.getTimestampCreation();
+		
+		return currentTimeOfDemoExecution >= Config.DEMO_EXECUTION_TIME;
 	}
 	
 	/**
@@ -492,7 +519,7 @@ public class WorldAgent extends Agent {
 		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
 		this.addBehaviour(new UpdateWorldStatusBehaviour(this, 1000));
 		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 10000));
-		this.addBehaviour(new WeatherConditionsBehaviour(this, 20000));
+		this.addBehaviour(new WeatherConditionsBehaviour(this, 30000));
 	}
 	
 	/**

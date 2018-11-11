@@ -30,5 +30,13 @@ public class UpdateWorldStatusBehaviour extends TickerBehaviour {
 	protected void onTick() {
 		this.worldAgent.refreshWorldMapPositions();
 		GraphicUserInterface.fillGrid();
+		
+		if(this.worldAgent.hasDemoExecutionEnded()) {
+			
+			// Print all the log info
+			// TODO
+			
+			this.worldAgent.doDelete();
+		}
 	}
 }

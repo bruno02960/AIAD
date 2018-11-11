@@ -49,28 +49,28 @@ public class WeatherConditionsBehaviour extends TickerBehaviour {
 		int rainFrequencyTimeSec;
 		long rainFrequencyTimeMs; 
 		
-		// Calculate a random time frequency in seconds of occurring precipitation/rain, from the global set [8s, 30s],
+		// Calculate a random time frequency in seconds of occurring precipitation/rain, from the global set [20s, 100s],
 		// accordingly with the current season
 		switch(seasonTypeID) {
 			// SPRING SEASON
 			case 0:
-				// Normal time frequency of occurring precipitation/rain from the set [11s, 21s]
-				rainFrequencyTimeSec = randomObject.ints(1, 11, 21).toArray()[0];
+				// Normal time frequency of occurring precipitation/rain from the set [31s, 50s]
+				rainFrequencyTimeSec = randomObject.ints(1, 31, 51).toArray()[0];
 				break;
 			// SUMMER SEASON
 			case 1:
-				// Normal time frequency of occurring precipitation/rain from the set [21s, 30s]
-				rainFrequencyTimeSec = randomObject.ints(1, 21, 31).toArray()[0];
+				// Normal time frequency of occurring precipitation/rain from the set [51s, 100s]
+				rainFrequencyTimeSec = randomObject.ints(1, 51, 101).toArray()[0];
 				break;
 			// AUTUMN SEASON
 			case 2:
-				// Normal time frequency of occurring precipitation/rain from the set [11s, 21s]
-				rainFrequencyTimeSec = randomObject.ints(1, 11, 21).toArray()[0];
+				// Normal time frequency of occurring precipitation/rain from the set [31s, 50s]
+				rainFrequencyTimeSec = randomObject.ints(1, 31, 51).toArray()[0];
 				break;
 			// WINTER SEASON
 			case 3:
-				// Normal time frequency of occurring precipitation/rain from the set [6s, 10s]
-				rainFrequencyTimeSec = randomObject.ints(1, 6, 11).toArray()[0];
+				// Normal time frequency of occurring precipitation/rain from the set [20s, 30s]
+				rainFrequencyTimeSec = randomObject.ints(1, 20, 31).toArray()[0];
 				break;
 			default:
 				rainFrequencyTimeSec = 0;
@@ -99,7 +99,7 @@ public class WeatherConditionsBehaviour extends TickerBehaviour {
 			float max = boundsDroughtSituationProbabilityInterval[1];
 			
 			if((probabilityOccurDroughtSituation >= min) && (probabilityOccurDroughtSituation <= max)) {
-				droughtSituationFrequencyTimeSec = randomObject.ints(1, 30, 121).toArray()[0];
+				droughtSituationFrequencyTimeSec = randomObject.ints(1, 100, 201).toArray()[0];
 				
 				droughtSituationFrequencyTimeMs = (long) droughtSituationFrequencyTimeSec * 1000;
 			
@@ -113,10 +113,15 @@ public class WeatherConditionsBehaviour extends TickerBehaviour {
 	 * Destroying all the previous ticker behaviours and their respectively time counters
 	 */
 	public void onDone() {
-		this.worldAgent.removeTimer(this.rainingBehaviour);
-		this.worldAgent.removeBehaviour(this.rainingBehaviour);
 		
-		this.worldAgent.removeTimer(this.droughtSituationBehaviour);
-		this.worldAgent.removeBehaviour(this.droughtSituationBehaviour);
+		if(this.rainingBehaviour != null) {
+			this.worldAgent.removeTimer(this.rainingBehaviour);
+			this.worldAgent.removeBehaviour(this.rainingBehaviour);
+		}
+		
+		if(this.droughtSituationBehaviour != null) {
+			this.worldAgent.removeTimer(this.droughtSituationBehaviour);
+			this.worldAgent.removeBehaviour(this.droughtSituationBehaviour);
+		}
 	}
 }
