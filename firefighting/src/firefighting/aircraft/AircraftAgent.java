@@ -12,6 +12,7 @@ package firefighting.aircraft;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -27,6 +28,7 @@ import firefighting.nature.WaterResource;
 import firefighting.utils.Config;
 import firefighting.world.WorldAgent;
 import firefighting.world.WorldObject;
+import firefighting.world.utils.WorldObjectType;
 import jade.core.Agent;
 import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.FailureException;
@@ -267,6 +269,17 @@ public class AircraftAgent extends Agent {
 	}
 	
 	/**
+	 * Returns the distance from a fire position to the fire station agent.
+	 * 
+	 * @return the distance from a fire position to the fire station agent
+	 */
+	public int getDistanceFromFireToFireStationAgent(Point firePos) {
+		Point fireStationPos = this.getWorldAgent().getFireStationAgent().getWorldObject().getPos();
+		
+		return (int) (Math.abs(firePos.getX() - fireStationPos.getX()) + Math.abs(firePos.getY() - fireStationPos.getY()));
+	}
+	
+	/**
 	 * TODO
 	 * 
 	 * @param numStepsToThePretendedDestination
@@ -278,7 +291,22 @@ public class AircraftAgent extends Agent {
 		Point fireStationPos = this.getWorldAgent().getFireStationAgent().getWorldObject().getPos();
 		
 		int numStepsFromPretendedDestinationToFireStation = (int) (Math.abs(pretendedDestination.getX() - fireStationPos.getX()) + Math.abs(pretendedDestination.getY() - fireStationPos.getY()));
-		int numTotalStepsToTravelSecure = Config.AIRCRAFT_FUEL_TANK_CAPACITY_SECURE_TRAVEL_FACTOR + numStepsToThePretendedDestination + numStepsFromPretendedDestinationToFireStation;
+		
+		Random randomObject = new Random();
+		
+		boolean optimisticThought = randomObject.nextBoolean();
+		int numTotalStepsToTravelSecure;
+		
+		if(optimisticThought)
+			numTotalStepsToTravelSecure = Config.AIRCRAFT_FUEL_TANK_CAPACITY_SECURE_TRAVEL_FACTOR + numStepsToThePretendedDestination + numStepsFromPretendedDestinationToFireStation;
+		else
+			numTotalStepsToTravelSecure = numStepsToThePretendedDestination + numStepsFromPretendedDestinationToFireStation;
+		
+		
+		GraphicUserInterface.log("\n");
+		GraphicUserInterface.log("GASOLINAAA DO AIRCRAFT" + this.getID() +" - " + this.getFuelTankQuantity()+"\n");
+		GraphicUserInterface.log("PASSSSOOOOOOS SEGUROS DO AIRCRAFT" + this.getID() + " - " + numTotalStepsToTravelSecure + "\n");
+		GraphicUserInterface.log("\n");
 		
 		return this.getFuelTankQuantity() >= numTotalStepsToTravelSecure;
 	}
@@ -288,8 +316,26 @@ public class AircraftAgent extends Agent {
 	 * it suffer an accident crash and become indefinitely inactive.
 	 */
 	public void accidentCrash() {
-		if(this.haveEmptyFuelTank())
+		if(this.haveEmptyFuelTank()) {
+			GraphicUserInterface.log("Aircraft agent responder " + getID() + ": Mayday!!! Mayday!!! I'm crashing!!! BOOOOM!!!\n\n");
+		
+			worldAgent.getAircraftAgents().remove((int) this.getID());
+			
+			Point crashPos = this.getWorldObject().getPos();
+			
+			WorldObject crashedWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, crashPos);
+			CrashedAircraft crashedAircraft = new CrashedAircraft(this.getID(), crashedWorldObject);
+			
+			WorldAgent worldAgent = this.getWorldAgent();
+			
+			worldAgent.getCrashedAircrafts().add(crashedAircraft);
+			worldAgent.getWorldMap()[(int) crashPos.getX()][(int) crashPos.getY()] = crashedAircraft;			
+		
+			this.worldObject = null;
+
 			this.takeDown();
+			this.doDelete();
+		}
 	}
 
 	/**
@@ -392,15 +438,21 @@ public class AircraftAgent extends Agent {
 		// Calculating the path to fire
 		ArrayList<Point> pathToFire = this.pathToFire(firePos);
 		
-		int distanceToFire = pathToFire.size();
+		int distanceToFire = pathToFire.size() + 1;
 		
 		this.travelPath.clear();
 		this.travelPath.addAll(this.pathToFire(firePos));			
 		
-		// TODO - melhorar a heuristica ??
 		// Returning the proposal's value
+		Random random = new Random();
+		
+		boolean optimistThought = random.nextBoolean();
+		
 		if(waterTankQuantity > (fireIntensity / 2))
-			return distanceToFire;
+			if(optimistThought)
+				return distanceToFire;
+			else
+				return distanceToFire + this.getDistanceFromFireToFireStationAgent(firePos);
 		else
 			return Integer.MAX_VALUE;	
 	}
@@ -415,11 +467,111 @@ public class AircraftAgent extends Agent {
 		
 		int totalNumStepsToFire = travelPathToFire.size();
 		
+		GraphicUserInterface.log("ESTOOOOOOUUUUUUUUUUUU A " + totalNumStepsToFire + " PASSOOOOOOOOOS DO FOGOOOOOOOOOO");
+		
+		if(totalNumStepsToFire == 0) {
+			if(this.currentAttendingFire == null) {
+				Object[][] worldMap = this.getWorldAgent().getWorldMap();
+				Point aircraftPos = this.getWorldObject().getPos();
+				
+				if(worldMap[(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()] instanceof Fire) {
+					
+					if(this.currentAttendingFire == null && !this.isBusy()) {
+						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()];
+						fireToAttend.setAttended(true);
+						
+						this.currentAttendingFire = fireToAttend;
+						this.setBusy(true);
+					}
+				}
+				else if(worldMap[(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()] instanceof Fire) {
+					
+					if(this.currentAttendingFire == null && !this.isBusy()) {
+						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()];
+						fireToAttend.setAttended(true);
+						
+						this.currentAttendingFire = fireToAttend;
+						this.setBusy(true);
+					}
+				}
+				else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1] instanceof Fire) {
+					
+					if(this.currentAttendingFire == null && !this.isBusy()) {
+						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1];
+						fireToAttend.setAttended(true);
+						
+						this.currentAttendingFire = fireToAttend;
+						this.setBusy(true);
+					}
+				}
+				else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1] instanceof Fire) {
+					
+					if(this.currentAttendingFire == null && !this.isBusy()) {
+						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1];
+						fireToAttend.setAttended(true);
+						
+						this.currentAttendingFire = fireToAttend;
+						this.setBusy(true);
+					}
+				}
+			}
+				
+			if(this.currentAttendingFire != null) {
+				
+				// Simulates the put out of fire process
+				while(!this.haveEmptyWaterTank()) {
+					
+					// Simulates 1s for each unity of water used in the process
+					try {
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					// The aircraft agent putting out of fire		
+					this.decreaseWaterTankQuantity();
+					this.currentAttendingFire.decreaseIntensity();
+					
+					if(!this.currentAttendingFire.isActive()) {
+						
+						byte currentAttendingFireID = this.currentAttendingFire.getID();
+						
+						WorldAgent worldAgent = this.getWorldAgent();
+						ConcurrentNavigableMap<Integer, Fire> fires = worldAgent.getCurrentFires();
+						
+						if(fires.containsKey((int) currentAttendingFireID)) {
+							this.getWorldAgent().getCurrentFires().get((int) currentAttendingFireID).setAttended(false);
+							this.worldAgent.fireExtinguished(currentAttendingFireID);
+						}
+						
+						this.currentAttendingFire = null;
+						break;
+					}
+				}
+			}
+			
+			if(this.currentAttendingFire != null) {
+				byte currentAttendingFireID = this.currentAttendingFire.getID();
+				
+				if(this.worldAgent.getCurrentFires().containsKey((int)currentAttendingFireID))
+					this.worldAgent.getCurrentFires().get((int)currentAttendingFireID).setAttended(false);
+			}
+			
+			this.setBusy(false);
+			this.travelPath.clear();
+		}
+		
 		if(totalNumStepsToFire > 0) {
+			
 			Point fireToAttendPos = travelPathToFire.get(totalNumStepsToFire - 1);
 			
-			//if(this.haveEnoughFuelToTravel(totalNumStepsToFire, fireToAttendPos)) {
+			GraphicUserInterface.log("EUUUUUU QUEROOOO IR AO FOOOOOOOGGOOOOOOOOO MAS NAO SEI SE TENHO GASOLINA");
+			
+			if(this.haveEnoughFuelToTravel(totalNumStepsToFire, fireToAttendPos)) {
 				Object[][] worldMap = this.worldAgent.getWorldMap();
+				
+				GraphicUserInterface.log("EUUUUUU VOUUUUUU AO FOOOOOOOGGOOOOOOOOO");
 				
 				if(worldMap[(int)fireToAttendPos.getX()][(int)fireToAttendPos.getY()] instanceof Fire) {
 					
@@ -433,35 +585,44 @@ public class AircraftAgent extends Agent {
 					
 					int numSteps = 0;
 					
-					for(Point nextStep: travelPathToFire) {
+					try {
+						for(Point nextStep: travelPathToFire) {
 						
-						if(this.currentAttendingFire == null)
-							break;
-						
-						boolean lastStep = (numSteps + 1) == totalNumStepsToFire ? true : false;
-				
-						// Simulates 1s for each step made of the calculated path
-						try {
-							Thread.sleep(1000);
-						}
-						catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-				
-						if(this.worldAgent.getWorldMap()[(int)nextStep.getX()][(int)nextStep.getY()] == null)
-							this.worldObject.setPos((int)nextStep.getX(), (int)nextStep.getY());			
-						else
-							if(!lastStep) {
-								//this.getTravelPath().clear();
-								this.performActionToPutOutOfFire();
+							if(this.currentAttendingFire == null)
+								break;
+							
+							boolean lastStep = (numSteps + 1) == totalNumStepsToFire ? true : false;
+					
+							// Simulates 1s for each step made of the calculated path
+							try {
+								Thread.sleep(1000);
 							}
-						
-						this.decreaseFuelTankQuantity();
-						
-						numSteps++;
+							catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							
+							if(this.worldAgent.getWorldMap()[(int)nextStep.getX()][(int)nextStep.getY()] == null)
+								this.worldObject.setPos((int)nextStep.getX(), (int)nextStep.getY());			
+							else
+								if(!lastStep) {
+									this.getTravelPath().clear();
+									this.performActionToPutOutOfFire();
+								}
+							
+							this.decreaseFuelTankQuantity();
+							
+							if(this.haveEmptyFuelTank())
+								this.accidentCrash();
+							
+							numSteps++;
+						}
 					}
+					catch (ConcurrentModificationException e) {
+						GraphicUserInterface.log("Interference on the radar!!!\n\n");
+						this.accidentCrash();
+					}						
 				}
-			//}
+			}
 			
 			if(this.currentAttendingFire != null) {
 				
@@ -796,6 +957,12 @@ public class AircraftAgent extends Agent {
 					
 					this.decreaseFuelTankQuantity();
 					
+					if(this.haveEmptyFuelTank()) {
+						this.accidentCrash();
+						
+						break;
+					}
+					
 					numSteps++;
 				}
 				
@@ -875,7 +1042,7 @@ public class AircraftAgent extends Agent {
 			
 			Point nearestWaterResourcePos = pathToNearestWaterResource.get(totalNumSteps - 1);
 
-			//if(this.haveEnoughFuelToTravel(totalNumSteps, nearestWaterResourcePos)) {
+			if(this.haveEnoughFuelToTravel(totalNumSteps, nearestWaterResourcePos)) {
 				Object[][] worldMap = this.worldAgent.getWorldMap();
 				
 				if(worldMap[(int)nearestWaterResourcePos.getX()][(int)nearestWaterResourcePos.getY()] instanceof WaterResource) {
@@ -901,8 +1068,11 @@ public class AircraftAgent extends Agent {
 						else
 							if(!lastStep)
 								this.goRefillWaterTank();
-						
+							
 						this.decreaseFuelTankQuantity();
+						
+						if(this.haveEmptyFuelTank())
+							this.accidentCrash();
 						
 						numSteps++;
 					}
@@ -921,7 +1091,7 @@ public class AircraftAgent extends Agent {
 						nearestWaterResource.decreaseQuantity();
 					}	
 				}
-			//}
+			}
 		}
 		
 		this.setBusy(false);

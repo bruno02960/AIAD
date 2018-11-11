@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import firefighting.aircraft.AircraftAgent;
+import firefighting.aircraft.CrashedAircraft;
 import firefighting.firestation.FireStationAgent;
 import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
@@ -84,12 +85,19 @@ public class WorldAgent extends Agent {
 	 */
 	private ArrayList<WaterResource> waterResources;
 	
+	/**
+	 * The Crashed Aircrafts in the world.
+	 */
+	private ArrayList<CrashedAircraft> crashedAircrafts;
+	
+	
 	// Mobile agents (with movement)
 	/**
 	 * The Aircraft Agents in the world.
 	 */
 	private ArrayList<AircraftAgent> aircraftAgents;
-	
+
+
 	// Independent agents (without movement)
 	/**
 	 * The current fires in the world.
@@ -207,6 +215,7 @@ public class WorldAgent extends Agent {
 	
 	
 	// Methods:
+	
 	/**
 	 * Returns the season type influencing the world.
 	 * 
@@ -332,6 +341,15 @@ public class WorldAgent extends Agent {
 	}
 	
 	/**
+	 * Returns all the crashed aircrafts in the world.
+	 * 
+	 * @return all the crashed aircrafts in the world
+	 */
+	public ArrayList<CrashedAircraft> getCrashedAircrafts() {
+		return this.crashedAircrafts;
+	}
+	
+	/**
 	 * Returns all the current fires in the world.
 	 * 
 	 * @return all the current fires in the world
@@ -358,6 +376,8 @@ public class WorldAgent extends Agent {
 	public void createWorld() {
 		worldMap = new Object[Config.GRID_WIDTH][Config.GRID_HEIGHT];
 
+		this.crashedAircrafts = new ArrayList<CrashedAircraft>();
+		
 		this.currentFires = new ConcurrentSkipListMap<Integer, Fire>();
 		
 		this.currentExtinguishedFires = new ArrayList<Fire>();
@@ -498,7 +518,15 @@ public class WorldAgent extends Agent {
 			tmpWorldMap[aircraftWorldObject.getPosX()][aircraftWorldObject.getPosY()] = aircraftAgent;
 		}
 		
-		// 4) Switching/refreshing the fires' positions in the world map/grid 
+		// 4) Switching/refreshing the aircraft agents' positions in the world map/grid 
+		ArrayList<CrashedAircraft> crashedAircrafts = this.getCrashedAircrafts();
+				
+		for(CrashedAircraft crashedAircraft: crashedAircrafts) {
+			WorldObject aircraftWorldObject = crashedAircraft.getWorldObject();
+			tmpWorldMap[aircraftWorldObject.getPosX()][aircraftWorldObject.getPosY()] = crashedAircraft;
+		}
+		
+		// 5) Switching/refreshing the fires' positions in the world map/grid 
 		ConcurrentNavigableMap<Integer, Fire> fires = this.getCurrentFires();
 				
 		for(Fire fire: fires.values()) {	
@@ -506,7 +534,7 @@ public class WorldAgent extends Agent {
 			tmpWorldMap[fireWorldObject.getPosX()][fireWorldObject.getPosY()] = fire;	
 		}
 				
-		// 5) Switching/refreshing the world maps/grids objects
+		// 6) Switching/refreshing the world maps/grids objects
 		this.worldMap = null;
 		this.worldMap = tmpWorldMap;
 		tmpWorldMap = null;
@@ -519,7 +547,7 @@ public class WorldAgent extends Agent {
 		this.addBehaviour(new GenerateFiresBehaviour(this, 6000));
 		this.addBehaviour(new UpdateWorldStatusBehaviour(this, 1000));
 		this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 10000));
-		this.addBehaviour(new WeatherConditionsBehaviour(this, 30000));
+		//this.addBehaviour(new WeatherConditionsBehaviour(this, 30000));
 	}
 	
 	/**

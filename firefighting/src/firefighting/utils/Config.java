@@ -17,7 +17,7 @@ public abstract class Config {
 	/**
 	 * Defines the time of execution of the demo of the global world's behaviour in ms (5 x 60000ms = 5mins).
 	 */
-	public final static long DEMO_EXECUTION_TIME = (5 * 60000);
+	public final static long DEMO_EXECUTION_TIME = (6 * 60000);
 	
 	/**
 	 * Defines the world map/grid width.
@@ -62,7 +62,7 @@ public abstract class Config {
 	/**
 	 * Defines the fuel tank's capacity factor of an aircraft agent to perform a secure travel.
 	 */
-	public final static int AIRCRAFT_FUEL_TANK_CAPACITY_SECURE_TRAVEL_FACTOR = 6;
+	public final static int AIRCRAFT_FUEL_TANK_CAPACITY_SECURE_TRAVEL_FACTOR = 4;
 	
 	/**
 	 * Defines the minimum capacity of a water resource.

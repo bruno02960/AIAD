@@ -32,6 +32,10 @@ public class UpdateWorldStatusBehaviour extends TickerBehaviour {
 		GraphicUserInterface.fillGrid();
 		
 		if(this.worldAgent.hasDemoExecutionEnded()) {
+			GraphicUserInterface.log("\n\n\n");
+			GraphicUserInterface.log("SIMULATION ENDED!!!\n\n");
+			GraphicUserInterface.log("The simulation results are presented below...\n");
+			GraphicUserInterface.log("\n\n\n");
 			
 			// Print all the log info
 			// TODO

@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import firefighting.aircraft.AircraftAgent;
+import firefighting.aircraft.CrashedAircraft;
 import firefighting.firestation.FireStationAgent;
 import firefighting.nature.Fire;
 import firefighting.nature.WaterResource;
@@ -184,6 +185,11 @@ public class GraphicUserInterface {
         	if (worldCell instanceof AircraftAgent) {
         		gridCell.setBackground(Color.green);
         		gridCell.setIcon(new ImageIcon("imgs/aircraft.png"));
+        	}
+        	
+        	if (worldCell instanceof CrashedAircraft) {
+        		gridCell.setBackground(Color.white);
+        		gridCell.setIcon(new ImageIcon("imgs/crashed-aircraft.png"));
         	}
         	
         	if (worldCell instanceof WaterResource) {

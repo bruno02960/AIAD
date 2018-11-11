@@ -3,6 +3,7 @@ package firefighting.firestation.messages;
 import java.util.Date;
 
 import firefighting.firestation.FireStationAgent;
+import firefighting.world.WorldAgent;
 import jade.core.AID;
 import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
@@ -12,8 +13,11 @@ public class HelloAircraftMessage extends ACLMessage {
 	
 	private ACLMessage cfpMsg;
 
-	public HelloAircraftMessage() {
+	private WorldAgent worldAgent;
+
+	public HelloAircraftMessage(WorldAgent worldAgent) {
 		super(ACLMessage.CFP);
+		this.worldAgent = worldAgent;
 		setACLMessage();
 	}
 	
@@ -22,8 +26,8 @@ public class HelloAircraftMessage extends ACLMessage {
 	}
 	
 	private void setACLMessage() {
-		Object[] args = FireStationAgent.getAircraftAgentsNames();
-		
+		int numAircraftAgents = this.worldAgent.getNumAircraftsAgents();
+		Object[] args = FireStationAgent.getAircraftAgentsNames(numAircraftAgents);
 				 
 		cfpMsg = null;
 				

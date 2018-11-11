@@ -49,14 +49,15 @@ public class FireStationAgent extends Agent {
 		return this.worldObject;
 	}
 
-	public static Object[] getAircraftAgentsNames() {
+	public static Object[] getAircraftAgentsNames(int numAircraftAgents) {
+		
+		Object[] aircraftAgentNames = new Object[numAircraftAgents];
 		
 		// The Available Aircraft Agents
-		String a = "AircraftAgent0";
-		String b = "AircraftAgent1";
-		String c = "AircraftAgent2";
-		    
-		return new Object[] {a,b,c};
+		for(int i = 0; i < numAircraftAgents; i++)
+			aircraftAgentNames[i] = "AircraftAgent" + i;
+		
+		return aircraftAgentNames;
 	}
 	
 	@Override

@@ -36,7 +36,8 @@ public class AlarmFireMessage extends ACLMessage {
 	}
 	
 	private void setACLMessage() {
-		Object[] args = FireStationAgent.getAircraftAgentsNames();
+		int numAircraftAgents = this.worldAgent.getNumAircraftsAgents();
+		Object[] args = FireStationAgent.getAircraftAgentsNames(numAircraftAgents);
 				 
 		cfpMsg = null;
 				
