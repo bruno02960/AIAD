@@ -19,7 +19,7 @@ import firefighting.world.WorldAgent;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -138,22 +138,34 @@ public class GUI {
 	 */
 	private static void setCell(Object worldCell, JLabel gridCell) {
 		if (worldCell != null) {
+			
 			gridCell.setText(worldCell.toString());
+        	gridCell.setHorizontalTextPosition(JLabel.CENTER);
+    		gridCell.setVerticalTextPosition(JLabel.BOTTOM);
+    		
         	if (worldCell instanceof Fire) {
         		gridCell.setBackground(Color.orange);
+        		gridCell.setIcon(new ImageIcon("imgs/fire.png"));
         	}
+      
         	if (worldCell instanceof AircraftAgent) {
-        		gridCell.setBackground(Color.yellow);
+        		gridCell.setBackground(Color.green);
+        		gridCell.setIcon(new ImageIcon("imgs/aircraft.png"));
         	}
+        	
         	if (worldCell instanceof WaterResource) {
         		gridCell.setBackground(Color.cyan);
+        		gridCell.setIcon(new ImageIcon("imgs/water-resource.png"));
         	}
+      
         	if (worldCell instanceof FireStationAgent) {
-        		gridCell.setBackground(Color.red);
+        		gridCell.setBackground(Color.gray);
+        		gridCell.setIcon(new ImageIcon("imgs/fire-station.png"));
         	}
 		}
         else {
         	gridCell.setBackground(null);
+        	gridCell.setIcon(null);
         	gridCell.setText("");
         }
 	}
