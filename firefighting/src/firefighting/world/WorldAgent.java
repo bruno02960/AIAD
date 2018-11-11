@@ -8,6 +8,7 @@ import firefighting.firestation.FireStationAgent;
 import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
+import firefighting.utils.JADELauncher;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
 import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
 import firefighting.world.behaviours.PrintStatusBehaviour;
@@ -17,6 +18,7 @@ import firefighting.world.utils.environment.SeasonType;
 import firefighting.world.utils.environment.WindType;
 
 import java.awt.Point;
+import java.awt.event.ActionListener;
 
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
@@ -107,12 +109,15 @@ public class WorldAgent extends Agent {
 	 */
 	private  int currentNumFires;
 	
+	private  ActionListener actionListener;
+	
 	
 	//Constructors:
 	/**
 	 * 
 	 */
 	public WorldAgent(byte seasonTypeID, byte windTypeID) {
+		this.actionListener = actionListener;
 		
 		// Sets the type of season
 		SeasonType seasonType;
@@ -519,7 +524,7 @@ public class WorldAgent extends Agent {
 	 * Shuts JADE down
 	 */
 	public void shutDown() {
-		
+
 		ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
         Codec codec = new SLCodec();
         this.getContentManager().registerLanguage(codec);

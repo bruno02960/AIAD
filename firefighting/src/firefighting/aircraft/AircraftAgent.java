@@ -92,7 +92,9 @@ public class AircraftAgent extends Agent {
 	 * The boolean value to keep the information about if
 	 * the aircraft agent it's already attending a fire.
 	 */
-	public boolean attendindFire;
+	public boolean attendindFire = false;
+	
+	public boolean attendindWater = false;
 	
 	/**
 	 * 
@@ -632,6 +634,8 @@ public class AircraftAgent extends Agent {
 
 	public void goToNearestWaterResource() {
 		
+		this.attendindWater = true;
+		
 		ArrayList<Point> pathToNearestWaterResource = this.pathToNearestWaterResource();
 		
 		long startWaterRefillTravelTime = System.currentTimeMillis();
@@ -669,5 +673,7 @@ public class AircraftAgent extends Agent {
 		
 		this.aircraftMetricsStats.incNumTotalWaterRefillsByThisAircraft();
 		this.aircraftMetricsStats.incTotalTimeInWaterRefillsByThisAircraft(startWaterRefillTime);
+		
+		this.attendindWater = false;
 	}
 }

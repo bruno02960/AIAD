@@ -41,7 +41,6 @@ public class JADELauncher {
 	
 	// Creation of the world agent
     static WorldAgent worldAgent;
-	
     
     // Main method
 	public static void main(String[] args) throws ControllerException {

@@ -46,31 +46,9 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 		
 		FireStationAgent fireStationAgent = this.getFireStationAgent();
 		ArrayList<Fire> fires = this.getCurrentFires();
-	/*	
-		if(fires.length > 0) {
-			for(int i = 0; i < Config.NUM_MAX_FIRES; i++) {
-				System.out.println(fires[i]);
-				if(fires[i] != null) {
-					System.out.println("vai adicionar alarme");
-					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
-					if(fires[i].isActive() && !fires[i].isAttended()) {
-						
-						// Get the Fire that needs to be extinguished
-						Fire fireToBeExtinguished = fires[i];
-						
-						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished);	
-					    
-						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg.getACLMessage());
-					
-					    fireStationAgent.addBehaviour(alarmToExtinguishFire);
-					}	
-				}
-			}
-		}
-	}
-}*/
 
-		//para ser um fogo de cada vez
+
+	
 		if(fires.size() > 0) {
 			int i = 0;
 			for(i = 0; i < fires.size(); i++) {
@@ -87,10 +65,19 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 						AlarmFireMessage alarmFireMsg = new AlarmFireMessage(fireToBeExtinguished, worldAgent);	
 					    
 						AlarmAircraftsAboutFiresBehaviour alarmToExtinguishFire = new AlarmAircraftsAboutFiresBehaviour(fireStationAgent, alarmFireMsg.getACLMessage());
+						
+						int notOccupied = 0;
+						for(int nrAir = 0; nrAir < this.worldAgent.getAircraftAgents().length; nrAir++) {
+							if(this.worldAgent.getAircraftAgents()[nrAir].attendindFire == false && this.worldAgent.getAircraftAgents()[nrAir].attendindWater == false)
+								notOccupied++;
+						}
+						
+						if(notOccupied == 0)
+							break;
 					
 					    fireStationAgent.addBehaviour(alarmToExtinguishFire); 
 					    
-					    break; //!!!!!!!!!!!ADICIONADO SÓ PARA FAZER PARA O PRIMEIRO INCENDIO
+					    break; 
 					}	
 					
 				}

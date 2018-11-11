@@ -47,7 +47,7 @@ public class AlarmFireMessage extends ACLMessage {
 			      
 			// Add all the pretended receivers a
 			for (int i = 0; i < args.length; ++i)  {
-				if(!worldAgent.getAircraftAgents()[i].attendindFire)
+				if(!worldAgent.getAircraftAgents()[i].attendindFire && !worldAgent.getAircraftAgents()[i].attendindWater)
 					cfpMsg.addReceiver(new AID((String) args[i], AID.ISLOCALNAME));
 			}
 					      

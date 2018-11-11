@@ -88,7 +88,7 @@ public class FireStationAgent extends Agent {
 		//this.addBehaviour(new HelloAircraftBehaviour(this, helloAircraftMsg.getACLMessage()));
 		
 		//20segundos para se ver o caso de teste (apagar 1 fogo) com calma
-		this.addBehaviour(new DetectFiresBehaviour(this.getWorldAgent(), this, 8000));
+		this.addBehaviour(new DetectFiresBehaviour(this.getWorldAgent(), this, 5000));
 	}
 		
 	protected void takeDown() {
