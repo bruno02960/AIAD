@@ -17,7 +17,7 @@ public abstract class Config {
 	/**
 	 * Defines the time of execution of the demo of the global world's behaviour in ms (5 x 60000ms = 5mins).
 	 */
-	public final static long DEMO_EXECUTION_TIME = (6 * 60000);
+	public final static long DEMO_EXECUTION_TIME = (10 * 60000);
 	
 	/**
 	 * Defines the world map/grid width.

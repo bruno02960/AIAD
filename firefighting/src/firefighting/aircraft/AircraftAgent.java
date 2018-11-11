@@ -474,44 +474,46 @@ public class AircraftAgent extends Agent {
 				Object[][] worldMap = this.getWorldAgent().getWorldMap();
 				Point aircraftPos = this.getWorldObject().getPos();
 				
-				if(worldMap[(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()] instanceof Fire) {
-					
-					if(this.currentAttendingFire == null && !this.isBusy()) {
-						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()];
-						fireToAttend.setAttended(true);
+				if((int)aircraftPos.getX() > 0 && (int)aircraftPos.getX() < Config.GRID_WIDTH && (int)aircraftPos.getY() > 0 && (int)aircraftPos.getY() < Config.GRID_HEIGHT) {
+					if(worldMap[(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()] instanceof Fire) {
 						
-						this.currentAttendingFire = fireToAttend;
-						this.setBusy(true);
+						if(this.currentAttendingFire == null && !this.isBusy()) {
+							Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() + 1][(int)aircraftPos.getY()];
+							fireToAttend.setAttended(true);
+							
+							this.currentAttendingFire = fireToAttend;
+							this.setBusy(true);
+						}
 					}
-				}
-				else if(worldMap[(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()] instanceof Fire) {
-					
-					if(this.currentAttendingFire == null && !this.isBusy()) {
-						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()];
-						fireToAttend.setAttended(true);
+					else if(worldMap[(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()] instanceof Fire) {
 						
-						this.currentAttendingFire = fireToAttend;
-						this.setBusy(true);
+						if(this.currentAttendingFire == null && !this.isBusy()) {
+							Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX() - 1][(int)aircraftPos.getY()];
+							fireToAttend.setAttended(true);
+							
+							this.currentAttendingFire = fireToAttend;
+							this.setBusy(true);
+						}
 					}
-				}
-				else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1] instanceof Fire) {
-					
-					if(this.currentAttendingFire == null && !this.isBusy()) {
-						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1];
-						fireToAttend.setAttended(true);
+					else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1] instanceof Fire) {
 						
-						this.currentAttendingFire = fireToAttend;
-						this.setBusy(true);
+						if(this.currentAttendingFire == null && !this.isBusy()) {
+							Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() + 1];
+							fireToAttend.setAttended(true);
+							
+							this.currentAttendingFire = fireToAttend;
+							this.setBusy(true);
+						}
 					}
-				}
-				else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1] instanceof Fire) {
-					
-					if(this.currentAttendingFire == null && !this.isBusy()) {
-						Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1];
-						fireToAttend.setAttended(true);
+					else if(worldMap[(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1] instanceof Fire) {
 						
-						this.currentAttendingFire = fireToAttend;
-						this.setBusy(true);
+						if(this.currentAttendingFire == null && !this.isBusy()) {
+							Fire fireToAttend = (Fire) worldMap[(int)(int)aircraftPos.getX()][(int)aircraftPos.getY() - 1];
+							fireToAttend.setAttended(true);
+							
+							this.currentAttendingFire = fireToAttend;
+							this.setBusy(true);
+						}
 					}
 				}
 			}
