@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 public class GUI {
 
@@ -31,6 +32,7 @@ public class GUI {
 	private static JLabel[][] grid;
     private static JTextArea textArea;
     private JPanel panel_3;
+    private JPanel panel_4;
 
 	/**
 	 * Creates the graphic user interface
@@ -40,17 +42,25 @@ public class GUI {
 		GUI.worldAgent = worldAgent;
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 800, 800);
+		panel.setBounds(10, 10, 794, 642);
 		panel_3 = new JPanel();
-		panel_3.setBounds(10, 368, 1800, 93);
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(900, 0, 800, 600);
+		panel_3.setBounds(9, 660, 1095, 93);
+		panel_4 = new JPanel();
+		panel_4.setBounds(810, 10, 762, 642);
 
-		frameInitialize(panel, panel_3, panel_2);
+		frameInitialize(panel, panel_3, panel_4);
 	    
 	    captionInitialize(panel, panel_3);
+
+        textArea = new JTextArea(10, 20);
+        textArea.setEditable(false);
+
+        scrollPaneInitialize(panel_4);
+	    gridInitialize(worldAgent, panel);
 	    
 	    JButton btnNewButton = new JButton("Stop");
+	    btnNewButton.setBounds(1430, 680, 141, 72);
+	    mainFrame.getContentPane().add(btnNewButton);
 	    btnNewButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		worldAgent.shutDown();
@@ -58,13 +68,6 @@ public class GUI {
 	    	}
 	    });
 	    btnNewButton.setAlignmentY(0.0f);
-	    panel_3.add(btnNewButton, BorderLayout.EAST);
-
-        textArea = new JTextArea(10, 20);
-        textArea.setEditable(false);
-
-        scrollPaneInitialize(panel_2);
-	    gridInitialize(worldAgent, panel);
 	}
 
 	/**
@@ -95,7 +98,7 @@ public class GUI {
 	 */
 	private void captionInitialize(JPanel panel, JPanel panel_1) {
 		panel_3.setLayout(new BorderLayout(1000, 1000));
-		JLabel lblCaption = new JLabel("<html>Caption:<br>1) ST - Fire Station<br>2) W[c] - Filling Station, where [c] is its capacity"
+		JLabel lblCaption = new JLabel("<html>Caption:<br>1) ST - Fire Station<br>2) W - Filling Station"
 	    		+ "<br>3) F[i] - Fire, where [i] is its intensity<br>4) A[t] - Aircraft, where [t] is its tank capacity</html>");
 		lblCaption.setHorizontalAlignment(SwingConstants.LEFT);
 	    panel_1.add(lblCaption, BorderLayout.WEST);
@@ -114,7 +117,7 @@ public class GUI {
 	    mainFrame.getContentPane().setLayout(null);
 	    mainFrame.getContentPane().add(panel);
 		mainFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		mainFrame.setBounds(100, 100, 1800, 900);
+		mainFrame.setBounds(100, 100, 1600, 800);
 	    mainFrame.getContentPane().add(panel_1);
 		mainFrame.getContentPane().add(panel_2);
 	}
@@ -124,9 +127,8 @@ public class GUI {
 	 * @param panel_2 info panel
 	 */
 	private void scrollPaneInitialize(JPanel panel_2) {
+		panel_4.setLayout(new BorderLayout(0, 0));
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		//scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		panel_2.setLayout(new BorderLayout(0, 0));
 		panel_2.add(scrollPane); //We add the scroll, since the scroll already contains the textArea
 		panel_2.setPreferredSize(new Dimension(800,500));
 	}

@@ -1,3 +1,4 @@
+package firefighting.aircraft;
 /**
  * Agents and Distributed Artificial Intelligence
  * Project 1 - Fire Fighting
@@ -8,7 +9,6 @@
  * 	@author Ruben Andre Barreiro - up201808917@fe.up.pt;
  */
 
-package firefighting.aircraft;
 
 import java.awt.Point;
 import java.util.ArrayList;
