@@ -20,10 +20,7 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import java.awt.FlowLayout;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
-import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
