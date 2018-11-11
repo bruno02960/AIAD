@@ -77,7 +77,7 @@ public class WelcomeScreen {
 		frame.getContentPane().add(maxAircrafts);
 		maxAircrafts.setText(String.valueOf(Config.NUM_MAX_AIRCRAFTS));
 		
-		JLabel lblMaxAircrafts = new JLabel("Max. Aircrafts");
+		JLabel lblMaxAircrafts = new JLabel("Num. Aircrafts");
 		lblMaxAircrafts.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMaxAircrafts.setBounds(10, 213, 134, 14);
 		frame.getContentPane().add(lblMaxAircrafts);
@@ -94,7 +94,7 @@ public class WelcomeScreen {
 		frame.getContentPane().add(maxWaterResources);
 		maxWaterResources.setText(String.valueOf(Config.NUM_MAX_WATER_RESOURCES));
 		
-		JLabel lblMaxWaterResources = new JLabel("Max. Water Resources");
+		JLabel lblMaxWaterResources = new JLabel("Num. Water Resources");
 		lblMaxWaterResources.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMaxWaterResources.setBounds(10, 182, 134, 14);
 		frame.getContentPane().add(lblMaxWaterResources);
