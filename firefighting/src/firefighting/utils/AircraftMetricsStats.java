@@ -16,6 +16,8 @@ public class AircraftMetricsStats {
 	
 	// 1) Countable metrics:
 	
+	public int numTotalFiresAttendedByThisAircraft;
+	
 	public int numTotalFiresExtinguishedByThisAircraft;
 
 	public int numTotalRefillsByThisAircraft;
@@ -24,9 +26,13 @@ public class AircraftMetricsStats {
 	
 	public int numTotalFuelRefillsByThisAircraft;
 	
+	public int numTotalTravelsByThisAircraft;
+	
 	
 	
 	// 2) Time metrics:
+	
+	public long totalTimeToAttendFiresByThisAircraft;
 	
 	public long totalTimeToExtinguishFiresByThisAircraft;
 		
@@ -36,21 +42,11 @@ public class AircraftMetricsStats {
 		
 	public long totalTimeToFuelRefillsByThisAircraft;
 	
-		
-		
-	// 3) Average metrics:
-		
-	public double averageTimeToExtiguishFireByThisAircraft;
-	
-	public double averageTimeToRefillByThisAircraft;
-	
-	public double averageTimeToWaterRefillByThisAircraft;
-		
-	public double averageTimeToFuelRefillByThisAircraft;
+	public long totalTimeInTravelsByThisAircraft;
 	
 	
 	
-	// 4) Messages exchanged (received/sent) metrics:
+	// 3) Messages exchanged (received/sent) metrics:
 	
 	public int numTotalMessagesExchangedByThisAircraft;
 	
@@ -68,6 +64,8 @@ public class AircraftMetricsStats {
 		
 		// 1) Countable metrics:
 		
+		this.numTotalFiresAttendedByThisAircraft = 0;
+		
 		this.numTotalFiresExtinguishedByThisAircraft = 0;
 		
 		this.numTotalRefillsByThisAircraft = 0;
@@ -76,9 +74,13 @@ public class AircraftMetricsStats {
 		
 		this.numTotalFuelRefillsByThisAircraft = 0;
 		
+		this.numTotalTravelsByThisAircraft = 0;
+		
 		
 		
 		// 2) Time metrics:
+		
+		this.totalTimeToAttendFiresByThisAircraft = 0L;
 		
 		this.totalTimeToExtinguishFiresByThisAircraft = 0L;
 		
@@ -88,21 +90,11 @@ public class AircraftMetricsStats {
 		
 		this.totalTimeToFuelRefillsByThisAircraft = 0L;
 		
-		
-		
-		// 3) Average metrics:
-	
-		this.averageTimeToExtiguishFireByThisAircraft = 0.0;
-		
-		this.averageTimeToRefillByThisAircraft = 0.0;
-		
-		this.averageTimeToWaterRefillByThisAircraft = 0.0;
+		this.totalTimeInTravelsByThisAircraft = 0L;
 			
-		this.averageTimeToFuelRefillByThisAircraft = 0.0;
 		
 		
-		
-		// 4) Messages exchanged (received/sent) metrics:
+		// 3) Messages exchanged (received/sent) metrics:
 		
 		this.numTotalMessagesExchangedByThisAircraft = 0;
 		
@@ -118,6 +110,14 @@ public class AircraftMetricsStats {
 	// Methods:
 	
 	// 1) Countable metrics:
+	
+	public int getNumTotalFiresAttendedByThisAircraft() {
+		return this.numTotalFiresAttendedByThisAircraft;
+	}
+	
+	public void incNumTotalFiresAttendedByThisAircraft() {
+		this.numTotalFiresAttendedByThisAircraft++;
+	}
 	
 	public int getNumTotalFiresExtinguishedByThisAircraft() {
 		return this.numTotalFiresExtinguishedByThisAircraft;
@@ -151,16 +151,36 @@ public class AircraftMetricsStats {
 		this.numTotalFuelRefillsByThisAircraft++;
 	}
 	
+	public int getNumTotalTravelsByThisAircraft() {
+		return this.numTotalTravelsByThisAircraft;
+	}
+
+	public void incNumTotalTravelsByThisAircraft() {
+		this.numTotalTravelsByThisAircraft++;
+	}
+	
 	
 	
 	// 2) Time metrics:
+	
+	public long getTotalTimeToAttendFiresByThisAircraft() {
+		return this.totalTimeToAttendFiresByThisAircraft;
+	}
+	
+	public void incTotalTimeToAttendFiresByThisAircraft(long startTime) {
+		long attendFireTime = System.currentTimeMillis() - startTime;
+		
+		this.totalTimeToAttendFiresByThisAircraft += attendFireTime;
+	}
 	
 	public long getTotalTimeToExtinguishFiresByThisAircraft() {
 		return this.totalTimeToExtinguishFiresByThisAircraft;
 	}
 	
-	public void incTotalTimeToExtinguishFiresByThisAircraft() {
-		this.totalTimeToExtinguishFiresByThisAircraft++;
+	public void incTotalTimeToExtinguishFiresByThisAircraft(long startTime) {
+		long extinguishFireTime = System.currentTimeMillis() - startTime;
+		
+		this.totalTimeToWaterRefillsByThisAircraft += extinguishFireTime;
 	}
 	
 	public long getTotalTimeToRefillsByThisAircraft() {
@@ -175,8 +195,10 @@ public class AircraftMetricsStats {
 		return this.totalTimeToWaterRefillsByThisAircraft;
 	}
 	
-	public void incTotalTimeToWaterRefillsByThisAircraft() {
-		this.totalTimeToWaterRefillsByThisAircraft++;
+	public void incTotalTimeInWaterRefillsByThisAircraft(long startTime) {
+		long waterRefillTime = System.currentTimeMillis() - startTime;
+		
+		this.totalTimeToWaterRefillsByThisAircraft += waterRefillTime;
 	}
 	
 	public long getTotalTimeToFuelRefillsByThisAircraft() {
@@ -187,42 +209,44 @@ public class AircraftMetricsStats {
 		this.totalTimeToFuelRefillsByThisAircraft++;
 	}
 	
+	public long getTotalTimeInTravelsByThisAircraft() {
+		return this.totalTimeInTravelsByThisAircraft;
+	}
+	
+	public void incTotalTimeInTravelsByThisAircraft(long startTime) {
+		long travelTime = System.currentTimeMillis() - startTime;
+		
+		this.totalTimeInTravelsByThisAircraft += travelTime;	
+	}
+	
 	
 	
 	// 3) Average metrics:
 	
-	public double getAverageTimeToExtinguishFireByThisAircraft() {
-		return this.averageTimeToExtiguishFireByThisAircraft;
+	public double getAverageTimeToAttendFireByThisAircraft() {
+		return this.getTotalTimeToAttendFiresByThisAircraft() / this.getNumTotalFiresAttendedByThisAircraft();
 	}
 	
-	public void incAverageTimeToExtinguishFireByThisAircraft() {
-		this.averageTimeToExtiguishFireByThisAircraft++;
+	public double getAverageTimeToExtinguishFireByThisAircraft() {
+		return this.getTotalTimeToExtinguishFiresByThisAircraft() / this.getNumTotalFiresExtinguishedByThisAircraft();
 	}
 	
 	public double getAverageTimeToRefillByThisAircraft() {
-		return this.averageTimeToRefillByThisAircraft;
-	}
-	
-	public void incAverageTimeToRefillByThisAircraft() {
-		this.averageTimeToRefillByThisAircraft++;
+		return 0;
 	}
 	
 	public double getAverageTimeToWaterRefillByThisAircraft() {
-		return this.averageTimeToWaterRefillByThisAircraft;
-	}
-	
-	public void incAverageTimeToWaterRefillByThisAircraft() {
-		this.averageTimeToWaterRefillByThisAircraft++;
+		return this.getTotalTimeToExtinguishFiresByThisAircraft() / this.getNumTotalWaterRefillsByThisAircraft();
 	}
 	
 	public double getAverageTimeToFuelRefillByThisAircraft() {
-		return this.averageTimeToFuelRefillByThisAircraft;
+		return 0;
 	}
 	
-	public void incAverageTimeToFuelRefillByThisAircraft() {
-		this.averageTimeToFuelRefillByThisAircraft++;
+	public double getAverageTimeInTravelsByThisAircraft() {
+		return this.getTotalTimeInTravelsByThisAircraft() / this.getNumTotalTravelsByThisAircraft();
 	}
-	 
+	
 	
 	
 	// 4) Messages exchanged (received/sent) metrics:
