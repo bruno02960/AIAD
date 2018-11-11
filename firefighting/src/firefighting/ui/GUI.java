@@ -71,16 +71,16 @@ public class GUI {
 	    			
 	    			GUI.log("\n");
 	    			GUI.log("\n");
-	    			GUI.log("Aircraft Agent " + i + " Stats:");
+	    			GUI.log("Aircraft Agent " + i + " Stats:" + "\n");
 	    			GUI.log("- Number of Total Fires Attended: " + aircraftMetricsStats.getNumTotalFiresAttendedByThisAircraft() + "\n");
 	    			GUI.log("- Number of Total Fires Extinguished: " + aircraftMetricsStats.getNumTotalFiresExtinguishedByThisAircraft() + "\n");
 	    			GUI.log("- Number of Total Water Refills: " + aircraftMetricsStats.getNumTotalWaterRefillsByThisAircraft() + "\n");
 	    			GUI.log("- Number of Total Travels: " + aircraftMetricsStats.getNumTotalTravelsByThisAircraft() + "\n");
 	    			GUI.log("\n");
-	    			GUI.log("- Number of Total Time to Attend Fires: " + aircraftMetricsStats.getTotalTimeToAttendFiresByThisAircraft() + "\n");
-	    			GUI.log("- Number of Total Time to Extiguish Fires: " + aircraftMetricsStats.getTotalTimeToExtinguishFiresByThisAircraft() + "\n");
-	    			GUI.log("- Number of Total Time to Water Refills: " + aircraftMetricsStats.getTotalTimeToWaterRefillsByThisAircraft() + "\n");
-	    			GUI.log("- Number of Total Time in Travels: " + aircraftMetricsStats.getTotalTimeInTravelsByThisAircraft() + "\n");
+	    			GUI.log("- Number of Total Time to Attend Fires: " + (double) aircraftMetricsStats.getTotalTimeToAttendFiresByThisAircraft()/1000 + "s\n");
+	    			GUI.log("- Number of Total Time to Extiguish Fires: " + (double) aircraftMetricsStats.getTotalTimeToExtinguishFiresByThisAircraft()/1000 + "s\n");
+	    			GUI.log("- Number of Total Time to Water Refills: " + (double) aircraftMetricsStats.getTotalTimeToWaterRefillsByThisAircraft()/1000 + "s\n");
+	    			GUI.log("- Number of Total Time in Travels: " + (double) aircraftMetricsStats.getTotalTimeInTravelsByThisAircraft()/1000 + "s\n");
 	    			GUI.log("\n");
 	    			GUI.log("- Number of Total Fire Alerts Received: " + aircraftMetricsStats.getNumTotalFireAlertMessagesReceivedByThisAircraft() + "\n");
 	    			GUI.log("- Number of Total Proposals Sent: " + aircraftMetricsStats.getNumTotalMessagesSentByThisAircraft() + "\n");

@@ -519,6 +519,7 @@ public class WorldAgent extends Agent {
 	 * Shuts JADE down
 	 */
 	public void shutDown() {
+		
 		ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
         Codec codec = new SLCodec();
         this.getContentManager().registerLanguage(codec);
@@ -529,7 +530,7 @@ public class WorldAgent extends Agent {
         try {
 			this.getContentManager().fillContent(shutdownMessage,new Action(this.getAID(), new ShutdownPlatform()));
 		} catch (CodecException | OntologyException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
         this.send(shutdownMessage);
 	}

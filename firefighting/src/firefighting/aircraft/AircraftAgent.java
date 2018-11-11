@@ -430,7 +430,7 @@ public class AircraftAgent extends Agent {
 					Thread.sleep(2000);
 				}
 				catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				
 				this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
@@ -447,7 +447,7 @@ public class AircraftAgent extends Agent {
 					Thread.sleep(1000);
 				}
 				catch (InterruptedException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				
 				// Water decrement
@@ -643,7 +643,7 @@ public class AircraftAgent extends Agent {
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			
 			if(this.worldAgent.getWorldMap()[(int)pathToNearestWaterResource.get(i).getX()][(int)pathToNearestWaterResource.get(i).getY()] == null)
@@ -661,7 +661,7 @@ public class AircraftAgent extends Agent {
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			
 			this.increaseWaterQuantity();
