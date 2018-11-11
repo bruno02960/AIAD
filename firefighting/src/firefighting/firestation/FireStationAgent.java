@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.Vector;
 
 import firefighting.firestation.behaviours.DetectFiresBehaviour;
-import firefighting.firestation.behaviours.HelloAircraftBehaviour;
 import firefighting.firestation.messages.AlarmFireMessage;
 import firefighting.nature.Fire;
 import firefighting.world.*;
