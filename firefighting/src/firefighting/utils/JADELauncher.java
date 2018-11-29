@@ -12,6 +12,7 @@ package firefighting.utils;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Random;
 
 import firefighting.ui.GUI;
@@ -43,9 +44,10 @@ public class JADELauncher {
     static WorldAgent worldAgent;
     
     // Main method
-	public static void main(String[] args) throws ControllerException {
-		// GUI related stuff
+	public static void main(String[] args) throws ControllerException, IOException {
+		new Logger();
 		
+		// GUI related stuff
 		welcomeScreen = new WelcomeScreen();
 		welcomeScreen.getFrame().setVisible(true);
 		welcomeScreen.getBtnGo().addActionListener(new ActionListener() {
@@ -89,8 +91,5 @@ public class JADELauncher {
 				}
 		    }
 		});
-		
-		
-		
 	}
 }

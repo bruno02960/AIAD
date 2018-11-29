@@ -9,6 +9,7 @@ import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
 import firefighting.utils.Config;
 import firefighting.utils.JADELauncher;
+import firefighting.utils.Logger;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
 import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
 import firefighting.world.behaviours.PrintStatusBehaviour;
@@ -111,12 +112,17 @@ public class WorldAgent extends Agent {
 	
 	private  ActionListener actionListener;
 	
+	private long init_time;
+	
 	
 	//Constructors:
 	/**
 	 * 
 	 */
 	public WorldAgent(byte seasonTypeID, byte windTypeID) {
+		init_time = System.currentTimeMillis();
+		System.out.println(init_time);
+		
 		this.actionListener = actionListener;
 		
 		// Sets the type of season
@@ -523,7 +529,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * Shuts JADE down
 	 */
-	public void shutDown() {
+	/*public void shutDown() {
 
 		ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
         Codec codec = new SLCodec();
@@ -538,5 +544,16 @@ public class WorldAgent extends Agent {
 			//e.printStackTrace();
 		}
         this.send(shutdownMessage);
+	}*/
+	
+	public void shutDown() {
+		long end_time = System.currentTimeMillis();
+		System.out.println(end_time);
+		long execution_time = end_time - init_time;
+		
+		Logger.appendConfigValues(execution_time);
+		Logger.closeStream();
+		
+		System.exit(0);
 	}
 }
