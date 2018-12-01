@@ -68,9 +68,6 @@ public class JADELauncher {
         Config.NUM_MAX_FIRES = random.nextInt(10) + 1;
         
 		worldAgent = new WorldAgent(seasonTypeID, windTypeID);
-
-		gui = new GUI(worldAgent);
-		gui.getFrame().setVisible(true);
 		
 		Runtime rt = Runtime.instance();
 		

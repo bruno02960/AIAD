@@ -121,8 +121,8 @@ public class WorldAgent extends Agent {
 	 */
 	public WorldAgent(byte seasonTypeID, byte windTypeID) {
 		init_time = System.currentTimeMillis();
-		System.out.println(init_time);
 		
+		/* TODO: What's this line code doing?*/
 		this.actionListener = actionListener;
 		
 		// Sets the type of season
@@ -548,7 +548,6 @@ public class WorldAgent extends Agent {
 	
 	public void shutDown() {
 		long end_time = System.currentTimeMillis();
-		System.out.println(end_time);
 		long execution_time = end_time - init_time;
 		
 		Logger.appendConfigValues(execution_time);
