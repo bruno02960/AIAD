@@ -95,17 +95,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="11" language="java" name="firefighting.firestation.behaviours.HelloAircraftBehaviour" 
-    project="firefighting" file="/firefighting/src/firefighting/firestation/behaviours/HelloAircraftBehaviour.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="925" y="638"/>    
-    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="false">      
-      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="12" language="java" name="firefighting.aircraft.AircraftAgent" project="firefighting" 
+  <class id="11" language="java" name="firefighting.aircraft.AircraftAgent" project="firefighting" 
     file="/firefighting/src/firefighting/aircraft/AircraftAgent.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1144" y="588"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -114,7 +104,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="firefighting.world.behaviours.PrintStatusBehaviour" project="firefighting" 
+  <class id="12" language="java" name="firefighting.world.behaviours.PrintStatusBehaviour" project="firefighting" 
     file="/firefighting/src/firefighting/world/behaviours/PrintStatusBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1255" y="589"/>    
@@ -124,7 +114,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="firefighting.world.behaviours.GenerateFiresBehaviour" project="firefighting" 
+  <class id="13" language="java" name="firefighting.world.behaviours.GenerateFiresBehaviour" project="firefighting" 
     file="/firefighting/src/firefighting/world/behaviours/GenerateFiresBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="922" y="422"/>    
@@ -134,7 +124,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="firefighting.firestation.FireStationAgent" project="firefighting" 
+  <class id="14" language="java" name="firefighting.firestation.FireStationAgent" project="firefighting" 
     file="/firefighting/src/firefighting/firestation/FireStationAgent.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1517" y="501"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -143,7 +133,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="firefighting.world.WorldObject" project="firefighting" 
+  <class id="15" language="java" name="firefighting.world.WorldObject" project="firefighting" 
     file="/firefighting/src/firefighting/world/WorldObject.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1169" y="376"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -152,7 +142,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="firefighting.nature.Fire" project="firefighting" 
+  <class id="16" language="java" name="firefighting.nature.Fire" project="firefighting" 
     file="/firefighting/src/firefighting/nature/Fire.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="893" y="595"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -161,7 +151,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="firefighting.ui.GUI" project="firefighting" 
+  <class id="17" language="java" name="firefighting.ui.GUI" project="firefighting" 
     file="/firefighting/src/firefighting/ui/GUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1707" y="421"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -170,7 +160,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="19" language="java" name="firefighting.world.WorldAgent" project="firefighting" 
+  <class id="18" language="java" name="firefighting.world.WorldAgent" project="firefighting" 
     file="/firefighting/src/firefighting/world/WorldAgent.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="36" width="79" x="1292" y="446"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -179,7 +169,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="20" language="java" name="firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour" 
+  <class id="19" language="java" name="firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour" 
     project="firefighting" 
     file="/firefighting/src/firefighting/world/behaviours/IncreaseActiveFiresIntensityBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -190,7 +180,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="21" language="java" name="firefighting.firestation.behaviours.DetectFiresBehaviour" project="firefighting" 
+  <class id="20" language="java" name="firefighting.firestation.behaviours.DetectFiresBehaviour" project="firefighting" 
     file="/firefighting/src/firefighting/firestation/behaviours/DetectFiresBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1668" y="558"/>    
@@ -200,7 +190,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="22" language="java" name="firefighting.world.behaviours.RainingBehaviour" project="firefighting" 
+  <class id="21" language="java" name="firefighting.world.behaviours.RainingBehaviour" project="firefighting" 
     file="/firefighting/src/firefighting/world/behaviours/RainingBehaviour.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1482" y="375"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -209,7 +199,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="23" language="java" name="firefighting.firestation.behaviours.AlarmAircraftsAboutFiresBehaviour" 
+  <class id="22" language="java" name="firefighting.firestation.behaviours.AlarmAircraftsAboutFiresBehaviour" 
     project="firefighting" 
     file="/firefighting/src/firefighting/firestation/behaviours/AlarmAircraftsAboutFiresBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -220,7 +210,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="24" language="java" name="firefighting.world.utils.environment.WindType" project="firefighting" 
+  <enumeration id="23" language="java" name="firefighting.world.utils.environment.WindType" project="firefighting" 
     file="/firefighting/src/firefighting/world/utils/environment/WindType.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1463" y="639"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -229,7 +219,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="25" language="java" name="firefighting.world.behaviours.WeatherConditionsBehaviour" project="firefighting" 
+  <class id="24" language="java" name="firefighting.world.behaviours.WeatherConditionsBehaviour" project="firefighting" 
     file="/firefighting/src/firefighting/world/behaviours/WeatherConditionsBehaviour.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1654" y="375"/>    
@@ -239,7 +229,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="26" language="java" name="firefighting.utils.AircraftMetricsStats" project="firefighting" 
+  <class id="25" language="java" name="firefighting.utils.AircraftMetricsStats" project="firefighting" 
     file="/firefighting/src/firefighting/utils/AircraftMetricsStats.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1604" y="638"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -248,7 +238,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="27" language="java" name="firefighting.utils.Config" project="firefighting" 
+  <class id="26" language="java" name="firefighting.utils.Config" project="firefighting" 
     file="/firefighting/src/firefighting/utils/Config.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1706" y="638"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
@@ -257,381 +247,381 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <association id="28">    
-    <bendpoint x="1265" y="527"/>    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="29" name="aircraftAgents">        
+  <association id="27">    
+    <bendpoint x="1253" y="520"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="28" name="fires">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="30" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="31">    
-    <bendpoint x="1593" y="513"/>    
-    <bendpoint x="1581" y="476"/>    
-    <bendpoint x="1408" y="479"/>    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="32" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="33" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="34">    
-    <bendpoint x="1327" y="530"/>    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="35" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="36" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="37">    
-    <bendpoint x="1085" y="440"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="38" name="worldObject">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="39" minimum="0" maximum="1">        
+      <multiplicity id="29" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <association id="40">    
-    <bendpoint x="1517" y="411"/>    
-    <bendpoint x="1377" y="411"/>    
-    <end type="SOURCE" refId="25" navigable="false">      
-      <attribute id="41" name="worldAgent">        
+  <association id="30">    
+    <bendpoint x="1418" y="430"/>    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="31" name="worldAgent">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="42" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="43">    
-    <bendpoint x="1157" y="492"/>    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="44" name="worldObject">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="45" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="46">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="47" name="worldObjectType">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="48" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="49">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="50" name="gui">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="51" minimum="0" maximum="1">        
+      <multiplicity id="32" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <association id="52">    
-    <bendpoint x="1253" y="520"/>    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="53" name="fires">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="54" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="55">    
-    <bendpoint x="1411" y="551"/>    
-    <bendpoint x="1513" y="551"/>    
-    <bendpoint x="1513" y="602"/>    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="56" name="windType">        
-        <position height="0" width="0" x="22" y="95"/>      
-      </attribute>      
-      <multiplicity id="57" minimum="0" maximum="1">        
-        <position height="0" width="0" x="22" y="95"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="58">    
-    <bendpoint x="1517" y="442"/>    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="59" name="fireStationAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="60" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="61">    
-    <bendpoint x="1418" y="430"/>    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="62" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="63" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="64">    
-    <bendpoint x="1254" y="435"/>    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="65" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="66" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="67">    
-    <bendpoint x="1152" y="517"/>    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="68" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="69" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="70">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="71" name="aircraftAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="72" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="73">    
-    <bendpoint x="1135" y="435"/>    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="74" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="75" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="76">    
-    <bendpoint x="1291" y="534"/>    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="77" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="78" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="79">    
-    <bendpoint x="1413" y="506"/>    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="80" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="81" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="82">    
-    <bendpoint x="1332" y="412"/>    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="83" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="84" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="85">    
-    <bendpoint x="1046" y="589"/>    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="86" name="worldObject">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="87" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="88">    
-    <bendpoint x="1004" y="612"/>    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="89" name="currentAttendindFire">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="90" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="91">    
-    <bendpoint x="1452" y="419"/>    
-    <bendpoint x="1197" y="419"/>    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="92" name="worldObject">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="93" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="94">    
-    <bendpoint x="1170" y="485"/>    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="95" name="seasonType">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="96" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="97">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="98" name="associatedFire">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="99" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="100">    
-    <bendpoint x="1336" y="553"/>    
-    <bendpoint x="1354" y="512"/>    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="101" name="worldAgent">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="102" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="103">    
-    <bendpoint x="1559" y="459"/>    
+  <association id="33">    
     <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="104" name="worldAgent">        
+      <attribute id="34" name="welcomeScreen">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="105" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="false" multiplicity="false"/>  
-  </association>  
-  <association id="106">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="107" name="welcomeScreen">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="108" minimum="0" maximum="1">        
+      <multiplicity id="35" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <association id="109">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="110" name="fireStationAgent">        
+  <association id="36">    
+    <bendpoint x="1411" y="551"/>    
+    <bendpoint x="1513" y="551"/>    
+    <bendpoint x="1513" y="602"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="37" name="windType">        
+        <position height="0" width="0" x="22" y="95"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="1">        
+        <position height="0" width="0" x="22" y="95"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="39">    
+    <bendpoint x="1254" y="435"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="40" name="worldAgent">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="111" minimum="0" maximum="1">        
+      <multiplicity id="41" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="42">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="43" name="worldObjectType">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="44" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="45">    
+    <bendpoint x="1152" y="517"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="46" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="47" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="48">    
+    <bendpoint x="1559" y="459"/>    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="49" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="50" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="51">    
+    <bendpoint x="1135" y="435"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="52" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="53" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="54">    
+    <bendpoint x="1085" y="440"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="55" name="worldObject">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="56" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
-  <association id="112">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="113" name="waterResources">        
+  <association id="57">    
+    <bendpoint x="1332" y="412"/>    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="58" name="worldAgent">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="114" minimum="0" maximum="2147483647">        
+      <multiplicity id="59" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="60">    
+    <bendpoint x="1004" y="612"/>    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="61" name="currentAttendindFire">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="62" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="63">    
+    <bendpoint x="1517" y="411"/>    
+    <bendpoint x="1377" y="411"/>    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="64" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="65" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="67" name="aircraftAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="68" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="69">    
+    <bendpoint x="1517" y="442"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="70" name="fireStationAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="71" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="72">    
+    <bendpoint x="1046" y="589"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="73" name="worldObject">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="74" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="75">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="76" name="waterResources">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="77" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="78">    
+    <bendpoint x="1336" y="553"/>    
+    <bendpoint x="1354" y="512"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="79" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="80" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="81">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="82" name="associatedFire">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="83" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="84">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="85" name="fireStationAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="86" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="87">    
+    <bendpoint x="1593" y="513"/>    
+    <bendpoint x="1581" y="476"/>    
+    <bendpoint x="1408" y="479"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="88" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="89" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="90">    
+    <bendpoint x="1265" y="527"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="91" name="aircraftAgents">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="92" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="93">    
+    <bendpoint x="1157" y="492"/>    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="94" name="worldObject">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="95" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="96">    
+    <bendpoint x="1170" y="485"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="97" name="seasonType">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="98" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="99">    
+    <bendpoint x="1452" y="419"/>    
+    <bendpoint x="1197" y="419"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="100" name="worldObject">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="101" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="102">    
+    <bendpoint x="1327" y="530"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="103" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="104" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="105">    
+    <bendpoint x="1413" y="506"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="106" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="107" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="108">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="109" name="gui">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="110" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="111">    
+    <bendpoint x="1291" y="534"/>    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="112" name="worldAgent">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="113" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="false" multiplicity="false"/>  
   </association>  
   <classifier-display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
