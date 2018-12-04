@@ -7,12 +7,14 @@ import firefighting.aircraft.AircraftAgent;
 import firefighting.firestation.FireStationAgent;
 import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
+import firefighting.utils.AircraftMetricsStats;
 import firefighting.utils.Config;
 import firefighting.utils.JADELauncher;
 import firefighting.utils.Logger;
+import firefighting.utils.WorldMetricsStats;
 import firefighting.world.behaviours.GenerateFiresBehaviour;
 import firefighting.world.behaviours.IncreaseActiveFiresIntensityBehaviour;
-import firefighting.world.behaviours.PrintStatusBehaviour;
+import firefighting.world.behaviours.UpdateStatusBehaviour;
 import firefighting.world.behaviours.WeatherConditionsBehaviour;
 import firefighting.world.utils.WorldObjectType;
 import firefighting.world.utils.environment.SeasonType;
@@ -114,6 +116,8 @@ public class WorldAgent extends Agent {
 	
 	private long init_time;
 	
+	private WorldMetricsStats worldMetricsStats;
+	
 	
 	//Constructors:
 	/**
@@ -125,93 +129,13 @@ public class WorldAgent extends Agent {
 		/* TODO: What's this line code doing?*/
 		this.actionListener = actionListener;
 		
-		// Sets the type of season
-		SeasonType seasonType;
-		
-		switch(seasonTypeID) {
-			// SPRING SEASON
-			case 0:
-				seasonType = SeasonType.SPRING;
-				break;
-			// SUMMER SEASON
-			case 1:
-				seasonType = SeasonType.SUMMER;
-				break;
-			// AUTUMN SEASON
-			case 2:
-				seasonType = SeasonType.AUTUMN;
-				break;
-			// WINTER SEASON
-			case 3:
-				seasonType = SeasonType.WINTER;
-				break;
-			default:
-				seasonType = null;
-				break;
-		}
-		
-		// Sets the type of wind
-		WindType windType;
-		
-		switch(windTypeID) {
-			// NO WIND
-			case 0:
-				windType = WindType.NO_WIND;
-				break;
-			// WEAK WIND
-			case 1:
-				windType = WindType.WEAK_WIND;
-				break;
-			// NORMAL WIND
-			case 2:
-				windType = WindType.NORMAL_WIND;
-				break;
-			// STRONG WIND
-			case 3:
-				windType = WindType.STRONG_WIND;
-				break;
-			default:
-				windType = null;
-				break;
-		}
-		
-		// Sets all the world's environment conditions
-		WorldAgent.seasonType = seasonType;
-		WorldAgent.windType = windType; // TODO: REVER
-		
-		Random randomObject = new Random();
-		
-		// Verifies the current season type first. If the current season type defined previously was the summer,
-		// generates a random boolean value (true or false) to keep the information that allows to know
-		// if, at some moment, can occur droughts (extreme dry situations), that will affect the global behaviour
-		// of the world and its weather conditions
-		if(this.getSeasonType().getID() == SeasonType.SUMMER.getID())
-			WorldAgent.droughtSituation = randomObject.nextBoolean();
-		else
-			WorldAgent.droughtSituation = false;
-		
-		if(this.canOccurDroughtSituations()) {
-			float bound1 = randomObject.nextFloat();
-			float bound2 = randomObject.nextFloat();
-			
-			if(bound1 != bound2) {
-				float max = bound2 > bound1 ? bound2 : bound1;
-				float min = bound2 < bound1 ? bound2 : bound1;
-				
-				WorldAgent.droughtSituationProbabilityInterval = new float[]{min,max};
-			}
-			else
-				WorldAgent.droughtSituationProbabilityInterval = new float[]{bound1,bound2};
-		}
-		else
-			// Never occurs droughts (extreme dry situations)
-			WorldAgent.droughtSituationProbabilityInterval = new float[]{0.0f,0.0f};
-		
 		// Creation of world's elements
 		this.createWorld();
 		this.createFireStationAgent();
 		this.generateWaterResources();
 		this.generateAicraftAgents();
+		
+		this.worldMetricsStats = new WorldMetricsStats();
 	}
 	
 	
@@ -510,9 +434,7 @@ public class WorldAgent extends Agent {
 	public void setup() {
 		
 		this.addBehaviour(new GenerateFiresBehaviour(this, 8000));
-		this.addBehaviour(new PrintStatusBehaviour(this, 1000));
-		//this.addBehaviour(new IncreaseActiveFiresIntensityBehaviour(this, 20000));
-		//this.addBehaviour(new WeatherConditionsBehaviour(this));
+		this.addBehaviour(new UpdateStatusBehaviour(this, 1000));
 	}
 	
 	
@@ -523,6 +445,11 @@ public class WorldAgent extends Agent {
 	 */
 	public  Object[][] getWorldMap() {
 		return worldMap;
+	}
+	
+	
+	public WorldMetricsStats getWorldMetricsStats() {
+		return this.worldMetricsStats;	
 	}
 
 
@@ -553,6 +480,6 @@ public class WorldAgent extends Agent {
 		Logger.appendConfigValues(execution_time);
 		Logger.closeStream();
 		
-		System.exit(0);
+		return;
 	}
 }

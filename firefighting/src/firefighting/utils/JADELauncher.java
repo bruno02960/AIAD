@@ -30,7 +30,7 @@ import jade.wrapper.StaleProxyException;
  */
 public class JADELauncher {	
 	/* Manual or random configuration */
-	static boolean batch_run = false;
+	static boolean batch_run = true;
 	
 	static Random random = new Random();
 
@@ -50,22 +50,25 @@ public class JADELauncher {
 	public static void main(String[] args) throws ControllerException, IOException {
 		new Logger();
 		
+		gui = new GUI();
+		
 		if(batch_run) {
-			normalRun();
+			for(int i = 0; i < 2; i++) {
+				batchRun();
+				//clearRun();
+			}
 		}
 		else {
-			batchRun();
+			normalRun();
 		}
 	}
 
+	private static void clearRun() {
+		worldAgent = null;
+	}
+	
 	private static void batchRun() {
 		Random random = new Random();
-		
-        Config.GRID_HEIGHT = random.nextInt(10) + 1;
-        Config.GRID_WIDTH = random.nextInt(10) + 1;
-        Config.NUM_MAX_WATER_RESOURCES = random.nextInt(10) + 1;
-        Config.NUM_MAX_AIRCRAFTS = random.nextInt(10) + 1;
-        Config.NUM_MAX_FIRES = random.nextInt(10) + 1;
         
 		worldAgent = new WorldAgent(seasonTypeID, windTypeID);
 		

@@ -63,7 +63,7 @@ public final class Logger {
 	}
 	
 	public static void closeStream() {
-        pw.write(sb.toString());
+        pw.append(sb.toString());
         pw.close();
 	}
 }

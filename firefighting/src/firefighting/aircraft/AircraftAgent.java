@@ -319,21 +319,37 @@ public class AircraftAgent extends Agent {
 		
 		//verify if has enough water
 		addBehaviour(new DetectEnoughWaterQty(this, 1000));
-				
-		GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
-		//System.out.println("Agent responder " + getLocalName() + " waiting for CFP Messages...");
+			
+		if(GUI.isActive()) {
+			GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
+		}
+		else {
+			System.out.print("Agent responder " + getLocalName() + " waiting for CFP Messages...");
+		}
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),
 				MessageTemplate.MatchPerformative(ACLMessage.CFP) );
 
 		addBehaviour(new ContractNetResponder(this, template) {
 			protected ACLMessage prepareResponse(ACLMessage cfp) throws NotUnderstoodException, RefuseException {
-				GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
+				
+				if(GUI.isActive()) {
+					GUI.log("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
+				}
+				else {
+					System.out.print("Agent "+getLocalName()+": CFP received from "+cfp.getSender().getName()+". Action is "+cfp.getContent() + "\n");
+				}
 				int proposal = evaluateAction(cfp.getContent());
 				
 				if (!attendindFire && proposal < Integer.MAX_VALUE) {
 					// We provide a proposal
-					GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
+					
+					if(GUI.isActive()) {
+						GUI.log("Agent "+getLocalName()+": Proposing "+proposal + "\n");
+					}
+					else {
+						System.out.print("Agent "+getLocalName()+": Proposing "+proposal + "\n");
+					}
 					ACLMessage propose = cfp.createReply();
 					propose.setPerformative(ACLMessage.PROPOSE);
 					propose.setContent(String.valueOf(proposal));
@@ -344,31 +360,55 @@ public class AircraftAgent extends Agent {
 				}
 				else {
 					// We refuse to provide a proposal
-					GUI.log("Agent "+getLocalName()+": Refuse");
-					System.out.println("Agent "+getLocalName()+": Refuse");
+					if(GUI.isActive()) {
+						GUI.log("Agent "+getLocalName()+": Refuse\n");
+					}
+					else {
+						System.out.print("Agent "+getLocalName()+": Refuse\n");
+					}
 					throw new RefuseException("evaluation-failed");
 				}
 			}
 
 			protected ACLMessage prepareResultNotification(ACLMessage cfp, ACLMessage propose,ACLMessage accept) throws FailureException {
-				GUI.log("Agent "+getLocalName()+": Proposal accepted\n");
+				if(GUI.isActive()) {
+					GUI.log("Agent "+getLocalName()+": Proposal accepted\n");
+				}
+				else {
+					System.out.print("Agent "+getLocalName()+": Proposal accepted\n");
+				}
 				attendindFire = true;
 	
 				if (performAction()) {
-					GUI.log("Agent "+getLocalName()+": Action successfully performed\n");
+					if(GUI.isActive()) {
+						GUI.log("Agent "+getLocalName()+": Action successfully performed\n");
+					}
+					else {
+						System.out.print("Agent "+getLocalName()+": Action successfully performed\n");
+					}
 					ACLMessage inform = accept.createReply();
 					inform.setPerformative(ACLMessage.INFORM);
 				
 					return inform;
 				}
 				else {
-					GUI.log("Agent "+getLocalName()+": Action execution failed\n");
+					if(GUI.isActive()) {
+						GUI.log("Agent "+getLocalName()+": Action execution failed\n");
+					}
+					else {
+						System.out.print("Agent "+getLocalName()+": Action execution failed\n");
+					}
 					throw new FailureException("unexpected-error");
 				}	
 			}
 
 			protected void handleRejectProposal(ACLMessage reject) {
-				GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
+				if(GUI.isActive()) {
+					GUI.log("Agent "+getLocalName()+": Proposal rejected\n");
+				}
+				else {
+					System.out.print("Agent "+getLocalName()+": Proposal rejected\n");
+				}
 			}
 		} );
 	}

@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 
 public class GUI {
+	
+	private static boolean active;
 
 	private static WorldAgent worldAgent;
 	private JFrame mainFrame;
@@ -35,6 +37,10 @@ public class GUI {
     private JPanel panel_3;
     private JPanel panel_4;
 
+    public GUI() {
+    	active = false;
+    }
+    
 	/**
 	 * Creates the graphic user interface
 	 * @param worldAgent the world agent
@@ -222,6 +228,10 @@ public class GUI {
 	 */
 	public JFrame getFrame() {
 		return mainFrame;
+	}
+
+	public static boolean isActive() {
+		return active;
 	}
 	
 	

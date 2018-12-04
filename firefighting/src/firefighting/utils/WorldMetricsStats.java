@@ -470,4 +470,8 @@ public class WorldMetricsStats {
 	public void incNumWaterResourcesCapacityDecreasedByDroughtSituationOccurences() {
 		this.numWaterResourcesCapacityDecreasedByDroughtSituationOccurences++;
 	}
+
+	public void setNumTotalFiresExtinguishedByAllAircrafts(int numTotalFiresExtinguishedByAllAircrafts) {
+		this.numTotalFiresExtinguishedByAllAircrafts = numTotalFiresExtinguishedByAllAircrafts;
+	}
 }

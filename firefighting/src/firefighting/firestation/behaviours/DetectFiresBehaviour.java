@@ -55,7 +55,12 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 					// The behaviour's reaction is only valid if the Fire is active and not attended by some Aircraft Agent yet
 					if(fires.get(i).isActive() && !fires.get(i).isAttended()) {
 						
-						GUI.log("Fire!! on index position: "+i + "\n");
+						if(GUI.isActive()) {
+							GUI.log("Fire!! on index position: "+i + "\n");
+						}
+						else {
+							System.out.println("Fire!! on index position: "+i + "\n");
+						}
 						
 						System.out.println("There are " + fires.size() + " fires and this is the fire on POS"+ fires.get(i).getWorldObject().getPos());
 						
