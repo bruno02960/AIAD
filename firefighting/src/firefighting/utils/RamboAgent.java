@@ -47,6 +47,7 @@ public class RamboAgent extends Agent {
 					for(int i = 0; i < aircrafts.length; i++) {
 						
 						for(Thread sleepingThread : aircrafts[i].getSleepingThreads().values()) {
+							System.err.println("Interrupting thread = \"" + sleepingThread.getName() +  "!");
 							sleepingThread.interrupt();
 						}
 					}

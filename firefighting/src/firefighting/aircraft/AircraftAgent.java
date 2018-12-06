@@ -476,10 +476,8 @@ public class AircraftAgent extends Agent {
 			// Simulate action execution by generating a random number
 			for(int i = 0; i < this.auxPath.size(); i++) {
 				try {
-					Thread thread = new Thread();
-					this.sleepingThreads.put(thread.getId(), thread);
-					thread.sleep(2000);
-					thread.interrupt();
+					this.sleepingThreads.put(Thread.currentThread().getId(), Thread.currentThread());
+					Thread.sleep(2000);
 				}
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -496,10 +494,8 @@ public class AircraftAgent extends Agent {
 			
 			while(this.waterTankQuantity > 0) {
 				try {
-					Thread thread = new Thread();
-					this.sleepingThreads.put(thread.getId(), thread);
-					thread.sleep(1000);
-					thread.interrupt();
+					this.sleepingThreads.put(Thread.currentThread().getId(), Thread.currentThread());
+					Thread.sleep(1000);
 				}
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -697,10 +693,8 @@ public class AircraftAgent extends Agent {
 		for(int i = 0; i < pathToNearestWaterResource.size(); i++) {
 			
 			try {
-				Thread thread = new Thread();
-				this.sleepingThreads.put(thread.getId(), thread);
-				thread.sleep(1000);
-				thread.interrupt();
+				this.sleepingThreads.put(Thread.currentThread().getId(), Thread.currentThread());
+				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
 				//e.printStackTrace();
@@ -718,10 +712,8 @@ public class AircraftAgent extends Agent {
 		
 		while(!this.haveFullWaterTank()) {
 			try {
-				Thread thread = new Thread();
-				this.sleepingThreads.put(thread.getId(), thread);
-				thread.sleep(1000);
-				thread.interrupt();
+				this.sleepingThreads.put(Thread.currentThread().getId(), Thread.currentThread());
+				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
 				//e.printStackTrace();
