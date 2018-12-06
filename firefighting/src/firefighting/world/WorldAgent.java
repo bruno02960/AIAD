@@ -33,6 +33,7 @@ import jade.domain.FIPANames;
 import jade.domain.JADEAgentManagement.JADEManagementOntology;
 import jade.domain.JADEAgentManagement.ShutdownPlatform;
 import jade.lang.acl.ACLMessage;
+import jade.wrapper.StaleProxyException;
 
 /**
  * Class responsible for managing, updating and printing the world status.
@@ -123,7 +124,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * 
 	 */
-	public WorldAgent(byte seasonTypeID, byte windTypeID) {
+	public WorldAgent() {
 		init_time = System.currentTimeMillis();
 		
 		/* TODO: What's this line code doing?*/
@@ -457,8 +458,10 @@ public class WorldAgent extends Agent {
 	 * Shuts JADE down
 	 */
 	/*public void shutDown() {
-
-		ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
+	}*/
+	
+	public void shutDown() {		
+		/*ACLMessage shutdownMessage = new ACLMessage(ACLMessage.REQUEST);
         Codec codec = new SLCodec();
         this.getContentManager().registerLanguage(codec);
         this.getContentManager().registerOntology(JADEManagementOntology.getInstance());
@@ -470,16 +473,15 @@ public class WorldAgent extends Agent {
 		} catch (CodecException | OntologyException e) {
 			//e.printStackTrace();
 		}
-        this.send(shutdownMessage);
-	}*/
-	
-	public void shutDown() {
+        this.send(shutdownMessage);*/
+		
 		long end_time = System.currentTimeMillis();
 		long execution_time = end_time - init_time;
 		
 		Logger.appendConfigValues(execution_time);
-		Logger.closeStream();
 		
-		return;
+		System.out.println("Run no. " + JADELauncher.NUMBER_OF_RUNS + " finished.");
+		
+		JADELauncher.prepareRun();
 	}
 }

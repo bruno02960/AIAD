@@ -31,21 +31,20 @@ import jade.wrapper.StaleProxyException;
 public class JADELauncher {	
 	/* Manual or random configuration */
 	static boolean batch_run = true;
-	
+	public static int NUMBER_OF_RUNS = 5;	
 	static Random random = new Random();
 
 	// GUI related stuff
 	static GUI gui;
 	static WelcomeScreen welcomeScreen;
 	
+	// Containers
+	public static ContainerController ramboContainer;
+	
 	// Setting global world's environment conditions
 	static byte seasonTypeID = (byte) random.nextInt(Config.NUM_SEASONS);
 	static byte windTypeID = (byte) random.nextInt(Config.NUM_TYPE_WINDS);	
-	
-	
-	// Creation of the world agent
-    static WorldAgent worldAgent;
-    
+	    
     // Main method
 	public static void main(String[] args) throws ControllerException, IOException {
 		new Logger();
@@ -53,51 +52,34 @@ public class JADELauncher {
 		gui = new GUI();
 		
 		if(batch_run) {
-			for(int i = 0; i < 2; i++) {
-				batchRun();
-				//clearRun();
-			}
+			batchRun();
 		}
 		else {
-			normalRun();
+			//normalRun();
 		}
 	}
-
-	private static void clearRun() {
-		worldAgent = null;
+	
+	public static void prepareRun() {
+		
+		batchRun();
 	}
 	
-	private static void batchRun() {
-		Random random = new Random();
-        
-		worldAgent = new WorldAgent(seasonTypeID, windTypeID);
+	public static void batchRun() {
+		if(NUMBER_OF_RUNS == 0) {
+			Logger.closeStream();
+			System.exit(0);
+		}
+		else {
+			NUMBER_OF_RUNS--;
+		}
+
 		
 		Runtime rt = Runtime.instance();
-		
 		Profile profile = new ProfileImpl();
-		ContainerController mainContainer = rt.createMainContainer(profile);
-		
-		try {
-			mainContainer.acceptNewAgent("WorldAgent", worldAgent);
-			mainContainer.getAgent("WorldAgent").start();
-			
-			mainContainer.acceptNewAgent("FireStation", worldAgent.getFireStationAgent());
-			mainContainer.getAgent("FireStation").start();
-			
-			for(int i = 0; i < worldAgent.getNumAircraftsAgents(); i++) {
-				mainContainer.acceptNewAgent("AircraftAgent" + i, worldAgent.getAircraftAgents()[i]);
-				mainContainer.getAgent(worldAgent.getAircraftAgents()[i].getLocalName()).start();
-			}
-		}
-		catch (StaleProxyException e1) {
-			e1.printStackTrace();
-		} catch (ControllerException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		ramboContainer = rt.createAgentContainer(profile);
 	};
 	
-	private static void normalRun() {
+	/*private static void normalRun() {
 		// GUI related stuff
 		welcomeScreen = new WelcomeScreen();
 		welcomeScreen.getFrame().setVisible(true);
@@ -112,7 +94,7 @@ public class JADELauncher {
 		        
 				welcomeScreen.getFrame().setVisible(false);
 				
-				worldAgent = new WorldAgent(seasonTypeID, windTypeID);
+				worldAgent = new WorldAgent();
 
 				gui = new GUI(worldAgent);
 				gui.getFrame().setVisible(true);
@@ -142,5 +124,5 @@ public class JADELauncher {
 				}
 		    }
 		});
-	}
+	}*/
 }

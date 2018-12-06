@@ -14,6 +14,8 @@ public final class Logger {
 		sb = new StringBuilder();
 		
 		if(!file.exists()) {
+			System.out.println("HERE");
+			
 			try {
 				file.createNewFile();
 			} catch (IOException e) {

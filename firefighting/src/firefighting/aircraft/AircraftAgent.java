@@ -324,7 +324,7 @@ public class AircraftAgent extends Agent {
 			GUI.log("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
 		}
 		else {
-			System.out.print("Agent responder " + getLocalName() + " waiting for CFP Messages...");
+			System.out.print("Agent responder " + getLocalName() + " waiting for CFP Messages...\n");
 		}
 		MessageTemplate template = MessageTemplate.and(
 				MessageTemplate.MatchProtocol(FIPANames.InteractionProtocol.FIPA_CONTRACT_NET),

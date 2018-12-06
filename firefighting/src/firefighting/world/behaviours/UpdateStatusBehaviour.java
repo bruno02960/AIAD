@@ -40,7 +40,7 @@ public class UpdateStatusBehaviour extends TickerBehaviour {
 		
 		this.worldAgent.getWorldMetricsStats().setNumTotalFiresExtinguishedByAllAircrafts(extinguishedFires);
 		
-		if(extinguishedFires == 2) {
+		if(extinguishedFires == 3) {
 			this.worldAgent.shutDown();
 			return;
 		}
