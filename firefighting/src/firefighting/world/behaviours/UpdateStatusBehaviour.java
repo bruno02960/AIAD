@@ -32,19 +32,6 @@ public class UpdateStatusBehaviour extends TickerBehaviour {
 	protected void onTick() {
 		this.worldAgent.refreshWorldMapPositions();
 		
-		int extinguishedFires = 0;
-		
-		for(int i = 0; i < this.worldAgent.getAircraftAgents().length; i++) {
-			extinguishedFires+=this.worldAgent.getAircraftAgents()[i].getAircraftMetricsStats().getNumTotalFiresExtinguishedByThisAircraft();
-		}
-		
-		this.worldAgent.getWorldMetricsStats().setNumTotalFiresExtinguishedByAllAircrafts(extinguishedFires);
-		
-		if(extinguishedFires == 3) {
-			this.worldAgent.shutDown();
-			return;
-		}
-		
 		if(GUI.isActive()) {
 			GUI.fillGrid();
 		}

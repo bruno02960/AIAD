@@ -31,15 +31,16 @@ import jade.wrapper.StaleProxyException;
 public class JADELauncher {	
 	/* Manual or random configuration */
 	static boolean batch_run = true;
-	public static int NUMBER_OF_RUNS = 5;	
+	public static int NUMBER_OF_RUNS = 9;	
 	static Random random = new Random();
 
 	// GUI related stuff
 	static GUI gui;
 	static WelcomeScreen welcomeScreen;
 	
-	// Containers
+	// Rambo
 	public static ContainerController ramboContainer;
+	public static RamboAgent ramboAgent;
 	
 	// Setting global world's environment conditions
 	static byte seasonTypeID = (byte) random.nextInt(Config.NUM_SEASONS);
@@ -60,23 +61,22 @@ public class JADELauncher {
 	}
 	
 	public static void prepareRun() {
-		
 		batchRun();
 	}
 	
-	public static void batchRun() {
-		if(NUMBER_OF_RUNS == 0) {
-			Logger.closeStream();
-			System.exit(0);
-		}
-		else {
-			NUMBER_OF_RUNS--;
-		}
-
-		
+	public static void batchRun() {		
 		Runtime rt = Runtime.instance();
 		Profile profile = new ProfileImpl();
-		ramboContainer = rt.createAgentContainer(profile);
+		ramboContainer = rt.createMainContainer(profile);
+		ramboAgent = new RamboAgent();
+		
+		try {
+			ramboContainer.acceptNewAgent("RamboAgent", ramboAgent);
+			ramboContainer.getAgent("RamboAgent").start();
+		} catch (ControllerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	};
 	
 	/*private static void normalRun() {

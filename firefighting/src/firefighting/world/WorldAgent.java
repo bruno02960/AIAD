@@ -115,8 +115,6 @@ public class WorldAgent extends Agent {
 	
 	private  ActionListener actionListener;
 	
-	private long init_time;
-	
 	private WorldMetricsStats worldMetricsStats;
 	
 	
@@ -125,7 +123,6 @@ public class WorldAgent extends Agent {
 	 * 
 	 */
 	public WorldAgent() {
-		init_time = System.currentTimeMillis();
 		
 		/* TODO: What's this line code doing?*/
 		this.actionListener = actionListener;
@@ -474,13 +471,6 @@ public class WorldAgent extends Agent {
 			//e.printStackTrace();
 		}
         this.send(shutdownMessage);*/
-		
-		long end_time = System.currentTimeMillis();
-		long execution_time = end_time - init_time;
-		
-		Logger.appendConfigValues(execution_time);
-		
-		System.out.println("Run no. " + JADELauncher.NUMBER_OF_RUNS + " finished.");
 		
 		JADELauncher.prepareRun();
 	}

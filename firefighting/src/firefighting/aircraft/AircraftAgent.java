@@ -13,8 +13,10 @@ package firefighting.aircraft;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -100,7 +102,7 @@ public class AircraftAgent extends Agent {
 	 * 
 	 * TODO
 	 */
-	private Fire currentAttendindFire ;
+	private Fire currentAttendindFire;
 
 	/**
 	 * The boolean value that keeps the information about if
@@ -118,6 +120,8 @@ public class AircraftAgent extends Agent {
 	 */
 	private AircraftMetricsStats aircraftMetricsStats;
 	
+
+	private Map<Long, Thread> sleepingThreads;
 	
 
 	// Constructors:
@@ -150,6 +154,8 @@ public class AircraftAgent extends Agent {
 		this.crashed = false;
 		
 		this.aircraftMetricsStats = new AircraftMetricsStats();
+
+		this.sleepingThreads = new ConcurrentHashMap<>();
 	}
 	
 	
@@ -460,6 +466,7 @@ public class AircraftAgent extends Agent {
 		return totalDistanceToMake;
 	}
 
+	@SuppressWarnings("static-access")
 	public boolean performAction() {
 		if(this.currentAttendindFire != null) {
 			this.currentAttendindFire.attended = true;
@@ -469,7 +476,10 @@ public class AircraftAgent extends Agent {
 			// Simulate action execution by generating a random number
 			for(int i = 0; i < this.auxPath.size(); i++) {
 				try {
-					Thread.sleep(2000);
+					Thread thread = new Thread();
+					this.sleepingThreads.put(thread.getId(), thread);
+					thread.sleep(2000);
+					thread.interrupt();
 				}
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -486,7 +496,10 @@ public class AircraftAgent extends Agent {
 			
 			while(this.waterTankQuantity > 0) {
 				try {
-					Thread.sleep(1000);
+					Thread thread = new Thread();
+					this.sleepingThreads.put(thread.getId(), thread);
+					thread.sleep(1000);
+					thread.interrupt();
 				}
 				catch (InterruptedException e) {
 					//e.printStackTrace();
@@ -684,7 +697,10 @@ public class AircraftAgent extends Agent {
 		for(int i = 0; i < pathToNearestWaterResource.size(); i++) {
 			
 			try {
-				Thread.sleep(1000);
+				Thread thread = new Thread();
+				this.sleepingThreads.put(thread.getId(), thread);
+				thread.sleep(1000);
+				thread.interrupt();
 			}
 			catch (InterruptedException e) {
 				//e.printStackTrace();
@@ -702,7 +718,10 @@ public class AircraftAgent extends Agent {
 		
 		while(!this.haveFullWaterTank()) {
 			try {
-				Thread.sleep(1000);
+				Thread thread = new Thread();
+				this.sleepingThreads.put(thread.getId(), thread);
+				thread.sleep(1000);
+				thread.interrupt();
 			}
 			catch (InterruptedException e) {
 				//e.printStackTrace();
@@ -715,5 +734,9 @@ public class AircraftAgent extends Agent {
 		this.aircraftMetricsStats.incTotalTimeInWaterRefillsByThisAircraft(startWaterRefillTime);
 		
 		this.attendindWater = false;
+	}
+	
+	public Map<Long, Thread> getSleepingThreads() {
+		return this.sleepingThreads;
 	}
 }
