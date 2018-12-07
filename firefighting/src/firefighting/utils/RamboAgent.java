@@ -1,5 +1,6 @@
 package firefighting.utils;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class RamboAgent extends Agent {
 				
 				worldAgent.getWorldMetricsStats().setNumTotalFiresExtinguishedByAllAircrafts(extinguishedFires);
 				
-				if(extinguishedFires == 3) {					
+				if(extinguishedFires >= 3) {					
 					long end_time = System.currentTimeMillis();
 					long execution_time = end_time - init_time;
 					
@@ -59,7 +60,12 @@ public class RamboAgent extends Agent {
 					System.out.println("Run no. " + JADELauncher.NUMBER_OF_RUNS + " finished.");
 
 					if(JADELauncher.NUMBER_OF_RUNS == 0) {
-						Logger.closeStream();
+						try {
+							Logger.closeStream();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						System.exit(0);
 					}
 					else {
@@ -78,11 +84,13 @@ public class RamboAgent extends Agent {
 	private void instanceRun() {
 		Random random = new Random();
 		
+		do {
         Config.GRID_HEIGHT = 5 + (int)(Math.random() * ((9 - 5) + 1));
         Config.GRID_WIDTH = 6 + (int)(Math.random() * ((10 - 6) + 1));
         Config.NUM_MAX_WATER_RESOURCES = 1 + (int)(Math.random() * ((5 - 1) + 1));
         Config.NUM_MAX_AIRCRAFTS = 3 + (int)(Math.random() * ((7 - 3) + 1));
         Config.NUM_MAX_FIRES = 6 + (int)(Math.random() * ((10 - 6) + 1));
+		} while(Math.abs(Config.NUM_MAX_AIRCRAFTS - Config.NUM_MAX_FIRES) > 3);
 		
 		worldAgent = new WorldAgent();
 		

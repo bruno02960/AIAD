@@ -62,7 +62,7 @@ public class DetectFiresBehaviour extends TickerBehaviour {
 							System.out.println("Fire!! on index position: "+i + "\n");
 						}
 						
-						System.out.println("There are " + fires.size() + " fires and this is the fire on POS"+ fires.get(i).getWorldObject().getPos());
+						//System.out.println("There are " + fires.size() + " fires and this is the fire on POS"+ fires.get(i).getWorldObject().getPos());
 						
 						// Get the Fire that needs to be extinguished
 						Fire fireToBeExtinguished = fires.get(i);

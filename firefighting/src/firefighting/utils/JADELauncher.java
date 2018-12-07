@@ -31,7 +31,7 @@ import jade.wrapper.StaleProxyException;
 public class JADELauncher {	
 	/* Manual or random configuration */
 	static boolean batch_run = true;
-	public static int NUMBER_OF_RUNS = 9;	
+	public static int NUMBER_OF_RUNS = 19;	
 	static Random random = new Random();
 
 	// GUI related stuff
@@ -41,10 +41,6 @@ public class JADELauncher {
 	// Rambo
 	public static ContainerController ramboContainer;
 	public static RamboAgent ramboAgent;
-	
-	// Setting global world's environment conditions
-	static byte seasonTypeID = (byte) random.nextInt(Config.NUM_SEASONS);
-	static byte windTypeID = (byte) random.nextInt(Config.NUM_TYPE_WINDS);	
 	    
     // Main method
 	public static void main(String[] args) throws ControllerException, IOException {
