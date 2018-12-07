@@ -13,13 +13,13 @@ public final class Logger {
 	boolean newFile = false;
 	
 	Logger() {
-		File file = new File("test.csv");
+		File file = new File("results.csv");
 		
 		if(!file.exists()) newFile = true;
 		
 		FileWriter fw;
 		try {
-			fw = new FileWriter("test.csv", true);
+			fw = new FileWriter("results.csv", true);
 		    bw = new BufferedWriter(fw);
 		    out = new PrintWriter(bw);
 		    

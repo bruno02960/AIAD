@@ -85,11 +85,11 @@ public class RamboAgent extends Agent {
 		Random random = new Random();
 		
 		do {
-        Config.GRID_HEIGHT = 5 + (int)(Math.random() * ((9 - 5) + 1));
-        Config.GRID_WIDTH = 6 + (int)(Math.random() * ((10 - 6) + 1));
-        Config.NUM_MAX_WATER_RESOURCES = 1 + (int)(Math.random() * ((5 - 1) + 1));
-        Config.NUM_MAX_AIRCRAFTS = 3 + (int)(Math.random() * ((7 - 3) + 1));
-        Config.NUM_MAX_FIRES = 6 + (int)(Math.random() * ((10 - 6) + 1));
+	    Config.GRID_WIDTH = 8;
+        Config.GRID_HEIGHT = 9;
+        Config.NUM_MAX_WATER_RESOURCES = 4;
+        Config.NUM_MAX_AIRCRAFTS = 6;
+        Config.NUM_MAX_FIRES = 7;
 		} while(Math.abs(Config.NUM_MAX_AIRCRAFTS - Config.NUM_MAX_FIRES) > 3);
 		
 		worldAgent = new WorldAgent();
