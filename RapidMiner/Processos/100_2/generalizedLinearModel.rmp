@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.0.003">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.0.003" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="9.0.003" expanded="true" height="68" name="Retrieve data" width="90" x="112" y="85">
+        <parameter key="repository_entry" value="//firefighting/Dados/data"/>
+      </operator>
+      <operator activated="true" class="h2o:generalized_linear_model" compatibility="9.0.000" expanded="true" height="124" name="Generalized Linear Model" width="90" x="313" y="85">
+        <parameter key="family" value="AUTO"/>
+        <parameter key="link" value="family_default"/>
+        <parameter key="solver" value="AUTO"/>
+        <parameter key="reproducible" value="false"/>
+        <parameter key="maximum_number_of_threads" value="4"/>
+        <parameter key="use_regularization" value="true"/>
+        <parameter key="lambda_search" value="false"/>
+        <parameter key="number_of_lambdas" value="0"/>
+        <parameter key="lambda_min_ratio" value="0.0"/>
+        <parameter key="early_stopping" value="true"/>
+        <parameter key="stopping_rounds" value="3"/>
+        <parameter key="stopping_tolerance" value="0.001"/>
+        <parameter key="standardize" value="true"/>
+        <parameter key="non-negative_coefficients" value="false"/>
+        <parameter key="add_intercept" value="true"/>
+        <parameter key="compute_p-values" value="false"/>
+        <parameter key="remove_collinear_columns" value="false"/>
+        <parameter key="missing_values_handling" value="MeanImputation"/>
+        <parameter key="max_iterations" value="0"/>
+        <parameter key="specify_beta_constraints" value="false"/>
+        <list key="beta_constraints"/>
+        <parameter key="max_runtime_seconds" value="0"/>
+        <list key="expert_parameters"/>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="9.0.003" expanded="true" height="68" name="Retrieve test" width="90" x="313" y="238">
+        <parameter key="repository_entry" value="//firefighting/Dados/test2"/>
+      </operator>
+      <operator activated="true" class="apply_model" compatibility="9.0.003" expanded="true" height="82" name="Apply Model" width="90" x="514" y="85">
+        <list key="application_parameters"/>
+        <parameter key="create_view" value="false"/>
+      </operator>
+      <connect from_op="Retrieve data" from_port="output" to_op="Generalized Linear Model" to_port="training set"/>
+      <connect from_op="Generalized Linear Model" from_port="model" to_op="Apply Model" to_port="model"/>
+      <connect from_op="Retrieve test" from_port="output" to_op="Apply Model" to_port="unlabelled data"/>
+      <connect from_op="Apply Model" from_port="labelled data" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>
