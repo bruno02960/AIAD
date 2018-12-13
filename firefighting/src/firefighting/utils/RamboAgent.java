@@ -43,10 +43,14 @@ public class RamboAgent extends Agent {
 					long end_time = System.currentTimeMillis();
 					long execution_time = end_time - init_time;
 					
+					double avgDistances = worldAgent.calculateAVGWaterResourcesDistances();
+					
+					double avgNumFiresPerSecond = worldAgent.calculateAverageNumFiresPerSecond();
+					double avgNumOccupedAircraftsPerSecond = worldAgent.calculateAverageNumOccupedAircraftsPerSecond();				
+					
 					AircraftAgent[] aircrafts = worldAgent.getAircraftAgents();
 					
-					for(int i = 0; i < aircrafts.length; i++) {
-						
+					for(int i = 0; i < aircrafts.length; i++) {	
 						for(Thread sleepingThread : aircrafts[i].getSleepingThreads().values()) {
 							System.err.println("Interrupting thread = \"" + sleepingThread.getName() +  "!");
 							sleepingThread.interrupt();
@@ -55,15 +59,15 @@ public class RamboAgent extends Agent {
 					
 					killContainer();
 					
-					Logger.appendConfigValues(execution_time);
+					Logger.appendConfigValues(avgDistances, avgNumFiresPerSecond, avgNumOccupedAircraftsPerSecond, execution_time);
 					
 					System.out.println("Run no. " + JADELauncher.NUMBER_OF_RUNS + " finished.");
 
 					if(JADELauncher.NUMBER_OF_RUNS == 0) {
 						try {
 							Logger.closeStream();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
+						}
+						catch (IOException e) {
 							e.printStackTrace();
 						}
 						System.exit(0);
@@ -90,7 +94,8 @@ public class RamboAgent extends Agent {
 	        Config.NUM_MAX_WATER_RESOURCES = 1 + (int)(Math.random() * ((5 - 1) + 1));
 	        Config.NUM_MAX_AIRCRAFTS = 3 + (int)(Math.random() * ((7 - 3) + 1));
 	        Config.NUM_MAX_FIRES = 6 + (int)(Math.random() * ((10 - 6) + 1));
-		} while(Math.abs(Config.NUM_MAX_AIRCRAFTS - Config.NUM_MAX_FIRES) > 3);
+		}
+		while(Math.abs(Config.NUM_MAX_AIRCRAFTS - Config.NUM_MAX_FIRES) > 3);
 		
 		worldAgent = new WorldAgent();
 		
@@ -115,8 +120,8 @@ public class RamboAgent extends Agent {
 		}
 		catch (StaleProxyException e1) {
 			e1.printStackTrace();
-		} catch (ControllerException e1) {
-			// TODO Auto-generated catch block
+		}
+		catch (ControllerException e1) {
 			e1.printStackTrace();
 		}
 	}
@@ -124,8 +129,8 @@ public class RamboAgent extends Agent {
 	public static void killContainer() {
 		try {
 			agentContainer.kill();
-		} catch (StaleProxyException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
 	}

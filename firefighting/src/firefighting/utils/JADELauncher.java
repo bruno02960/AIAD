@@ -31,7 +31,7 @@ import jade.wrapper.StaleProxyException;
 public class JADELauncher {	
 	/* Manual or random configuration */
 	static boolean batch_run = true;
-	public static int NUMBER_OF_RUNS = 19;	
+	public static int NUMBER_OF_RUNS = 5;	
 	static Random random = new Random();
 
 	// GUI related stuff

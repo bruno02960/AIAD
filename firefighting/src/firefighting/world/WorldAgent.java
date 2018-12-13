@@ -1,6 +1,8 @@
 package firefighting.world;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import firefighting.aircraft.AircraftAgent;
@@ -8,6 +10,8 @@ import firefighting.firestation.FireStationAgent;
 import firefighting.nature.WaterResource;
 import firefighting.nature.Fire;
 import firefighting.utils.AircraftMetricsStats;
+import firefighting.utils.CalculateOccupedAircraftsPerSecond;
+import firefighting.utils.CalculateSimultaneousFiresPerSecond;
 import firefighting.utils.Config;
 import firefighting.utils.JADELauncher;
 import firefighting.utils.Logger;
@@ -78,7 +82,7 @@ public class WorldAgent extends Agent {
 	/**
 	 * The Fire Station Agent in the world.
 	 */
-	private  FireStationAgent fireStationAgent;
+	private FireStationAgent fireStationAgent;
 	
 	/**
 	 * The Water Resources in the world.
@@ -106,16 +110,20 @@ public class WorldAgent extends Agent {
 	/*
 	 * The current number of aircrafts in the world.
 	 */
-	private  int currentNumAircrafts;
+	private int currentNumAircrafts;
 	
 	/*
 	 * The current number of fires in the world.
 	 */
-	private  int currentNumFires;
+	private int currentNumFires;
 	
-	private  ActionListener actionListener;
+	private ActionListener actionListener;
 	
 	private WorldMetricsStats worldMetricsStats;
+	
+	public Map<Integer, Integer> numOccupedAircraftsPerSecond;
+
+	public Map<Integer, Integer> numFiresPerSecond;
 	
 	
 	//Constructors:
@@ -134,6 +142,8 @@ public class WorldAgent extends Agent {
 		this.generateAicraftAgents();
 		
 		this.worldMetricsStats = new WorldMetricsStats();
+		this.numFiresPerSecond = new HashMap<Integer, Integer>();
+		this.numOccupedAircraftsPerSecond = new HashMap<Integer, Integer>();
 	}
 	
 	
@@ -327,6 +337,33 @@ public class WorldAgent extends Agent {
 			
 			this.numWaterResources++;
 		}
+		
+		for(int i = 0; i < waterResources.length; i++) {
+			for(int j = 0; j < waterResources.length; j++) {
+				if(waterResources[i] != waterResources[j]) {
+					Point thisWaterResourcePos = waterResources[i].getWorldObject().getPos();
+					Point otherWaterResourcePos = waterResources[j].getWorldObject().getPos();
+					
+					int distance = Math.abs(thisWaterResourcePos.x - otherWaterResourcePos.x) + Math.abs(thisWaterResourcePos.y - otherWaterResourcePos.y);
+					
+					waterResources[i].addNeighbourDistance(distance);
+				}
+			}
+		}
+	}
+	
+	public double calculateAVGWaterResourcesDistances() {
+		int count = 0;
+		int sumDistances = 0;
+		
+		for(int i = 0; i < waterResources.length; i++) {
+			for(int distance: waterResources[i].getNeighbourDistances()) {
+				sumDistances += distance;
+				count++;
+			}
+		}
+		
+		return count > 0 ? ((double) ((double) sumDistances/ (double) count)) : 0.0;
 	}
 	
 	/**
@@ -338,12 +375,9 @@ public class WorldAgent extends Agent {
 		for(int i = 0; i < Config.NUM_MAX_AIRCRAFTS; i++) {
 			int[] aircraftPos = this.generateRandomPos();
 			
-			
-			
 			WorldObject aircraftWorldObject = new WorldObject(WorldObjectType.AIRCRAFT, new Point(aircraftPos[0], aircraftPos[1]));
 			
 			AircraftAgent aircraftAgent = new AircraftAgent((byte) this.currentNumAircrafts, aircraftWorldObject, this);
-			
 			
 			this.worldMap[aircraftPos[0]][aircraftPos[1]] = aircraftAgent;
 			this.aircraftAgents[i] = aircraftAgent;
@@ -369,11 +403,12 @@ public class WorldAgent extends Agent {
 		
 		for(int f = 0; f < fires.size(); f++) {
 			
-				WorldObject fire = fires.get(f).getWorldObject();
-				if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
-					fires.remove(f);
-					break;
-				}
+			WorldObject fire = fires.get(f).getWorldObject();
+			
+			if(fire.getPosX() == firePosX && fire.getPosY() == firePosY) {
+				fires.remove(f);
+				break;
+			}
 			
 		}
 		
@@ -430,13 +465,12 @@ public class WorldAgent extends Agent {
 	 * Generates all the Fires in the world, when is possible.
 	 */
 	public void setup() {
-		
 		this.addBehaviour(new GenerateFiresBehaviour(this, 8000));
 		this.addBehaviour(new UpdateStatusBehaviour(this, 1000));
+		this.addBehaviour(new CalculateSimultaneousFiresPerSecond(this, 1000));
+		this.addBehaviour(new CalculateOccupedAircraftsPerSecond(this, 1000));
 	}
 	
-	
-
 	/**
 	 * Returns the current world map
 	 * @return current world map
@@ -474,4 +508,29 @@ public class WorldAgent extends Agent {
 		
 		JADELauncher.prepareRun();
 	}
+	
+	public double calculateAverageNumFiresPerSecond() {
+		
+		int total_num_fires_metrics = this.numFiresPerSecond.size();
+		
+		int totalFiresPerSecond = 0;
+		
+		for(int numFires: this.numFiresPerSecond.values())
+			totalFiresPerSecond += numFires;
+		
+		return (double) ((double) totalFiresPerSecond / (double) total_num_fires_metrics);
+	}
+
+	public double calculateAverageNumOccupedAircraftsPerSecond() {
+		
+		int total_num_occuped_aircrafts_metrics = this.numOccupedAircraftsPerSecond.size();
+		
+		int totalOccupedAircraftsPerSecond = 0;
+		
+		for(int numOccupedAircrafts: this.numOccupedAircraftsPerSecond.values())
+			totalOccupedAircraftsPerSecond += numOccupedAircrafts;
+		
+		return (double) ((double) totalOccupedAircraftsPerSecond / (double) total_num_occuped_aircrafts_metrics);
+	}
+
 }

@@ -1,5 +1,6 @@
 package firefighting.nature;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import firefighting.utils.Config;
@@ -26,6 +27,9 @@ public class WaterResource {
 	 */
 	private int waterCapacity;
 	
+	private ArrayList<Integer> neighbourDistances;
+	
+	
 	// Constructors:
 	/**
 	 * Constructor #1 of the Filling Station.
@@ -41,6 +45,7 @@ public class WaterResource {
 		this.id = id;
 		this.worldObject = worldObject;
 		this.waterCapacity = random.nextInt(Config.WATER_RESOURCE_INITIAL_MAX_CAPACITY) + 1;
+		this.neighbourDistances = new ArrayList<Integer>(Config.NUM_MAX_WATER_RESOURCES-1);
 	}
 
 	// Methods:
@@ -77,6 +82,14 @@ public class WaterResource {
 
 	public void increasingCapacity(int increaseValue) {
 		this.waterCapacity += increaseValue;
+	}
+	
+	public void addNeighbourDistance(int distance) {
+		this.neighbourDistances.add(distance);
+	}
+	
+	public ArrayList<Integer> getNeighbourDistances() {
+		return this.neighbourDistances;
 	}
 	
 	@Override

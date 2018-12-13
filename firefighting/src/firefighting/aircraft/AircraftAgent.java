@@ -480,7 +480,6 @@ public class AircraftAgent extends Agent {
 					Thread.sleep(2000);
 				}
 				catch (InterruptedException e) {
-					//e.printStackTrace();
 				}
 				
 				this.worldObject.setPos((int)this.auxPath.get(i).getX(), (int)this.auxPath.get(i).getY());
@@ -488,7 +487,6 @@ public class AircraftAgent extends Agent {
 			
 			this.aircraftMetricsStats.incNumTotalTravelsByThisAircraft();
 			this.aircraftMetricsStats.incTotalTimeInTravelsByThisAircraft(startFireAttendTravelTime);
-			
 			
 			long startPutOutFireTime = System.currentTimeMillis();
 			
@@ -498,7 +496,6 @@ public class AircraftAgent extends Agent {
 					Thread.sleep(1000);
 				}
 				catch (InterruptedException e) {
-					//e.printStackTrace();
 				}
 				
 				// Water decrement
@@ -697,7 +694,6 @@ public class AircraftAgent extends Agent {
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
-				//e.printStackTrace();
 			}
 			
 			if(this.worldAgent.getWorldMap()[(int)pathToNearestWaterResource.get(i).getX()][(int)pathToNearestWaterResource.get(i).getY()] == null)
@@ -707,7 +703,6 @@ public class AircraftAgent extends Agent {
 		this.aircraftMetricsStats.incNumTotalTravelsByThisAircraft();
 		this.aircraftMetricsStats.incTotalTimeInTravelsByThisAircraft(startWaterRefillTravelTime);
 
-		
 		long startWaterRefillTime = System.currentTimeMillis();
 		
 		while(!this.haveFullWaterTank()) {
@@ -716,7 +711,6 @@ public class AircraftAgent extends Agent {
 				Thread.sleep(1000);
 			}
 			catch (InterruptedException e) {
-				//e.printStackTrace();
 			}
 			
 			this.increaseWaterQuantity();
