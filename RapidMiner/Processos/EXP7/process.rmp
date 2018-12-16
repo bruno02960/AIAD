@@ -15,7 +15,7 @@
       <operator activated="true" class="retrieve" compatibility="9.0.003" expanded="true" height="68" name="Retrieve data1144" width="90" x="45" y="136">
         <parameter key="repository_entry" value="../../Dados/data1144"/>
       </operator>
-      <operator activated="true" class="multiply" compatibility="9.0.003" expanded="true" height="124" name="Multiply" width="90" x="179" y="136"/>
+      <operator activated="true" class="multiply" compatibility="9.0.003" expanded="true" height="145" name="Multiply" width="90" x="179" y="136"/>
       <operator activated="true" class="split_validation" compatibility="9.0.003" expanded="true" height="145" name="Validation ML" width="90" x="313" y="340">
         <parameter key="create_complete_model" value="false"/>
         <parameter key="split" value="relative"/>
@@ -334,6 +334,7 @@
       <connect from_op="Multiply" from_port="output 1" to_op="Validation kNN" to_port="training"/>
       <connect from_op="Multiply" from_port="output 2" to_op="Validation DL" to_port="training"/>
       <connect from_op="Multiply" from_port="output 3" to_op="Validation ML" to_port="training"/>
+      <connect from_op="Multiply" from_port="output 4" to_port="result 13"/>
       <connect from_op="Validation ML" from_port="model" to_port="result 7"/>
       <connect from_op="Validation ML" from_port="training" to_port="result 12"/>
       <connect from_op="Validation ML" from_port="averagable 1" to_port="result 8"/>
@@ -360,6 +361,7 @@
       <portSpacing port="sink_result 11" spacing="0"/>
       <portSpacing port="sink_result 12" spacing="0"/>
       <portSpacing port="sink_result 13" spacing="0"/>
+      <portSpacing port="sink_result 14" spacing="0"/>
     </process>
   </operator>
 </process>
